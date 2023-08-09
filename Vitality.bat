@@ -5256,13 +5256,13 @@ echo                                       %r% _      _  _____   __    _     _  
 echo                                      %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%
 echo                                        %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%
 echo.
-echo                                          %e%[ %r%1%e% ] 1.7.10  [ %r%2%e% ] 1.8.9  [ %r%3%e% ] 1.19.2
+echo                                          %e%[ %r%1%e% ] 1.7.10  [ %r%2%e% ] 1.8.9  [ %r%3%e% ] Newest
 choice /c:123 /n /m "%BS%"
 set MenuItem=%errorlevel%
 
 if "%MenuItem%"=="1" goto 1.7.10
 if "%MenuItem%"=="2" goto 1.8.9
-if "%MenuItem%"=="3" goto 1.19.2
+if "%MenuItem%"=="3" goto Newest
 
 :1.7.10
 cd %APPDATA%\.minecraft\
@@ -5433,7 +5433,7 @@ set "formatted_optimizations=%ran_optimizations%"
 if %formatted_optimizations% LSS 10 set "formatted_optimizations= %formatted_optimizations%"
 echo set "ran_optimizations=%ran_optimizations%"> v.bat
 
-:1.19.3
+:Newest
 cd %APPDATA%\.minecraft\
 (
 	echo ofFogType:3
