@@ -2196,7 +2196,7 @@ reg delete HKCR\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.ZuneV
 
 set "file=C:\Vitality\Info\fpsandinput"
 if not exist "%file%" (
-    echo fired > "%file%"
+    echo Vitality > "%file%"
     set /a "ran_optimizations+=1"
 )
 cd C:\Vitality
@@ -2287,7 +2287,7 @@ Reg.exe add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\System
 
 set "file=C:\Vitality\Info\latency"
 if not exist "%file%" (
-    echo fired > "%file%"
+    echo Vitality > "%file%"
     set /a "ran_optimizations+=1"
 )
 cd C:\Vitality
@@ -2584,7 +2584,7 @@ reg add HKLM\SOFTWARE\Policies\Microsoft\Windows\Psched /v MaxOutstandingSends /
 
 set "file=C:\Vitality\Info\network"
 if not exist "%file%" (
-    echo fired > "%file%"
+    echo Vitality > "%file%"
     set /a "ran_optimizations+=1"
 )
 cd C:\Vitality
@@ -2619,7 +2619,7 @@ Reg.exe add "HKCU\Control Panel\Accessibility\MouseKeys" /v "TimeToMaximumSpeed"
 
 set "file=C:\Vitality\Info\kbm"
 if not exist "%file%" (
-    echo fired > "%file%"
+    echo Vitality > "%file%"
     set /a "ran_optimizations+=1"
 )
 cd C:\Vitality
@@ -2658,7 +2658,7 @@ schtasks /Change /TN "\Microsoft\Windows\Workplace Join\Recovery-Check"  /Disabl
 
 set "file=C:\Vitality\Info\task"
 if not exist "%file%" (
-    echo fired > "%file%"
+    echo Vitality > "%file%"
     set /a "ran_optimizations+=1"
 )
 cd C:\Vitality
@@ -2894,7 +2894,7 @@ Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm" /v "DisableCudaCon
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler" /v "EnablePreemption" /t REG_DWORD /d "0" /f >nul 2>&1
 set "file=C:\Vitality\Info\gpu"
 if not exist "%file%" (
-    echo fired > "%file%"
+    echo Vitality > "%file%"
     set /a "ran_optimizations+=1"
 )
 cd C:\Vitality
@@ -3077,7 +3077,7 @@ Reg.exe add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\amdfendrmgr" /
 Reg.exe add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\amdlog" /v "Start" /t REG_DWORD /d "4" /f > nul 2>&1
 set "file=C:\Vitality\Info\gpu"
 if not exist "%file%" (
-    echo fired > "%file%"
+    echo Vitality > "%file%"
     set /a "ran_optimizations+=1"
 )
 cd C:\Vitality
@@ -3114,7 +3114,7 @@ Reg.exe add "HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control" /v "SvcHostSpl
 
 set "file=C:\Vitality\Info\ram"
 if not exist "%file%" (
-    echo fired > "%file%"
+    echo Vitality > "%file%"
     set /a "ran_optimizations+=1"
 )
 cd C:\Vitality
@@ -3140,7 +3140,7 @@ sc config FontCache3.0.0.0 start=disabled >nul 2>&1
 fsutil behavior set disabledeletenotify 0 >nul 2>&1
 set "file=C:\Vitality\Info\disk"
 if not exist "%file%" (
-    echo fired > "%file%"
+    echo Vitality > "%file%"
     set /a "ran_optimizations+=1"
 )
 cd C:\Vitality
@@ -3547,7 +3547,7 @@ reg add "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Virtual
 reg add HKLM\SYSTEM\CurrentControlSet\Services\TCPIP\Parameters /v DisableTaskOffload /t REG_DWORD /d 0 /f >nul 2>&1
 set "file=C:\Vitality\Info\windows"
 if not exist "%file%" (
-    echo fired > "%file%"
+    echo Vitality > "%file%"
     set /a "ran_optimizations+=1"
 )
 cd C:\Vitality
@@ -3652,7 +3652,7 @@ reg.exe add "HKLM\System\CurrentControlSet\Services\amdsbs" /v "Start" /t REG_DW
 reg.exe add "HKLM\System\CurrentControlSet\Services\amdxata" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1
 set "file=C:\Vitality\Info\cpu"
 if not exist "%file%" (
-    echo fired > "%file%"
+    echo Vitality > "%file%"
     set /a "ran_optimizations+=1"
 )
 cd C:\Vitality
@@ -3756,7 +3756,7 @@ reg.exe add "HKLM\System\CurrentControlSet\Services\intelpep" /v "Start" /t REG_
 reg.exe add "HKLM\System\CurrentControlSet\Services\intelppm" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1
 set "file=C:\Vitality\Info\cpu"
 if not exist "%file%" (
-    echo fired > "%file%"
+    echo Vitality > "%file%"
     set /a "ran_optimizations+=1"
 )
 cd C:\Vitality
@@ -3817,7 +3817,7 @@ if %gpu1% == Nvidia (
     move /Y "%TEMP%\RecordEncoder.json" "%APPDATA%\obs-studio\basic\profiles\Untitled\" >nul 2>&1
     set "file=C:\Vitality\Info\obs"
     if not exist "%file%" (
-    echo fired > "%file%"
+    echo Vitality > "%file%"
     set /a "ran_optimizations+=1"
     )
     cd C:\Vitality
@@ -3871,7 +3871,7 @@ if %gpu1% == AMD (
     move /Y "%TEMP%\RecordEncoder.json" "%APPDATA%\obs-studio\basic\profiles\Untitled\" >nul 2>&1
     set "file=C:\Vitality\Info\obs"
     if not exist "%file%" (
-    echo fired > "%file%"
+    echo Vitality > "%file%"
     set /a "ran_optimizations+=1"
     )
     cd C:\Vitality
@@ -3925,7 +3925,7 @@ if %gpu1% == NaN (
     move /Y "%TEMP%\RecordEncoder.json" "%APPDATA%\obs-studio\basic\profiles\Untitled\" >nul 2>&1
     set "file=C:\Vitality\Info\obs"
     if not exist "%file%" (
-    echo fired > "%file%"
+    echo Vitality > "%file%"
     set /a "ran_optimizations+=1"
     )
     cd C:\Vitality
@@ -3994,7 +3994,7 @@ if %gpu1% == Nvidia (
     move /Y "%TEMP%\RecordEncoder.json" "%APPDATA%\obs-studio\basic\profiles\Untitled\" >nul 2>&1
     set "file=C:\Vitality\Info\obs"
     if not exist "%file%" (
-    echo fired > "%file%"
+    echo Vitality > "%file%"
     set /a "ran_optimizations+=1"
     )
     cd C:\Vitality
@@ -4048,7 +4048,7 @@ if %gpu1% == AMD (
     move /Y "%TEMP%\RecordEncoder.json" "%APPDATA%\obs-studio\basic\profiles\Untitled\" >nul 2>&1
     set "file=C:\Vitality\Info\obs"
     if not exist "%file%" (
-    echo fired > "%file%"
+    echo Vitality > "%file%"
     set /a "ran_optimizations+=1"
     )
     cd C:\Vitality
@@ -4102,7 +4102,7 @@ if %gpu1% == NaN(
     move /Y "%TEMP%\RecordEncoder.json" "%APPDATA%\obs-studio\basic\profiles\Untitled\" >nul 2>&1
     set "file=C:\Vitality\Info\obs"
     if not exist "%file%" (
-    echo fired > "%file%"
+    echo Vitality > "%file%"
     set /a "ran_optimizations+=1"
     )
     cd C:\Vitality
@@ -4175,7 +4175,7 @@ if %gpu1% == Nvidia (
     move /Y "%TEMP%\RecordEncoder.json" "%APPDATA%\obs-studio\basic\profiles\Untitled\" >nul 2>&1
     set "file=C:\Vitality\Info\obs"
     if not exist "%file%" (
-    echo fired > "%file%"
+    echo Vitality > "%file%"
     set /a "ran_optimizations+=1"
     )
     cd C:\Vitality
@@ -4229,7 +4229,7 @@ if %gpu1% == AMD (
     move /Y "%TEMP%\RecordEncoder.json" "%APPDATA%\obs-studio\basic\profiles\Untitled\" >nul 2>&1
     set "file=C:\Vitality\Info\obs"
     if not exist "%file%" (
-    echo fired > "%file%"
+    echo Vitality > "%file%"
     set /a "ran_optimizations+=1"
     )
     cd C:\Vitality
@@ -4284,7 +4284,7 @@ if %gpu1% == NaN (
     
     set "file=C:\Vitality\Info\obs"
     if not exist "%file%" (
-    echo fired > "%file%"
+    echo Vitality > "%file%"
     set /a "ran_optimizations+=1"
     )
     cd C:\Vitality
@@ -4439,7 +4439,7 @@ dism /online /Remove-DefaultAppAssociations > NUL 2>&1
 
 set "file=C:\Vitality\Info\privacycleanup"
 if not exist "%file%" (
-    echo fired > "%file%"
+    echo Vitality > "%file%"
     set /a "ran_optimizations+=1"
 )
 cd C:\Vitality
@@ -4681,7 +4681,7 @@ reg add "HKCU\SOFTWARE\Microsoft\Input\TIPC" /v "Enabled" /t REG_DWORD /d 0 /f >
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\System" /v "EnableActivityFeed" /d "0" /t REG_DWORD /f >nul 2>&1
 set "file=C:\Vitality\Info\datacol"
 if not exist "%file%" (
-    echo fired > "%file%"
+    echo Vitality > "%file%"
     set /a "ran_optimizations+=1"
 )
 cd C:\Vitality
@@ -4807,7 +4807,7 @@ reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WCN\Registrars" /v "DisableWPD
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WCN\Registrars" /v "EnableRegistrars" /t REG_DWORD /d 0 /f >nul 2>&1
 set "file=C:\Vitality\Info\securityimpr"
 if not exist "%file%" (
-    echo fired > "%file%"
+    echo Vitality > "%file%"
     set /a "ran_optimizations+=1"
 )
 cd C:\Vitality
@@ -4934,7 +4934,7 @@ reg add "HKLM\Software\Piriform\CCleaner" /v "(Cfg)SoftwareUpdater" /t REG_DWORD
 reg add "HKLM\Software\Piriform\CCleaner" /v "(Cfg)SoftwareUpdaterIpm" /t REG_DWORD /d 0 /f >nul 2>&1
 set "file=C:\Vitality\Info\configprograms"
 if not exist "%file%" (
-    echo fired > "%file%"
+    echo Vitality > "%file%"
     set /a "ran_optimizations+=1"
 )
 cd C:\Vitality
@@ -5137,7 +5137,7 @@ reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" /v "Schedule
 PowerShell -ExecutionPolicy Unrestricted -Command "$serviceName = 'UsoSvc'; Write-Host "^""Disabling service: `"^""$serviceName`"^""."^""; <# -- 1. Skip if service does not exist #>; $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue; if(!$service) {; Write-Host "^""Service `"^""$serviceName`"^"" could not be not found, no need to disable it."^""; Exit 0; }; <# -- 2. Stop if running #>; if ($service.Status -eq [System.ServiceProcess.ServiceControllerStatus]::Running) {; Write-Host "^""`"^""$serviceName`"^"" is running, stopping it."^""; try {; Stop-Service -Name "^""$serviceName"^"" -Force -ErrorAction Stop; Write-Host "^""Stopped `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Warning "^""Could not stop `"^""$serviceName`"^"", it will be stopped after reboot: $_"^""; }; } else {; Write-Host "^""`"^""$serviceName`"^"" is not running, no need to stop."^""; }; <# -- 3. Skip if already disabled #>; $startupType = $service.StartType <# Does not work before .NET 4.6.1 #>; if(!$startupType) {; $startupType = (Get-WmiObject -Query "^""Select StartMode From Win32_Service Where Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; if(!$startupType) {; $startupType = (Get-WmiObject -Class Win32_Service -Property StartMode -Filter "^""Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; }; }; if($startupType -eq 'Disabled') {; Write-Host "^""$serviceName is already disabled, no further action is needed"^""; }; <# -- 4. Disable service #>; try {; Set-Service -Name "^""$serviceName"^"" -StartupType Disabled -Confirm:$false -ErrorAction Stop; Write-Host "^""Disabled `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Error "^""Could not disable `"^""$serviceName`"^"": $_"^""; }" >nul 2>&1
 set "file=C:\Vitality\Info\privacyoversec"
 if not exist "%file%" (
-    echo fired > "%file%"
+    echo Vitality > "%file%"
     set /a "ran_optimizations+=1"
 )
 cd C:\Vitality
@@ -5184,7 +5184,7 @@ reg add "HKLM\SOFTWARE\Microsoft\OEM\Device\Capture" /v "NoPhysicalCameraLED" /d
 powercfg -h off  >nul 2>&1
 set "file=C:\Vitality\Info\uiforprivacy"
 if not exist "%file%" (
-    echo fired > "%file%"
+    echo Vitality > "%file%"
     set /a "ran_optimizations+=1"
 )
 cd C:\Vitality
@@ -5338,7 +5338,7 @@ cd %APPDATA%\.minecraft\
 ) > optionsof.txt
 set "file=C:\Vitality\Info\minecraft"
 if not exist "%file%" (
-    echo fired > "%file%"
+    echo Vitality > "%file%"
     set /a "ran_optimizations+=1"
 )
 cd C:\Vitality
@@ -5425,7 +5425,7 @@ cd %APPDATA%\.minecraft\
 ) > optionsof.txt
 set "file=C:\Vitality\Info\minecraft"
 if not exist "%file%" (
-    echo fired > "%file%"
+    echo Vitality > "%file%"
     set /a "ran_optimizations+=1"
 )
 cd C:\Vitality
@@ -5511,7 +5511,7 @@ cd %APPDATA%\.minecraft\
 ) > optionsof.txt
 set "file=C:\Vitality\Info\minecraft"
 if not exist "%file%" (
-    echo fired > "%file%"
+    echo Vitality > "%file%"
     set /a "ran_optimizations+=1"
 )
 cd C:\Vitality
@@ -5581,7 +5581,7 @@ if not exist "%folder%\steamapps" (
         echo	"setting.fullscreen"		        "1" >>"C:\Vitality\video.txt"
         echo	"setting.nowindowborder"		    "0" >>"C:\Vitality\video.txt"
         echo }                                          >>"C:\Vitality\video.txt"
-		
+
     goto IngameSettings
     )
 
