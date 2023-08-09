@@ -622,7 +622,7 @@ if "%MenuItem%"=="4" (
     ) else (
         set "CSGO=True"
     )
-) && goto IngameSettings
+) && goto CSGO
 
 if "%MenuItem%"=="5" (
     if "%Valorant%"=="false" (
@@ -1116,7 +1116,7 @@ pause
 
 
 
-:CSGO
+:CSGO1
 cls
     echo Select the game location
     set "folder="
@@ -5256,7 +5256,7 @@ echo                                       %r% _      _  _____   __    _     _  
 echo                                      %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%
 echo                                        %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%
 echo.
-echo                                          [ %r%1%e% ] 1.7.10  [ %r%2%e% ] 1.8.9  [ %r%3%e% ] 1.19.2
+echo                                          %e%[ %r%1%e% ] 1.7.10  [ %r%2%e% ] 1.8.9  [ %r%3%e% ] 1.19.2
 choice /c:123 /n /m "%BS%"
 set MenuItem=%errorlevel%
 
@@ -5525,7 +5525,7 @@ start "" "%batch_file%"
 exit
 
 
-:Minecraft
+:CSGO
 cls
 echo.
 echo.
@@ -5545,15 +5545,67 @@ echo                                       %r% _      _  _____   __    _     _  
 echo                                      %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%
 echo                                        %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%
 echo.
-echo                                          [ %r%1%e% ] 1.7.10  [ %r%2%e% ] 1.8.9  [ %r%3%e% ] 1.19.2
-echo                                                         Instructions:
-echo                                               
+echo                                          %e%[ %r%1%e% ] 1.7.10  [ %r%2%e% ] 1.8.9  [ %r%3%e% ] 1.19.2
+echo                                                          Instructions:
+echo Select the game location
+set "folder="
+for /f "delims=" %%i in ('powershell -Command "(new-object -COM 'Shell.Application').BrowseForFolder(0, 'Select the game location.', 0, 0).self.path"') do set "folder=%%i"
+
+if not "%folder%" == "" (
+if not exist "%folder%\steamapps" (
+    goto :WrongFolder
+) else (
+        if exist "C:\Vitality\video.txt" del "C:\Vitality\video.txt"
+        echo "VideoConfig" > "C:\Vitality\video.txt"
+        echo {                                          >> "C:\Vitality\video.txt"
+        echo 	"setting.cpu_level"		            "0" >>"C:\Vitality\video.txt"
+        echo	"setting.gpu_level"		            "0" >>"C:\Vitality\video.txt"
+        echo    "setting.mat_antialias"		        "4" >>"C:\Vitality\video.txt"
+        echo	"setting.mat_aaquality"		        "0" >>"C:\Vitality\video.txt"
+        echo	"setting.mat_forceaniso"		    "0" >>"C:\Vitality\video.txt"
+        echo	"setting.mat_vsync"		            "0" >>"C:\Vitality\video.txt"
+        echo	"setting.mat_triplebuffered"		"0" >>"C:\Vitality\video.txt"
+        echo	"setting.mat_grain_scale_override"	"-1.0" >>"C:\Vitality\video.txt"
+        echo	"setting.gpu_mem_level"		        "0" >>"C:\Vitality\video.txt"
+        echo	"setting.mem_level"		            "2" >>"C:\Vitality\video.txt"
+        echo	"setting.mat_queue_mode"		    "-1" >>"C:\Vitality\video.txt"
+        echo	"setting.csm_quality_level"		    "0" >>"C:\Vitality\video.txt"
+        echo	"setting.mat_software_aa_strength"	"0" >>"C:\Vitality\video.txt"
+        echo	"setting.mat_motion_blur_enabled"	"0" >>"C:\Vitality\video.txt"
+        echo	"setting.mat_texturestreaming"		"0" >>"C:\Vitality\video.txt" 
+        echo	"setting.r_player_visibility_mode"	"1" >>"C:\Vitality\video.txt"
+        echo	"setting.mat_enable_uber_shaders"	"1" >>"C:\Vitality\video.txt"
+        echo	"setting.defaultres"		        "1024" >>"C:\Vitality\video.txt"
+        echo	"setting.defaultresheight"		    "768" >>"C:\Vitality\video.txt"
+        echo	"setting.aspectratiomode"		    "0" >>"C:\Vitality\video.txt"
+        echo	"setting.fullscreen"		        "1" >>"C:\Vitality\video.txt"
+        echo	"setting.nowindowborder"		    "0" >>"C:\Vitality\video.txt"
+        echo }                                          >>"C:\Vitality\video.txt"
+		
+    goto IngameSettings
+    )
+
+) else (
+    cls
+    echo No folder selected.
+    pause
+    exit
+	
+)
+  :WrongFolder
+    cls
+    Echo you have selected wrong folder
+    pause
+    exit
+)
+
+
+
+
+
+
+
+pause >nul
 set "batch_file=%~f0"
 start "" "%batch_file%"
 exit
-
-
-
-
-
-
