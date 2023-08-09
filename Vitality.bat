@@ -40,6 +40,50 @@ set ConfigurePro=false
 set PrivacyOverSec=false
 set UIForPrivacy=false
 
+if exist "C:\Vitality\Backup\Security.reg"  (
+    set "Status=Enabled"
+) else (
+    set "Status=Disabled"
+)
+
+if exist "C:\Vitality\Backup\System.reg"  (
+    set "Status=Enabled"
+) else (
+    set "Status=Disabled"
+)
+
+if exist "C:\Vitality\Backup\Default.reg"  (
+    set "Status=Enabled"
+) else (
+    set "Status=Disabled"
+)
+
+if exist "C:\Vitality\Backup\Security.reg" (
+    set "Status=Enabled"
+) else (
+    set "Status=Disabled"
+)
+
+if exist "C:\Vitality\Backup\RestorePoint" (
+    set "ResStatus=Enabled"
+) else (
+    set "ResStatus=Disabled"
+)
+
+set "statusc="
+if "%status%"=="Disabled" (
+    set "statusc=[38;5;203m"
+) else (
+    set "statusc=[38;5;34m"
+)
+
+set "ResStatusc="
+if "%ResStatus%"=="Disabled" (
+    set "ResStatusc=[38;5;203m"
+) else (
+    set "ResStatusc=[38;5;34m"
+)
+
 
 
 REM Set Colors
@@ -196,7 +240,7 @@ cls
 echo.                                
 echo     %l%┌─────────────────────────────┐                       
 echo     │ %r%W%l% = %e%Up%l%       %r%D%l% = %e%Right%l%      │           %r% _      _  _____   __    _     _  _____  _%l%    
-echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l% 
+echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      %r%▲%e% Pages  [%r%1%e%/1]%l%
 echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l% 
 echo.    │ It's not that hard is it?   │
 echo     └─────────────────────────────┘                                                        
@@ -221,7 +265,7 @@ echo     ^│                             ^│       │ %ar%•%e% Understand t
 echo     ^│           Backup            ^│       └───────────────────────────────────────────────────────────────────┘
 echo     ^│                             ^│
 echo     ^│                             ^│
-echo     ^│           Credits           ^│        %e%Applied Optimizations: %r%%formatted_optimizations%%l%
+echo     ^│           Credits           ^│        %e%Applied Optimizations: %r%%formatted_optimizations%%l%      %e%Status of Backup: %statusc%%Status%%l%
 echo     ^│                             ^│
 echo     ^│                             ^│
 echo     └─────────────────────────────┘
@@ -235,6 +279,10 @@ exit
 
 :Tweaks 
 set lastpage=:Tweaks
+set lasttweaks1=true
+set lasttweaks2=false
+:lasttweaks1
+
 
 set "FPSc="
 if "%FPS%"=="false" (
@@ -294,7 +342,6 @@ if "%CPU%"=="false" (
 
 
 
-
 cls
 echo.                                
 echo     %l%┌─────────────────────────────┐                       
@@ -307,22 +354,22 @@ echo     %l%┌─────────────────────�
 echo     ^│                             ^│  Everything that's green means that will be optimized once you press %r%X%l%
 echo     ^│                             ^│          
 echo     ^│            Home             ^│
-echo     ^│                             ^│       %e%[%r%0%e%]  %r%•%e%  FPS and Input Delay %l%                        %FPSc%▼%l%        
+echo     ^│                             ^│     %e%[%r% 0 %e%]  %r%•%e%  FPS and Input Delay %l%                        %FPSc%▼%l%        
 echo     ^│                             ^│             Enhance FPS and Reduce Input Delay for Better Gaming. 
 echo     ^│           %r%Tweaks%l%            ^│
-echo     ^│                             ^│       %e%[%r%1%e%]  %r%•%e%  Latency %l%                                    %Latencyc%▼%l%
+echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  Latency %l%                                    %Latencyc%▼%l%
 echo     ^│                             ^│             Significantly Minimize Computer Latency for Enhanced Performance.
 echo     ^│       Ingame Settings       ^│      
-echo     ^│                             ^│       %e%[%r%2%e%]  %r%•%e%  Network %l%                                    %Networkc%▼%l%     
+echo     ^│                             ^│     %e%[%r% 2 %e%]  %r%•%e%  Network %l%                                    %Networkc%▼%l%     
 echo     ^│                             ^│             Optimize Internet Performance Effectively.
 echo     ^│      Recording Settings     ^│    
-echo     ^│                             ^│       %e%[%r%3%e%]  %r%•%e%  KBM %l%                                        %KBMc%▼%l%       
+echo     ^│                             ^│     %e%[%r% 3 %e%]  %r%•%e%  KBM %l%                                        %KBMc%▼%l%       
 echo     ^│                             ^│             Enhance Keyboard and Mouse Functionality with Tweaks.
 echo     ^│           Privacy           ^│      
-echo     ^│                             ^│       %e%[%r%4%e%]  %r%•%e%  Task Scheduler %l%                             %Taskc%▼%l% 
+echo     ^│                             ^│     %e%[%r% 4 %e%]  %r%•%e%  Task Scheduler %l%                             %Taskc%▼%l% 
 echo     ^│                             ^│             Optimize Performance by Disabling Unnecessary Task Scheduler Tasks.
 echo     ^│           Backup            ^│
-echo     ^│                             ^│       %e%[%r%5%e%]  %r%•%e%  GPU Tweaks                                  %GPUc%▼%l%
+echo     ^│                             ^│     %e%[%r% 5 %e%]  %r%•%e%  GPU Tweaks                                  %GPUc%▼%l%
 echo     ^│                             ^│             Unlock Peak GPU Performance with our tweaks
 echo     ^│           Credits           ^│  
 echo     ^│                             ^│          
@@ -402,8 +449,11 @@ if "%MenuItem%"=="11" goto TweaksProceed
 
 
 :Tweaks2 
-
 set lastpage=:Tweaks2
+
+set lasttweaks2=true
+set lasttweaks1=false
+:lasttweaks2
 
 set "RAMc="
 if "%RAM%"=="false" (
@@ -449,16 +499,16 @@ echo     %l%┌─────────────────────�
 echo     ^│                             ^│  Everything that's green means that will be optimized once you press %r%X%l%
 echo     ^│                             ^│          
 echo     ^│            Home             ^│
-echo     ^│                             ^│       %e%[%r%6%e%]  %r%•%e%  RAM  %l%                                       %RAMc%▼%l%        
+echo     ^│                             ^│     %e%[%r% 6 %e%]  %r%•%e%  RAM  %l%                                       %RAMc%▼%l%        
 echo     ^│                             ^│             Unlock Top-notch Performance with RAM Optimization.
 echo     ^│           %r%Tweaks%l%            ^│
-echo     ^│                             ^│       %e%[%r%7%e%]  %r%•%e%  DISK %l%                                       %DISKc%▼%l%      
+echo     ^│                             ^│     %e%[%r% 7 %e%]  %r%•%e%  DISK %l%                                       %DISKc%▼%l%      
 echo     ^│                             ^│             Achieve Optimal Disk Performance with our tweaks.
 echo     ^│       Ingame Settings       ^│       
-echo     ^│                             ^│       %e%[%r%8%e%]  %r%•%e%  Windows %l%                                    %Windowsc%▼%l%      
+echo     ^│                             ^│     %e%[%r% 8 %e%]  %r%•%e%  Windows %l%                                    %Windowsc%▼%l%      
 echo     ^│                             ^│             Enhance Your Windows Experience with These Superior Settings.
 echo     ^│      Recording Settings     ^│             
-echo     ^│                             ^│       %e%[%r%9%e%]  %r%•%e%  CPU Tweaks %l%                                 %CPUc%▼%l%             
+echo     ^│                             ^│     %e%[%r% 9 %e%]  %r%•%e%  CPU Tweaks %l%                                 %CPUc%▼%l%             
 echo     ^│                             ^│             Unlock Peak CPU Performance with our tweaks.
 echo     ^│           Privacy           ^│                
 echo     ^│                             ^│                   
@@ -517,6 +567,9 @@ if "%MenuItem%"=="9" goto TweaksProceed
 
 
 :IngameSettings
+
+
+
 set lastpage=:IngameSettings
 cls
 set "Minecraftc="
@@ -572,40 +625,46 @@ cls
 echo.                                
 echo     %l%┌─────────────────────────────┐                       
 echo     │ %r%W%l% = %e%Up%l%       %r%D%l% = %e%Right%l%      │           %r% _      _  _____   __    _     _  _____  _%l%    
-echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      
-echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%   
+echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      %r%▲%e% Pages  [%r%1%e%/1]%l%      
+echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%  
 echo.    │ It's not that hard is it?   │
 echo     └─────────────────────────────┘                                                        
-echo     %l%┌─────────────────────────────┐         
-echo     ^│                             ^│  
-echo     ^│                             ^│          %r%▲%e% Best Settings For Each Game:%l%     
+echo     %l%┌─────────────────────────────┐         %r%▲%e% Instruction: Press %r%1-7%e% and the button will turn green%l%
+echo     ^│                             ^│  Everything that's green means that will be optimized once you press %r%X%l%
+echo     ^│                             ^│   
 echo     ^│            Home             ^│         
-echo     ^│                             ^│       %e%[%r%1%e%]  %r%•%e%  Minecraft%l%                                   %Minecraftc%▼%l%     
+echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  Minecraft%l%                                   %Minecraftc%▼%l%     
 echo     ^│                             ^│                 
 echo     ^│           Tweaks            ^│         
-echo     ^│                             ^│       %e%[%r%2%e%]  %r%•%e%  CSGO%l%                                        %CSGOc%▼%l% 
+echo     ^│                             ^│     %e%[%r% 2 %e%]  %r%•%e%  CSGO%l%                                        %CSGOc%▼%l% 
 echo     ^│                             ^│ 
 echo     ^│       %r%Ingame Settings%l%       ^│              
-echo     ^│                             ^│       %e%[%r%3%e%]  %r%•%e%  Valorant%l%                                    %Valorantc%▼%l% 
+echo     ^│                             ^│     %e%[%r% 3 %e%]  %r%•%e%  Valorant%l%                                    %Valorantc%▼%l% 
 echo     ^│                             ^│ 
 echo     ^│      Recording Settings     ^│    
-echo     ^│                             ^│       %e%[%r%4%e%]  %r%•%e%  Fortnite%l%                                    %Fortnitec%▼%l%
+echo     ^│                             ^│     %e%[%r% 4 %e%]  %r%•%e%  Fortnite%l%                                    %Fortnitec%▼%l%
 echo     ^│                             ^│       
 echo     ^│           Privacy           ^│              
-echo     ^│                             ^│       %e%[%r%5%e%]  %r%•%e%  Call of Duty Warzone ^& MW%l%                   %CODc%▼%l%
+echo     ^│                             ^│     %e%[%r% 5 %e%]  %r%•%e%  Call of Duty Warzone ^& MW%l%                   %CODc%▼%l%
 echo     ^│                             ^│       
 echo     ^│           Backup            ^│         
-echo     ^│                             ^│       %e%[%r%6%e%]  %r%•%e%  Apex%l%                                        %Apexc%▼%l%
+echo     ^│                             ^│     %e%[%r% 6 %e%]  %r%•%e%  Apex%l%                                        %Apexc%▼%l%
 echo     ^│                             ^│
 echo     ^│           Credits           ^│  
-echo     ^│                             ^│       %e%[%r%7%e%]  %r%•%e%  Rust%l%                                        %Rustc%▼%l%
+echo     ^│                             ^│     %e%[%r% 7 %e%]  %r%•%e%  Rust%l%                                        %Rustc%▼%l%
 echo     ^│                             ^│
 echo     └─────────────────────────────┘                                
 echo.                                                                    
 echo.                                                                   
 choice /c:WS1234567 /n /m " "                                           
 set MenuItem=%errorlevel%
-if "%MenuItem%"=="1" goto Tweaks
+if "%MenuItem%"=="1" (
+	if "%lasttweaks1%"=="true" (
+	goto lasttweaks1
+) else (
+	goto lasttweaks2
+)
+)
 if "%MenuItem%"=="2" goto RecordingSettings
 if "%MenuItem%"=="3" (
     if "%Minecraft%"=="false" (
@@ -706,28 +765,28 @@ cls
 echo.                                
 echo     %l%┌─────────────────────────────┐                       
 echo     │ %r%W%l% = %e%Up%l%       %r%D%l% = %e%Right%l%      │           %r% _      _  _____   __    _     _  _____  _%l%    
-echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      
-echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%   
+echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      %r%▲%e% Pages  [%r%1%e%/1]%l%
+echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l% 
 echo.    │ It's not that hard is it?   │
 echo     └─────────────────────────────┘                                                        
-echo     %l%┌─────────────────────────────┐          
-echo     ^│                             ^│        
-echo     ^│                             ^│          %r%▲%e% Types of Recording Settings:%l%
+echo     %l%┌─────────────────────────────┐         %r%▲%e% Instruction: Press %r%1-3%e% and the button will turn green%l%
+echo     ^│                             ^│  Everything that's green means that will be optimized once you press %r%X%l%
+echo     ^│                             ^│
 echo     ^│            Home             ^│         
-echo     ^│                             ^│       %e%[%r%1%e%]  %r%•%e%  High Quality%l%                                %HighQualityc%▼%l%        
+echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  High Quality%l%                                %HighQualityc%▼%l%        
 echo     ^│                             ^│         These recording settings are suitable for short videos however,
 echo     ^│           Tweaks            ^│         they may not be optimal for longer videos due to higher storage usage.
 echo     ^│                             ^│                  
 echo     ^│                             ^│       
 echo     ^│       Ingame Settings       ^│              
-echo     ^│                             ^│       %e%[%r%2%e%]  %r%•%e%  Medium Quality%l%                              %MediumQualityc%▼%l%             
+echo     ^│                             ^│     %e%[%r% 2 %e%]  %r%•%e%  Medium Quality%l%                              %MediumQualityc%▼%l%             
 echo     ^│                             ^│         These recording settings are well-suited for both short and long videos,
 echo     ^│      %r%Recording Settings%l%     ^│         striking the perfect balance with medium storage usage while maintaining 
 echo     ^│                             ^│         optimal performance.              
 echo     ^│                             ^│       
 echo     ^│           Privacy           ^│              
 echo     ^│                             ^│                   
-echo     ^│                             ^│       %e%[%r%3%e%]  %r%•%e%  Low Quality%l%                                 %LowQualityc%▼%l%       
+echo     ^│                             ^│     %e%[%r% 3 %e%]  %r%•%e%  Low Quality%l%                                 %LowQualityc%▼%l%       
 echo     ^│           Backup            ^│         While these recording settings offer exceptionally low storage usage,
 echo     ^│                             ^│         it's worth noting that. they may result in subpar video quality. 
 echo     ^│                             ^│         Consider utilizing these settings as a last resort when all other 
@@ -838,30 +897,30 @@ if "%UIForPrivacy%"=="false" (
 echo.                                
 echo     %l%┌─────────────────────────────┐                       
 echo     │ %r%W%l% = %e%Up%l%       %r%D%l% = %e%Right%l%      │           %r% _      _  _____   __    _     _  _____  _%l%    
-echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      
-echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%   
+echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      %r%▲%e% Pages  [%r%1%e%/1]%l%
+echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l% 
 echo.    │ It's not that hard is it?   │
 echo     └─────────────────────────────┘                                                        
-echo     %l%┌─────────────────────────────┐          
-echo     ^│                             ^│        
-echo     ^│                             ^│          %r%▲%e% Privacy:%l%
+echo     %l%┌─────────────────────────────┐         %r%▲%e% Instruction: Press %r%1-6%e% and the button will turn green%l%
+echo     ^│                             ^│  Everything that's green means that will be optimized once you press %r%X%l%
+echo     ^│                             ^│
 echo     ^│            Home             ^│         
-echo     ^│                             ^│       %e%[%r%1%e%]  %r%•%e%  Privacy Cleanup%l%                             %PrivacyCleanupc%▼%l% 
+echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  Privacy Cleanup%l%                             %PrivacyCleanupc%▼%l% 
 echo     ^│                             ^│         Audit and remove unnecessary data, ensuring compliance and security.
 echo     ^│           Tweaks            ^│        
-echo     ^│                             ^│       %e%[%r%2%e%]  %r%•%e%  Data Collection%l%                             %DataColc%▼%l%          
+echo     ^│                             ^│     %e%[%r% 2 %e%]  %r%•%e%  Data Collection%l%                             %DataColc%▼%l%          
 echo     ^│                             ^│         Deletes Microsoft Gathered Informations About You.
 echo     ^│       Ingame Settings       ^│              
-echo     ^│                             ^│       %e%[%r%3%e%]  %r%•%e%  Security Improvements%l%                       %SecurityImpc%▼%l%  
+echo     ^│                             ^│     %e%[%r% 3 %e%]  %r%•%e%  Security Improvements%l%                       %SecurityImpc%▼%l%  
 echo     ^│                             ^│         Strengthen systems with updates, encryption, and regular assessments.
 echo     ^│      Recording Settings     ^│          
-echo     ^│                             ^│       %e%[%r%4%e%]  %r%•%e%  Configure Programs%l%                          %ConfigureProc%▼%l%                       
+echo     ^│                             ^│     %e%[%r% 4 %e%]  %r%•%e%  Configure Programs%l%                          %ConfigureProc%▼%l%                       
 echo     ^│                             ^│         Removes data collection from 3rd party programs. (Visual Studio)
 echo     ^│           %r%Privacy%l%           ^│              
-echo     ^│                             ^│       %e%[%r%5%e%]  %r%•%e%  Privacy Over Security%l%                       %PrivacyOverSecc%▼%l%                   
+echo     ^│                             ^│     %e%[%r% 5 %e%]  %r%•%e%  Privacy Over Security%l%                       %PrivacyOverSecc%▼%l%                   
 echo     ^│                             ^│         Disables Windows Defender and automatic updates.  
 echo     ^│           Backup            ^│         
-echo     ^│                             ^│       %e%[%r%6%e%]  %r%•%e%  UI For Privacy%l%                              %UIForPrivacyc%▼%l%    
+echo     ^│                             ^│     %e%[%r% 6 %e%]  %r%•%e%  UI For Privacy%l%                              %UIForPrivacyc%▼%l%    
 echo     ^│                             ^│         Elevate Your Windows 10 UI Experience by Disabling Annoying Elements.
 echo     ^│           Credits           ^│        
 echo     ^│                             ^│          
@@ -982,31 +1041,31 @@ cls
 echo.                                
 echo     %l%┌─────────────────────────────┐                       
 echo     │ %r%W%l% = %e%Up%l%       %r%D%l% = %e%Right%l%      │           %r% _      _  _____   __    _     _  _____  _%l%    
-echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      
+echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      %r%▲%e% Pages  [%r%1%e%/1]%l%
 echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%   
 echo.    │ It's not that hard is it?   │
 echo     └─────────────────────────────┘                                                        
-echo     %l%┌─────────────────────────────┐          
-echo     ^│                             ^│        
-echo     ^│                             ^│          %r%▲%e% Backup status:%l%                             [%statusc%%Status%%l%]
-echo     ^│            Home             ^│         If you see backup status as "Disabled" it means that some 
-echo     ^│                             ^│         files are corrupted and automatic backup didn't work well.
-echo     ^│                             ^│         
-echo     ^│           Tweaks            ^│       %e%[%r%X%e%]  %r%•%e%  Software%l%                                    %statusc%▼%l%        
+echo     %l%┌─────────────────────────────┐         %r%▲%e% Instruction:%l%
+echo     ^│                             ^│  If you see backup status as "Disabled" it means that some
+echo     ^│                             ^│  files are corrupted and automatic backup didn't work well.    [%statusc%%Status%%l%]
+echo     ^│            Home             ^│ 
+echo     ^│                             ^│     %e%[%r% X %e%]  %r%•%e%  Software%l%                                      %statusc%▼%l%
 echo     ^│                             ^│          HKEY_LOCAL_MACHINE\SOFTWARE 
-echo     ^│                             ^│          
-echo     ^│       Ingame Settings       ^│       %e%[%r%X%e%]  %r%•%e%  System%l%                                      %statusc%▼%l%    
+echo     ^│           Tweaks            ^│      
+echo     ^│                             ^│     %e%[%r% X %e%]  %r%•%e%  System%l%                                        %statusc%▼%l%  
 echo     ^│                             ^│          HKEY_LOCAL_MACHINE\SYSTEM
-echo     ^│                             ^│         
-echo     ^│      Recording Settings     ^│       %e%[%r%X%e%]  %r%•%e%  Default%l%                                     %statusc%▼%l% 
-echo     ^│                             ^│          HKEY_USERS\.DEFAULT                  
-echo     ^│                             ^│         
-echo     ^│           Privacy           ^│       %e%[%r%X%e%]  %r%•%e%  Security%l%                                    %statusc%▼%l%               
-echo     ^│                             ^│          HKEY_LOCAL_MACHINE\SECURITY               
-echo     ^│                             ^│           
-echo     ^│           %r%Backup%l%            ^│       %e%[%r%X%e%]  %r%•%e%  Restore Point%l%                               %ResStatusc%▼%l%   
-echo     ^│                             ^│          Restore Point should be named as "Vitality", but there
-echo     ^│                             ^│          is a chance that it won't work so make backup by yourself
+echo     ^│       Ingame Settings       ^│    
+echo     ^│                             ^│     %e%[%r% X %e%]  %r%•%e%  Default%l%                                       %statusc%▼%l%
+echo     ^│                             ^│          HKEY_USERS\.DEFAULT
+echo     ^│      Recording Settings     ^│ 
+echo     ^│                             ^│     %e%[%r% X %e%]  %r%•%e%  Security%l%                                      %statusc%▼%l%
+echo     ^│                             ^│          HKEY_LOCAL_MACHINE\SECURITY
+echo     ^│           Privacy           ^│              
+echo     ^│                             ^│     %e%[%r% X %e%]  %r%•%e%  Restore Point%l%                                 %ResStatusc%▼%l%
+echo     ^│                             ^│  Restore Point should be named as "Vitality", but there
+echo     ^│           %r%Backup%l%            ^│  is a chance that it won't work so make backup by yourself
+echo     ^│                             ^│
+echo     ^│                             ^│
 echo     ^│           Credits           ^│          
 echo     ^│                             ^│          
 echo     ^│                             ^│
@@ -1032,35 +1091,35 @@ cls
 echo.                                
 echo     %l%┌─────────────────────────────┐                       
 echo     │ %r%W%l% = %e%Up%l%       %r%D%l% = %e%Right%l%      │           %r% _      _  _____   __    _     _  _____  _%l%    
-echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      
-echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%   
+echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      %r%▲%e% Pages  [%r%1%e%/1]%l%
+echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%  
 echo.    │ It's not that hard is it?   │
 echo     └─────────────────────────────┘                                                        
-echo     %l%┌─────────────────────────────┐          
-echo     ^│                             ^│        
-echo     ^│                             ^│          %r%▲%e% Credits:%l% 
-echo     ^│            Home             ^│          
-echo     ^│                             ^│          
-echo     ^│                             ^│         %r%Founders:%e% vojtikczhraje, Pigeonlinon%l% 
-echo     ^│           Tweaks            ^│               
-echo     ^│                             ^│         %do%Design Inspiration:%e% Karma Team%l%
-echo     ^│                             ^│          
-echo     ^│       Ingame Settings       ^│         %o%Functionality:%e% vojtikczhraje, Hone Team, Aiden / EchoX%l%
-echo     ^│                             ^│          
-echo     ^│                             ^│         %lo%Tweaks:%e% vojtikczhraje, Karma Team%l%
-echo     ^│      Recording Settings     ^│        
-echo     ^│                             ^│         %ic%IngameSettings:%e% vojtikczhraje%l%                   
-echo     ^│                             ^│         
-echo     ^│           Privacy           ^│         %oc%Recording Settings:%e% vojtikczhraje%l%            
-echo     ^│                             ^│                        
-echo     ^│                             ^│         %g%Privacy:%e% privacy.sexy%l%  
-echo     ^│           Backup            ^│         
-echo     ^│                             ^│         %mg%Backup:%e% vojtikczhraje, Hone Team%l% 
-echo     ^│                             ^│          
-echo     ^│           %r%Credits%l%           ^│          
-echo     ^│                             ^│          
+echo     %l%┌─────────────────────────────┐          %r%▲%e% Credits:%l% 
+echo     ^│                             ^│  idkidkidkikdikdikdikdikdidkik
+echo     ^│                             ^│ 
+echo     ^│            Home             ^│         %r%Founders:%e% vojtikczhraje, Pigeonlinon%l% 
 echo     ^│                             ^│
-echo     └─────────────────────────────┘                                
+echo     ^│                             ^│ 
+echo     ^│           Tweaks            ^│         %do%Design Inspiration:%e% Karma%l%
+echo     ^│                             ^│
+echo     ^│                             ^│          
+echo     ^│       Ingame Settings       ^│         %o%Functionality:%e% vojtikczhraje, HoneCtrl, EchoX%l%
+echo     ^│                             ^│
+echo     ^│                             ^│
+echo     ^│      Recording Settings     ^│         %lo%Tweaks:%e% vojtikczhraje, Karma%l% 
+echo     ^│                             ^│                  
+echo     ^│                             ^│         
+echo     ^│           Privacy           ^│         %ic%IngameSettings:%e% vojtikczhraje, HoneCtrl%l% 
+echo     ^│                             ^│
+echo     ^│                             ^│  
+echo     ^│           Backup            ^│         %oc%Recording Settings:%e% vojtikczhraje, HoneCtrl%l%
+echo     ^│                             ^│
+echo     ^│                             ^│          
+echo     ^│           %r%Credits%l%           ^│         %g%Privacy:%e% privacy.sexy%l%
+echo     ^│                             ^│
+echo     ^│                             ^│
+echo     └─────────────────────────────┘         %mg%Backup:%e% vojtikczhraje, HoneCtrl%l% 
 echo.
 echo.
 choice /c:WS /n /m " "                                           
