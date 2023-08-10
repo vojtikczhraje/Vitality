@@ -4,6 +4,33 @@ mode 120, 36
 chcp 65001 >nul
 TITLE Vitality
 
+::Ask for ADMIN permissions inside batch (https://stackoverflow.com/questions/1894967/how-to-request-administrator-access-inside-a-batch-file)
+REM  --> Check for permissions
+    IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" (
+>nul 2>&1 "%SYSTEMROOT%\SysWOW64\cacls.exe" "%SYSTEMROOT%\SysWOW64\config\system"
+) ELSE (
+>nul 2>&1 "%SYSTEMROOT%\system32\cacls.exe" "%SYSTEMROOT%\system32\config\system"
+)
+
+REM --> If error flag set, we do not have admin.
+if '%errorlevel%' NEQ '0' (
+    echo Requesting administrative privileges...
+    goto UACPrompt
+) else ( goto gotAdmin )
+
+:UACPrompt
+    echo Set UAC = CreateObject^("Shell.Application"^) > "%temp%\getadmin.vbs"
+    set params= %*
+    echo UAC.ShellExecute "cmd.exe", "/c ""%~s0"" %params:"=""%", "", "runas", 1 >> "%temp%\getadmin.vbs"
+
+    "%temp%\getadmin.vbs"
+    del "%temp%\getadmin.vbs"
+    exit /B
+
+:gotAdmin
+    pushd "%CD%"
+    CD /D "%~dp0"
+
 REM Tweaks Page 1
 set FPS=false
 set Latency=false
@@ -138,12 +165,16 @@ if exist C:\Vitality\welcome1 (
 
 if not exist C:\Vitality\welcome1 (
     set welcome1=Welcome to Vitality %r%%username%%e%.
-    echo s > C:\Vitality\welcome1
+    echo Vitality > C:\Vitality\welcome1
 )
 
 if not exist C:\Vitality\welcome2 (
     set welcome2=Are you ready to level up your gaming experience?
-    echo s > C:\Vitality\welcome2
+    echo Vitality > C:\Vitality\welcome2
+)
+
+if exist C:\Vitality\welcome2 (
+    set welcome2=Let's optimize your Windows even more :P
 )
 
 
@@ -244,28 +275,28 @@ echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r
 echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l% 
 echo.    │ It's not that hard is it?   │
 echo     └─────────────────────────────┘                                                        
-echo     %l%┌─────────────────────────────┐            
+echo     %l%┌─────────────────────────────┐         %r%▲%e% %welcome1% %l%
+echo     ^│                             ^│          %l%%welcome2%%l% %l%%welcome3%%l%
 echo     ^│                             ^│
-echo     ^│                             ^│
-echo     ^│            %r%Home%l%             ^│        %r%▲%e% %welcome1% %l% 
-echo     ^│                             ^│          %e%%welcome2%%l%
-echo     ^│                             ^│
-echo     ^│           Tweaks            ^│       ┌───────────────────────────────────────────────────────────────────┐
+echo     ^│            %r%Home%l%             ^│
+echo     ^│                             ^│       ┌───────────────────────────────────────────────────────────────────┐
 echo     ^│                             ^│       │ %ar%▼ %ar%Disclaimer%l%                                                      │
+echo     ^│           Tweaks            ^│       │                                                                   │
+echo     ^│                             ^│       │ %ar%•%e% Use at Your Own Risk. %l%                                          │
 echo     ^│                             ^│       │                                                                   │
-echo     ^│       Ingame Settings       ^│       │ %ar%•%e% Use at Your Own Risk. %l%                                          │
+echo     ^│       Ingame Settings       ^│       │ %ar%•%e% Not guaranteed to be compatible with all configurations. %l%       │
 echo     ^│                             ^│       │                                                                   │
-echo     ^│                             ^│       │ %ar%•%e% Not guaranteed to be compatible with all configurations. %l%       │
-echo     ^│      Recording Settings     ^│       │                                                                   │
 echo     ^│                             ^│       │ %ar%•%e% Create a full system backup before applying any tweaks. %l%        │
+echo     ^│      Recording Settings     ^│       │                                                                   │
+echo     ^│                             ^│       │ %ar%•%e% Disable antivirus to avoid conflicts. %l%                          │
 echo     ^│                             ^│       │                                                                   │
-echo     ^│           Privacy           ^│       │ %ar%•%e% Disable antivirus to avoid conflicts. %l%                          │
-echo     ^│                             ^│       │                                                                   │
-echo     ^│                             ^│       │ %ar%•%e% Understand the implications of each tweak before applying it. %l%  │
-echo     ^│           Backup            ^│       └───────────────────────────────────────────────────────────────────┘
+echo     ^│           Privacy           ^│       │ %ar%•%e% Understand the implications of each tweak before applying it. %l%  │
+echo     ^│                             ^│       └───────────────────────────────────────────────────────────────────┘
 echo     ^│                             ^│
+echo     ^│           Backup            ^│		  
+echo     ^│                             ^│        %e%Applied Optimizations: %r%%formatted_optimizations%%l%      %e%Status of Backup: %statusc%%Status%%l%
 echo     ^│                             ^│
-echo     ^│           Credits           ^│        %e%Applied Optimizations: %r%%formatted_optimizations%%l%      %e%Status of Backup: %statusc%%Status%%l%
+echo     ^│           Credits           ^│
 echo     ^│                             ^│
 echo     ^│                             ^│
 echo     └─────────────────────────────┘
@@ -1095,7 +1126,7 @@ echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r
 echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%  
 echo.    │ It's not that hard is it?   │
 echo     └─────────────────────────────┘                                                        
-echo     %l%┌─────────────────────────────┐          %r%▲%e% Credits:%l% 
+echo     %l%┌─────────────────────────────┐         %r%▲%e% Credits:%l% 
 echo     ^│                             ^│  idkidkidkikdikdikdikdikdidkik
 echo     ^│                             ^│ 
 echo     ^│            Home             ^│         %r%Founders:%e% vojtikczhraje, Pigeonlinon%l% 
