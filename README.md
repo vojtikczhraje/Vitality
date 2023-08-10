@@ -1,28 +1,32 @@
 ![Header image](https://github.com/vojtikczhraje/Vitality/blob/main/Resources/Images/Vitality-Github.jpg)
 <br>
 <br>
-<h5 align="center"> Vitality is a free and open source batch optimizer, which aims to improve performance, decrease latency, enhance your game settings, and bring your recording settings to the next level.
-<br>
-<br>
-<br>
-<br>
-<img src="https://github.com/vojtikczhraje/Vitality/blob/main/Resources/Images/Vitality-About-Github.jpg">
-<br>
-<br>
-<h3 align="center">- Founders: vojtikczhraje, Pigeonlonion
-<h4 align="center">- Languages: Batch, Powershell
-<h5 align="center">- Requirements: Windows 10/11, Administrator Permissions, Internet Connection
-<br>
-<br>
-<br>
-<br>
-<img src="https://github.com/vojtikczhraje/Vitality/blob/main/Resources/Images/Vitality.png" align="center">
-<br>
-<br>
-<br>
-<br>
-<img src="https://github.com/vojtikczhraje/Vitality/blob/main/Resources/Images/Vitality-How-To-Use-It-Github.jpg">
-<h3 align="center">- Download Vitality
-<h4 align="center">- Run as Administrator
-<h5 align="center">- Use W, S, A, D and X to interact with the program
 
+##### • Vitality is a free and open source batch optimizer, which aims to improve performance, decrease latency, enhance your game settings, and bring your recording settings to the next level.
+  
+  
+<h2> ▲ About
+  
+
+##### • Founders: vojtikczhraje, Pigeonlonion
+##### • Languages: ```Batch, Powershell```
+##### • Requirements: Windows 10/11, Administrator Permissions, Internet Connection
+
+<br>
+<img src="https://github.com/vojtikczhraje/Vitality/blob/main/Resources/Images/Vitality.png" align="center" >
+
+<h2> ▲ How To Use
+  
+##### • Download Vitality
+##### • Run as Administrator
+##### • Use ```W, S, A, D, X``` and ```Numbers``` to interact with the program
+
+<br>
+
+<h2> ▲ Disclaimer
+  
+##### • Use at Your Own Risk.
+##### • Not guaranteed to be compatible with all configurations.
+##### • Create a full system backup before applying any tweaks.
+##### • Disable antivirus to avoid confilicts.
+##### • Understand the implications of each tweak before applying.
