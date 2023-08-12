@@ -304,7 +304,7 @@ echo     ^│                             ^│          %l%%welcome2%%l% %l%%wel
 echo     ^│                             ^│
 echo     ^│            %r%Home%l%             ^│
 echo     ^│                             ^│       ┌───────────────────────────────────────────────────────────────────┐
-echo     ^│                             ^│       │ %ar%▼ %ar%Disclaimer%l%                                                      │
+echo     ^│                             ^│       │ %ar%▼ %ar%Disclaimers%l%                                                      │
 echo     ^│           Tweaks            ^│       │                                                                   │
 echo     ^│                             ^│       │ %ar%•%e% Use at Your Own Risk. %l%                                          │
 echo     ^│                             ^│       │                                                                   │
@@ -3597,7 +3597,8 @@ goto skippingcpu
 
 
 if "%HighQuality%"=="false" goto skippinghighquality
-if not exist "%SYSTEMDRIVE%\Program Files\obs-studio\bin\64bit" echo                                                        Reinstall OBS
+echo                                           Applying High Quality Recording Settings
+if not exist "%appdata%\obs-studio" echo                                                        Reinstall OBS
 taskkill /f /im obs64.exe >nul 2>&1
 for /f %%A in ('powershell.exe -Command "(Get-WmiObject -Class Win32_VideoController).CurrentHorizontalResolution"') do set "horizontal=%%A"
 for /f %%A in ('powershell.exe -Command "(Get-WmiObject -Class Win32_VideoController).CurrentVerticalResolution"') do set "vertical=%%A"
@@ -3774,7 +3775,8 @@ if %gpu1% == NaN (
 
 
 if "%MediumQuality%"=="false" goto skippingmediumquality
-if not exist "%SYSTEMDRIVE%\Program Files\obs-studio\bin\64bit" echo                                                        Reinstall OBS
+echo                                          Applying Medium Quality Recording Settings
+if not exist "%appdata%\obs-studio" echo                                                        Reinstall OBS
 taskkill /f /im obs64.exe >nul 2>&1
 for /f %%A in ('powershell.exe -Command "(Get-WmiObject -Class Win32_VideoController).CurrentHorizontalResolution"') do set "horizontal=%%A"
 for /f %%A in ('powershell.exe -Command "(Get-WmiObject -Class Win32_VideoController).CurrentVerticalResolution"') do set "vertical=%%A"
@@ -3955,7 +3957,8 @@ if %gpu1% == NaN(
 
 
 if "%LowQuality%"=="false" goto skippinglowquality
-if not exist "%SYSTEMDRIVE%\Program Files\obs-studio\bin\64bit" echo                                                        Reinstall OBS
+echo                                           Applying Low Quality Recording Settings
+if not exist "%appdata%\obs-studio" echo                                                        Reinstall OBS
 taskkill /f /im obs64.exe >nul 2>&1
 for /f %%A in ('powershell.exe -Command "(Get-WmiObject -Class Win32_VideoController).CurrentHorizontalResolution"') do set "horizontal=%%A"
 for /f %%A in ('powershell.exe -Command "(Get-WmiObject -Class Win32_VideoController).CurrentVerticalResolution"') do set "vertical=%%A"
