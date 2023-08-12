@@ -4,6 +4,21 @@ mode 120, 36
 chcp 65001 >nul
 TITLE Vitality
 
+REM Set Colors
+set p=[38;5;99m
+set l=[38;5;240m
+set r=[38;5;216m
+set g=[38;5;123m
+set e=[0m
+set ar=[38;5;203m
+set do=[38;5;223m
+set o=[38;5;229m
+set lo=[38;5;230m
+set ic=[38;5;231m
+set oc=[38;5;253m
+set g=[38;5;248m
+set mg=[38;5;243m
+
 ::Ask for ADMIN permissions inside batch (https://stackoverflow.com/questions/1894967/how-to-request-administrator-access-inside-a-batch-file)
 REM  --> Check for permissions
     IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" (
@@ -14,8 +29,25 @@ REM  --> Check for permissions
 
 REM --> If error flag set, we do not have admin.
 if '%errorlevel%' NEQ '0' (
-    echo Requesting administrative privileges...
-    goto UACPrompt
+    echo.
+    echo.
+    echo.
+    echo.
+    echo.
+    echo.
+    echo.
+    echo.
+    echo.
+    echo.
+    echo.
+    echo.
+    echo.
+    echo.
+    echo                                       %r% _      _  _____   __    _     _  _____  _%l%
+    echo                                      %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%
+    echo                                        %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%
+    echo.
+    echo                                                 Requesting Admin Previleges
 ) else ( goto gotAdmin )
 
 :UACPrompt
@@ -117,23 +149,6 @@ if "%ResStatus%"=="Disabled" (
 
 
 
-REM Set Colors
-set p=[38;5;99m
-set l=[38;5;240m
-set r=[38;5;216m
-set g=[38;5;123m
-set e=[0m
-set ar=[38;5;203m
-set do=[38;5;223m
-set o=[38;5;229m
-set lo=[38;5;230m
-set ic=[38;5;231m
-set oc=[38;5;253m
-set g=[38;5;248m
-set mg=[38;5;243m
-
-
-
 REM Create Required Directories 
 
 REM Create Main Directory
@@ -151,9 +166,7 @@ cls
 
 REM Optimization Counter
 if not exist "C:\Vitality\v.bat" echo set "ran_optimizations=0"> v.bat
-if not exist "C:\Vitality\a.bat" echo set "apps_uninstalled= 0"> a.bat
 call v.bat
-call a.bat
 set "formatted_optimizations=%ran_optimizations%"
 if %formatted_optimizations% LSS 10 set "formatted_optimizations= %formatted_optimizations%"
 
@@ -253,6 +266,13 @@ if not exist C:\Vitality\Backup\RestorePoint (
     echo exit >> "C:\Vitality\Backup\RestorePoint.bat"
     start /min "" "C:\Vitality\Backup\RestorePoint.bat"
 )
+
+Ping www.google.nl -n 1 -w 1000 >nul
+if %errorlevel% neq 0 (
+echo %e%                                   No Internet Connection, press C to continue anyway
+choice /c:"CQ" /n /m "%l%                                              [ %r%C%l% ] Continue  [ %r%Q%l% ] Quit %r%" & if !errorlevel! equ 2 exit /b
+)
+
 timeout /nobreak /t 2 >nul 2>&1
 echo.
 echo.
@@ -691,7 +711,7 @@ echo     ^│                             ^│
 echo     └─────────────────────────────┘                                
 echo.                                                                    
 echo.                                                                   
-choice /c:WS/n /m " "                                           
+choice /c:WS /n /m " "                                           
 set MenuItem=%errorlevel%
 if "%MenuItem%"=="1" (
 	if "%lasttweaks1%"=="true" (
@@ -1021,24 +1041,24 @@ echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_
 echo.    │ It's not that hard is it?   │
 echo     └─────────────────────────────┘                                                        
 echo     %l%┌─────────────────────────────┐         %r%▲%e% Instruction:%l%
-echo     ^│                             ^│  If you see backup status as "Disabled" it means that some
-echo     ^│                             ^│  files are corrupted and automatic backup didn't work well.    [%statusc%%Status%%l%]
+echo     ^│                             ^│  If you see backup status as "Disabled" it means 
+echo     ^│                             ^│  that some files are corrupted                          [%statusc%%Status%%l%]
 echo     ^│            Home             ^│ 
-echo     ^│                             ^│     %e%[%r% X %e%]  %r%•%e%  Software%l%                                      %statusc%▼%l%
+echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  Software%l%                                      %statusc%▼%l%
 echo     ^│                             ^│          HKEY_LOCAL_MACHINE\SOFTWARE 
 echo     ^│           Tweaks            ^│      
-echo     ^│                             ^│     %e%[%r% X %e%]  %r%•%e%  System%l%                                        %statusc%▼%l%  
+echo     ^│                             ^│     %e%[%r% 2 %e%]  %r%•%e%  System%l%                                        %statusc%▼%l%  
 echo     ^│                             ^│          HKEY_LOCAL_MACHINE\SYSTEM
 echo     ^│       Ingame Settings       ^│    
-echo     ^│                             ^│     %e%[%r% X %e%]  %r%•%e%  Default%l%                                       %statusc%▼%l%
+echo     ^│                             ^│     %e%[%r% 3 %e%]  %r%•%e%  Default%l%                                       %statusc%▼%l%
 echo     ^│                             ^│          HKEY_USERS\.DEFAULT
 echo     ^│      Recording Settings     ^│ 
-echo     ^│                             ^│     %e%[%r% X %e%]  %r%•%e%  Security%l%                                      %statusc%▼%l%
+echo     ^│                             ^│     %e%[%r% 4 %e%]  %r%•%e%  Security%l%                                      %statusc%▼%l%
 echo     ^│                             ^│          HKEY_LOCAL_MACHINE\SECURITY
 echo     ^│           Privacy           ^│              
-echo     ^│                             ^│     %e%[%r% X %e%]  %r%•%e%  Restore Point%l%                                 %ResStatusc%▼%l%
-echo     ^│                             ^│  Restore Point should be named as "Vitality", but there
-echo     ^│           %r%Backup%l%            ^│  is a chance that it won't work so make backup by yourself
+echo     ^│                             ^│     %e%[%r% 5 %e%]  %r%•%e%  Restore Point%l%                                 %ResStatusc%▼%l%
+echo     ^│                             ^│  Restore Point should be named as "Vitality"
+echo     ^│           %r%Backup%l%            ^│ 
 echo     ^│                             ^│
 echo     ^│                             ^│
 echo     ^│           Credits           ^│          
@@ -1071,7 +1091,7 @@ echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_
 echo.    │ It's not that hard is it?   │
 echo     └─────────────────────────────┘                                                        
 echo     %l%┌─────────────────────────────┐         %r%▲%e% Credits:%l% 
-echo     ^│                             ^│  idkidkidkikdikdikdikdikdidkik
+echo     ^│                             ^│        We would like to thank the following:
 echo     ^│                             ^│ 
 echo     ^│            Home             ^│         %r%Founders:%e% vojtikczhraje, Pigeonlinon%l% 
 echo     ^│                             ^│
@@ -2086,10 +2106,12 @@ reg delete HKCR\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.XboxG
 reg delete HKCR\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.XboxSpeechToTextOverlay_1.17.29001.0_x64__8wekyb3d8bbwe /f >nul 2>&1
 reg delete HKCR\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.ZuneMusic_10.19071.19011.0_x64__8wekyb3d8bbwe /f >nul 2>&1
 reg delete HKCR\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.ZuneVideo_10.19071.19011.0_x64__8wekyb3d8bbwe /f >nul 2>&1
-curl -g -k -L -# -o "%SYSTEMDRIVE%\Hone\Resources\HoneV2.pow" "https://github.com/auraside/HoneCtrl/raw/main/Files/HoneV2.pow"
-powercfg /d 01010101-0101-0101-0101-010101010101
-powercfg -import "%SYSTEMDRIVE%\Vitality\Vitality.pow" 01010101-0101-0101-0101-010101010101
-powercfg /changename 01010101-0101-0101-0101-010101010101 "Vitality" " "
+if exist "%SYSTEMDRIVE%\Vitality\Vitality.pow" del "%SYSTEMDRIVE%\Vitality\Vitality.pow" >nul 2>&1
+powercfg /d 01010101-0101-0101-0101-010101010101 >nul 2>&1
+curl -g -k -L -# -o "%SYSTEMDRIVE%\Vitality\Vitality.pow" "https://cdn.discordapp.com/attachments/1140029335944835152/1140029390449819659/Vitality.pow" >nul 2>&1
+powercfg -import "%SYSTEMDRIVE%\Vitality\Vitality.pow" 01010101-0101-0101-0101-010101010101 >nul 2>&1
+powercfg /changename 01010101-0101-0101-0101-010101010101 "Vitality" " " >nul 2>&1
+powercfg -setactive 01010101-0101-0101-0101-010101010101 >nul 2>&1
 
 set "file=C:\Vitality\Info\fpsandinput"
 if not exist "%file%" (
