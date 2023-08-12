@@ -67,6 +67,8 @@ set ConfigurePro=false
 set PrivacyOverSec=false
 set UIForPrivacy=false
 
+
+REM Backup
 if exist "C:\Vitality\Backup\Security.reg"  (
     set "Status=Enabled"
 ) else (
@@ -110,6 +112,8 @@ if "%ResStatus%"=="Disabled" (
 ) else (
     set "ResStatusc=[38;5;34m"
 )
+
+
 
 
 
@@ -660,29 +664,29 @@ echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r
 echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%  
 echo.    │ It's not that hard is it?   │
 echo     └─────────────────────────────┘                                                        
-echo     %l%┌─────────────────────────────┐         %r%▲%e% Instruction: Press %r%1-7%e% and the button will turn green%l%
-echo     ^│                             ^│  Everything that's green means that will be optimized once you press %r%X%l%
+echo     %l%┌─────────────────────────────┐
+echo     ^│                             ^│
 echo     ^│                             ^│   
 echo     ^│            Home             ^│         
-echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  Minecraft%l%                                   %Minecraftc%▼%l%     
+echo     ^│                             ^│      
 echo     ^│                             ^│                 
 echo     ^│           Tweaks            ^│         
-echo     ^│                             ^│     %e%[%r% 2 %e%]  %r%•%e%  CSGO%l%                                        %CSGOc%▼%l% 
+echo     ^│                             ^│     
+echo     ^│                             ^│          
+echo     ^│       %r%Ingame Settings%l%       ^│            
+echo     ^│                             ^│               
+echo     ^│                             ^│                           %e%under construction...%l%
+echo     ^│      Recording Settings     ^│   
 echo     ^│                             ^│ 
-echo     ^│       %r%Ingame Settings%l%       ^│              
-echo     ^│                             ^│     %e%[%r% 3 %e%]  %r%•%e%  Valorant%l%                                    %Valorantc%▼%l% 
-echo     ^│                             ^│ 
-echo     ^│      Recording Settings     ^│    
-echo     ^│                             ^│     %e%[%r% 4 %e%]  %r%•%e%  Fortnite%l%                                    %Fortnitec%▼%l%
-echo     ^│                             ^│       
+echo     ^│                             ^│   
 echo     ^│           Privacy           ^│              
-echo     ^│                             ^│     %e%[%r% 5 %e%]  %r%•%e%  Call of Duty Warzone ^& MW%l%                   %CODc%▼%l%
+echo     ^│                             ^│     
 echo     ^│                             ^│       
 echo     ^│           Backup            ^│         
-echo     ^│                             ^│     %e%[%r% 6 %e%]  %r%•%e%  Apex%l%                                        %Apexc%▼%l%
+echo     ^│                             ^│    
 echo     ^│                             ^│
 echo     ^│           Credits           ^│  
-echo     ^│                             ^│     %e%[%r% 7 %e%]  %r%•%e%  Rust%l%                                        %Rustc%▼%l%
+echo     ^│                             ^│    
 echo     ^│                             ^│
 echo     └─────────────────────────────┘                                
 echo.                                                                    
@@ -797,7 +801,7 @@ echo.
 echo     %l%┌─────────────────────────────┐                       
 echo     │ %r%W%l% = %e%Up%l%       %r%D%l% = %e%Right%l%      │           %r% _      _  _____   __    _     _  _____  _%l%    
 echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      %r%▲%e% Pages  [%r%1%e%/1]%l%
-echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l% 
+echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l% (Renders are from HoneCtrl)
 echo.    │ It's not that hard is it?   │
 echo     └─────────────────────────────┘                                                        
 echo     %l%┌─────────────────────────────┐         %r%▲%e% Instruction: Press %r%1-3%e% and the button will turn green%l%
@@ -1281,6 +1285,7 @@ echo                                       %r% _      _  _____   __    _     _  
 echo                                      %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%
 echo                                        %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%
 echo.
+
 if "%FPS%"=="false" goto skippingfps
 echo                                            Applying FPS and Input Delay Tweaks
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects" /v "VisualFXSetting" /t REG_DWORD /d "2" /f >nul 2>&1
@@ -2283,6 +2288,7 @@ reg delete HKCR\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.XboxG
 reg delete HKCR\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.XboxSpeechToTextOverlay_1.17.29001.0_x64__8wekyb3d8bbwe /f >nul 2>&1
 reg delete HKCR\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.ZuneMusic_10.19071.19011.0_x64__8wekyb3d8bbwe /f >nul 2>&1
 reg delete HKCR\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.ZuneVideo_10.19071.19011.0_x64__8wekyb3d8bbwe /f >nul 2>&1
+
 
 set "file=C:\Vitality\Info\fpsandinput"
 if not exist "%file%" (
