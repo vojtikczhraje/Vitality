@@ -2086,7 +2086,10 @@ reg delete HKCR\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.XboxG
 reg delete HKCR\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.XboxSpeechToTextOverlay_1.17.29001.0_x64__8wekyb3d8bbwe /f >nul 2>&1
 reg delete HKCR\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.ZuneMusic_10.19071.19011.0_x64__8wekyb3d8bbwe /f >nul 2>&1
 reg delete HKCR\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.ZuneVideo_10.19071.19011.0_x64__8wekyb3d8bbwe /f >nul 2>&1
-
+curl -g -k -L -# -o "%SYSTEMDRIVE%\Hone\Resources\HoneV2.pow" "https://github.com/auraside/HoneCtrl/raw/main/Files/HoneV2.pow"
+powercfg /d 01010101-0101-0101-0101-010101010101
+powercfg -import "%SYSTEMDRIVE%\Vitality\Vitality.pow" 01010101-0101-0101-0101-010101010101
+powercfg /changename 01010101-0101-0101-0101-010101010101 "Hone Ultimate Power Plan V2" "The Ultimate Power Plan to increase FPS, improve latency and reduce input lag."
 
 set "file=C:\Vitality\Info\fpsandinput"
 if not exist "%file%" (
