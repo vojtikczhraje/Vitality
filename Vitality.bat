@@ -2089,7 +2089,7 @@ reg delete HKCR\Extensions\ContractId\Windows.Protocol\PackageId\Microsoft.ZuneV
 curl -g -k -L -# -o "%SYSTEMDRIVE%\Hone\Resources\HoneV2.pow" "https://github.com/auraside/HoneCtrl/raw/main/Files/HoneV2.pow"
 powercfg /d 01010101-0101-0101-0101-010101010101
 powercfg -import "%SYSTEMDRIVE%\Vitality\Vitality.pow" 01010101-0101-0101-0101-010101010101
-powercfg /changename 01010101-0101-0101-0101-010101010101 "Hone Ultimate Power Plan V2" "The Ultimate Power Plan to increase FPS, improve latency and reduce input lag."
+powercfg /changename 01010101-0101-0101-0101-010101010101 "Vitality" " "
 
 set "file=C:\Vitality\Info\fpsandinput"
 if not exist "%file%" (
