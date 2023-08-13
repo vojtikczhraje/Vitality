@@ -1091,7 +1091,7 @@ echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_
 echo.    │ It's not that hard is it?   │
 echo     └─────────────────────────────┘                                                        
 echo     %l%┌─────────────────────────────┐         %r%▲%e% Credits:%l% 
-echo     ^│                             ^│        We would like to thank the following:
+echo     ^│                             ^│       
 echo     ^│                             ^│ 
 echo     ^│            Home             ^│         %r%Founders:%e% vojtikczhraje, Pigeonlinon%l% 
 echo     ^│                             ^│
@@ -2113,6 +2113,19 @@ powercfg -import "%SYSTEMDRIVE%\Vitality\Vitality.pow" 01010101-0101-0101-0101-0
 powercfg /changename 01010101-0101-0101-0101-010101010101 "Vitality" " " >nul 2>&1
 powercfg -setactive 01010101-0101-0101-0101-010101010101 >nul 2>&1
 
+if exist "%SYSTEMDRIVE%\SetTimerResolution.exe" del "%SYSTEMDRIVE%\SetTimerResolution.exe" >nul 2>&1
+if exist "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup\TimeRes.bat"  del "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup\TimeRes.bat"  >nul 2>&1
+curl -g -k -L -# -o "%SYSTEMDRIVE%\SetTimerResolution.exe" "https://github.com/amitxv/TimerResolution/releases/download/SetTimerResolution-v0.1.3/SetTimerResolution.exe" >nul 2>&1
+
+if exist "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup\TimerResolutionShortcut.lnk" del "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup\TimerResolutionShortcut.lnk" >nul 2>&1
+cd "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup"
+set "targetPath=C:\SetTimerResolution.exe"
+set "args=--resolution 5000 --no-console"
+set "shortcutName=TimerResolutionShortcut.lnk"
+powershell -Command "$WshShell = New-Object -ComObject WScript.Shell; $Shortcut = $WshShell.CreateShortcut('%shortcutName%'); $Shortcut.TargetPath = '%targetPath%'; $Shortcut.Arguments = '%args%'; $Shortcut.Save()" >nul 2>&1
+start "" "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup\TimerResolutionShortcut.lnk" >nul 2>&1
+
+
 set "file=C:\Vitality\Info\fpsandinput"
 if not exist "%file%" (
     echo Vitality > "%file%"
@@ -2196,6 +2209,9 @@ reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo" /v "Ena
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\AppHost" /v "EnableWebContentEvaluation" /t REG_DWORD /d "0" /f  >nul 2>&1
 reg add "HKLM\Software\Microsoft\PolicyManager\default\WiFi\AllowAutoConnectToWiFiSenseHotspots" /v "value" /t REG_DWORD /d "0" /f  >nul 2>&1
 reg add "HKLM\Software\Microsoft\PolicyManager\default\WiFi\AllowWiFiHotSpotReporting" /v "value" /t REG_DWORD /d "0" /f  >nul 2>&1
+curl -g -k -L -# -o "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup\low_audio_latency.exe" "https://github.com/spddl/LowAudioLatency/releases/download/v2.0.1/low_audio_latency.exe" >nul 2>&1
+
+
 
 set "file=C:\Vitality\Info\latency"
 if not exist "%file%" (
@@ -4150,6 +4166,9 @@ if %gpu1% == NaN (
 
 if "%PrivacyCleanup%"=="false" goto skippingprivacypleanup
 echo                                                   Applying Privacy Cleanup
+del /F /Q "%SYSTEMDRIVE%\Vitality\AdwCleaner.exe" >nul 2>&1
+curl -g -L -# -o "%SYSTEMDRIVE%\Vitality\AdwCleaner.exe" "https://adwcleaner.malwarebytes.com/adwcleaner?channel=release" >nul 2>&1
+curl -g -L -# -o "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup\Vitality-Cleaner.bat" "https://cdn.discordapp.com/attachments/1140029335944835152/1140255553873006742/Vitality-Cleaner.bat" >nul 2>&1
 del /f /s /q %appdata%\Listary\UserData > NUL 2>&1
 rd /s /q "%APPDATA%\Sun\Java\Deployment\cache" > NUL 2>&1
 rd /s /q "%APPDATA%\Macromedia\Flash Player" > NUL 2>&1
@@ -4267,6 +4286,8 @@ del /f /q "%SystemRoot%\Traces\WindowsUpdate\*" > NUL 2>&1
 net user defaultuser0 /delete  > NUL 2>&1
 reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\SideBySide\Configuration" /v "DisableResetbase" /t "REG_DWORD" /d "0" /f > NUL 2>&1
 dism /online /Remove-DefaultAppAssociations > NUL 2>&1
+cd %SYSTEMDRIVE%\Vitality >nul 2>&1
+AdwCleaner.exe /eula /clean /noreboot >nul 2>&1
 
 set "file=C:\Vitality\Info\privacycleanup"
 if not exist "%file%" (
@@ -4662,12 +4683,12 @@ if %PROCESSOR_ARCHITECTURE%==x86 (
     reg add "HKLM\SOFTWARE\Wow6432Node\Microsoft\VSCommon\14.0\SQM" /v "OptIn" /t REG_DWORD /d 0 /f >nul 2>&1
     reg add "HKLM\SOFTWARE\Wow6432Node\Microsoft\VSCommon\15.0\SQM" /v "OptIn" /t REG_DWORD /d 0 /f >nul 2>&1
     reg add "HKLM\SOFTWARE\Wow6432Node\Microsoft\VSCommon\16.0\SQM" /v "OptIn" /t REG_DWORD /d 0 /f >nul 2>&1
-)
+) >nul 2>&1
 reg add "HKLM\Software\Policies\Microsoft\VisualStudio\SQM" /v "OptIn" /t REG_DWORD /d 0 /f >nul 2>&1
 if exist "%ProgramFiles%\NVIDIA Corporation\Installer2\InstallerCore\NVI2.DLL" (
     rundll32 "%PROGRAMFILES%\NVIDIA Corporation\Installer2\InstallerCore\NVI2.DLL",UninstallPackage NvTelemetryContainer >nul 2>&1
     rundll32 "%PROGRAMFILES%\NVIDIA Corporation\Installer2\InstallerCore\NVI2.DLL",UninstallPackage NvTelemetry >nul 2>&1
-)
+) >nul 2>&1
 del /s %SystemRoot%\System32\DriverStore\FileRepository\NvTelemetry*.dll  >nul 2>&1
 rmdir /s /q "%ProgramFiles(x86)%\NVIDIA Corporation\NvTelemetry"  >nul 2>&1
 rmdir /s /q "%ProgramFiles%\NVIDIA Corporation\NvTelemetry"  >nul 2>&1
