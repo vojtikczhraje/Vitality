@@ -406,7 +406,7 @@ echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_
 echo.    │ It's not that hard is it?   │
 echo     └─────────────────────────────┘                                                        
 echo     %l%┌─────────────────────────────┐         %r%▲%e% Instruction: Press %r%0-5%e% and the button will turn green%l%
-echo     ^│                             ^│  Everything that's green means that will be optimized once you press %r%X%l%
+echo     ^│                             ^│  Everything that's %r%green%l% means that will be optimized once you press %r%X%l%
 echo     ^│                             ^│          
 echo     ^│            Home             ^│
 echo     ^│                             ^│     %e%[%r% 0 %e%]  %r%•%e%  FPS and Input Delay %l%                        %FPSc%▼%l%        
@@ -551,7 +551,7 @@ echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_
 echo.    │ It's not that hard is it?   │
 echo     └─────────────────────────────┘                                                        
 echo     %l%┌─────────────────────────────┐         %r%▲%e% Instruction: Press %r%6-9%e% and the button will turn green%l%
-echo     ^│                             ^│  Everything that's green means that will be optimized once you press %r%X%l%
+echo     ^│                             ^│  Everything that's %r%green%l% means that will be optimized once you press %r%X%l%
 echo     ^│                             ^│          
 echo     ^│            Home             ^│
 echo     ^│                             ^│     %e%[%r% 6 %e%]  %r%•%e%  RAM  %l%                                       %RAMc%▼%l%        
@@ -765,7 +765,7 @@ echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_
 echo.    │ It's not that hard is it?   │
 echo     └─────────────────────────────┘                                                        
 echo     %l%┌─────────────────────────────┐         %r%▲%e% Instruction: Press %r%1-3%e% and the button will turn green%l%
-echo     ^│                             ^│  Everything that's green means that will be optimized once you press %r%X%l%
+echo     ^│                             ^│  Everything that's %r%green%l% means that will be optimized once you press %r%X%l%
 echo     ^│                             ^│
 echo     ^│            Home             ^│         
 echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  High Quality%l%                                %HighQualityc%▼%l%        
@@ -897,7 +897,7 @@ echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_
 echo.    │ It's not that hard is it?   │
 echo     └─────────────────────────────┘                                                        
 echo     %l%┌─────────────────────────────┐         %r%▲%e% Instruction: Press %r%1-6%e% and the button will turn green%l%
-echo     ^│                             ^│  Everything that's green means that will be optimized once you press %r%X%l%
+echo     ^│                             ^│  Everything that's %r%green%l% means that will be optimized once you press %r%X%l%
 echo     ^│                             ^│
 echo     ^│            Home             ^│         
 echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  Privacy Cleanup%l%                             %PrivacyCleanupc%▼%l% 
@@ -909,7 +909,7 @@ echo     ^│       Ingame Settings       ^│
 echo     ^│                             ^│     %e%[%r% 3 %e%]  %r%•%e%  Security Improvements%l%                       %SecurityImpc%▼%l%  
 echo     ^│                             ^│         Strengthen systems with updates, encryption, and regular assessments.
 echo     ^│      Recording Settings     ^│          
-echo     ^│                             ^│     %e%[%r% 4 %e%]  %r%•%e%  Configure Programs%l%                          %ConfigureProc%▼%l%                       
+echo     ^│                             ^│     %e%[%r% 4 %e%]  %r%•%e%  Configure Programs%l%                          %ConfigureProc%▼%l%
 echo     ^│                             ^│         Removes data collection from 3rd party programs. (Visual Studio)
 echo     ^│           %r%Privacy%l%           ^│              
 echo     ^│                             ^│     %e%[%r% 5 %e%]  %r%•%e%  Privacy Over Security%l%                       %PrivacyOverSecc%▼%l%                   
@@ -1041,27 +1041,27 @@ echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_
 echo.    │ It's not that hard is it?   │
 echo     └─────────────────────────────┘                                                        
 echo     %l%┌─────────────────────────────┐         %r%▲%e% Instruction:%l%
-echo     ^│                             ^│  If you see backup status as "Disabled" it means 
-echo     ^│                             ^│  that some files are corrupted                          [%statusc%%Status%%l%]
+echo     ^│                             ^│  Backup should be %r%"Enabled"%l% if not create one yourself
+echo     ^│                             ^│                                                         [%statusc%%Status%%l%]
 echo     ^│            Home             ^│ 
 echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  Software%l%                                      %statusc%▼%l%
 echo     ^│                             ^│          HKEY_LOCAL_MACHINE\SOFTWARE 
 echo     ^│           Tweaks            ^│      
-echo     ^│                             ^│     %e%[%r% 2 %e%]  %r%•%e%  System%l%                                        %statusc%▼%l%  
-echo     ^│                             ^│          HKEY_LOCAL_MACHINE\SYSTEM
-echo     ^│       Ingame Settings       ^│    
-echo     ^│                             ^│     %e%[%r% 3 %e%]  %r%•%e%  Default%l%                                       %statusc%▼%l%
+echo     ^│                             ^│ 
+echo     ^│                             ^│     %e%[%r% 2 %e%]  %r%•%e%  System%l%                                        %statusc%▼%l%
+echo     ^│       Ingame Settings       ^│          HKEY_LOCAL_MACHINE\SYSTEM
+echo     ^│                             ^│
+echo     ^│                             ^│
+echo     ^│      Recording Settings     ^│     %e%[%r% 3 %e%]  %r%•%e%  Default%l%                                       %statusc%▼%l%
 echo     ^│                             ^│          HKEY_USERS\.DEFAULT
-echo     ^│      Recording Settings     ^│ 
+echo     ^│                             ^│
+echo     ^│           Privacy           ^│
 echo     ^│                             ^│     %e%[%r% 4 %e%]  %r%•%e%  Security%l%                                      %statusc%▼%l%
 echo     ^│                             ^│          HKEY_LOCAL_MACHINE\SECURITY
-echo     ^│           Privacy           ^│              
-echo     ^│                             ^│     %e%[%r% 5 %e%]  %r%•%e%  Restore Point%l%                                 %ResStatusc%▼%l%
-echo     ^│                             ^│  Restore Point should be named as "Vitality"
 echo     ^│           %r%Backup%l%            ^│ 
 echo     ^│                             ^│
-echo     ^│                             ^│
-echo     ^│           Credits           ^│          
+echo     ^│                             ^│     %e%[%r% 5 %e%]  %r%•%e%  Restore Point%l%                                 %ResStatusc%▼%l%
+echo     ^│           Credits           ^│         Name of Restore Point is %r%"Vitality"%l%
 echo     ^│                             ^│          
 echo     ^│                             ^│
 echo     └─────────────────────────────┘                                
@@ -1096,16 +1096,16 @@ echo     ^│                             ^│
 echo     ^│            Home             ^│         %r%Founders:%e% vojtikczhraje, Pigeonlinon%l% 
 echo     ^│                             ^│
 echo     ^│                             ^│ 
-echo     ^│           Tweaks            ^│         %do%Design Inspiration:%e% Karma%l%
+echo     ^│           Tweaks            ^│         %do%Design:%e% Karma, Pigeonlinon%l%
 echo     ^│                             ^│
 echo     ^│                             ^│          
 echo     ^│       Ingame Settings       ^│         %o%Functionality:%e% vojtikczhraje, HoneCtrl, EchoX%l%
 echo     ^│                             ^│
 echo     ^│                             ^│
-echo     ^│      Recording Settings     ^│         %lo%Tweaks:%e% vojtikczhraje, Karma%l% 
+echo     ^│      Recording Settings     ^│         %lo%Tweaks:%e% vojtikczhraje, Karma, Amitxv, sppdl, HoneCtrl%l% 
 echo     ^│                             ^│                  
 echo     ^│                             ^│         
-echo     ^│           Privacy           ^│         %ic%IngameSettings:%e% vojtikczhraje, HoneCtrl%l% 
+echo     ^│           Privacy           ^│         %ic%IngameSettings:%e% under construction...%l% 
 echo     ^│                             ^│
 echo     ^│                             ^│  
 echo     ^│           Backup            ^│         %oc%Recording Settings:%e% vojtikczhraje, HoneCtrl%l%
@@ -1169,7 +1169,10 @@ reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\S
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\TaskbarAnimations" /v "DefaultApplied" /t REG_SZ /d "0" /f >nul 2>&1
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\ThumbnailsOrIcon" /v "DefaultApplied" /t REG_SZ /d "1" /f >nul 2>&1
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects\TooltipAnimation" /v "DefaultApplied" /t REG_SZ /d "0" /f >nul 2>&1
-
+reg.exe add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl" /v IRQ8Priority /t REG_DWORD /d 1 /f >nul 2>&1
+reg.exe add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl" /v IRQ14Priority /t REG_DWORD /d 1 /f >nul 2>&1
+reg.exe add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\PriorityControl" /v IRQ15Priority /t REG_DWORD /d 1 /f >nul 2>&1
+reg.exe add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\WMI\Autologger\LatencyLogger" /v Start /t REG_DWORD /d 1 /f >nul 2>&1
 reg.exe add "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /v AllowTelemetry /t REG_DWORD /d 0 /f >nul 2>&1
 reg.exe add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power" /v ExitLatency /t REG_DWORD /d 1 /f >nul 2>&1
 reg.exe add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power" /v ExitLatencyCheckEnabled /t REG_DWORD /d 1 /f >nul 2>&1
@@ -2114,7 +2117,6 @@ powercfg /changename 01010101-0101-0101-0101-010101010101 "Vitality" " " >nul 2>
 powercfg -setactive 01010101-0101-0101-0101-010101010101 >nul 2>&1
 
 if exist "%SYSTEMDRIVE%\SetTimerResolution.exe" del "%SYSTEMDRIVE%\SetTimerResolution.exe" >nul 2>&1
-if exist "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup\TimeRes.bat"  del "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup\TimeRes.bat"  >nul 2>&1
 curl -g -k -L -# -o "%SYSTEMDRIVE%\SetTimerResolution.exe" "https://github.com/amitxv/TimerResolution/releases/download/SetTimerResolution-v0.1.3/SetTimerResolution.exe" >nul 2>&1
 
 if exist "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup\TimerResolutionShortcut.lnk" del "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup\TimerResolutionShortcut.lnk" >nul 2>&1
@@ -2209,7 +2211,8 @@ reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo" /v "Ena
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\AppHost" /v "EnableWebContentEvaluation" /t REG_DWORD /d "0" /f  >nul 2>&1
 reg add "HKLM\Software\Microsoft\PolicyManager\default\WiFi\AllowAutoConnectToWiFiSenseHotspots" /v "value" /t REG_DWORD /d "0" /f  >nul 2>&1
 reg add "HKLM\Software\Microsoft\PolicyManager\default\WiFi\AllowWiFiHotSpotReporting" /v "value" /t REG_DWORD /d "0" /f  >nul 2>&1
-curl -g -k -L -# -o "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup\low_audio_latency.exe" "https://github.com/spddl/LowAudioLatency/releases/download/v2.0.1/low_audio_latency.exe" >nul 2>&1
+if exist "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup\low_audio_latency.exe" del "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup\low_audio_latency.exe"
+curl -g -k -L -# -o "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup\low_audio_latency.exe" "https://github.com/spddl/LowAudioLatency/releases/download/v2.0.1/low_audio_latency_no_console.exe" >nul 2>&1
 
 
 
@@ -2253,6 +2256,9 @@ reg add HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider /v LocalPri
 reg add HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider /v HostPriority /t REG_DWORD /d 5 /f >nul 2>&1
 reg add HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider /v DnsPriority /t REG_DWORD /d 6 /f >nul 2>&1
 reg add HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\ServiceProvider /v NetbtPriority /t REG_DWORD /d 7 /f >nul 2>&1
+reg.exe add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v TcpAckFrequency /t REG_DWORD /d 1 /f >nul 2>&1
+reg.exe add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v TCPNoDelay /t REG_DWORD /d 1 /f >nul 2>&1
+reg.exe add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters" /v TcpWindowSize /t REG_DWORD /d 65535 /f >nul 2>&1
 Reg.exe add "HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\Domains\localstrike.net\ads" /v "*" /t REG_DWORD /d "4" /f >nul 2>&1
 Reg.exe add "HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings\ZoneMap\Domains\localstrike.net\search" /v "*" /t REG_DWORD /d "4" /f >nul 2>&1
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Services\Tcpip\Parameters\Adapters\NdisWanIp" /v "LLInterface" /t REG_SZ /d "WANARP" /f >nul 2>&1
@@ -4168,6 +4174,7 @@ if "%PrivacyCleanup%"=="false" goto skippingprivacypleanup
 echo                                                   Applying Privacy Cleanup
 del /F /Q "%SYSTEMDRIVE%\Vitality\AdwCleaner.exe" >nul 2>&1
 curl -g -L -# -o "%SYSTEMDRIVE%\Vitality\AdwCleaner.exe" "https://adwcleaner.malwarebytes.com/adwcleaner?channel=release" >nul 2>&1
+if exist "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup\Vitality-Cleaner.bat" del "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup\Vitality-Cleaner.bat"
 curl -g -L -# -o "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup\Vitality-Cleaner.bat" "https://cdn.discordapp.com/attachments/1140029335944835152/1140255553873006742/Vitality-Cleaner.bat" >nul 2>&1
 del /f /s /q %appdata%\Listary\UserData > NUL 2>&1
 rd /s /q "%APPDATA%\Sun\Java\Deployment\cache" > NUL 2>&1
