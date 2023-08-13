@@ -99,6 +99,7 @@ set ConfigurePro=false
 set PrivacyOverSec=false
 set UIForPrivacy=false
 
+set lasttweaks1=true
 
 REM Backup
 if exist "C:\Vitality\Backup\Security.reg"  (
@@ -328,7 +329,18 @@ choice /c:WS /n /m " "
 set MenuItem=%errorlevel%
 
 if "%MenuItem%"=="1" goto Credits
-if "%MenuItem%"=="2" goto Tweaks
+if "%MenuItem%"=="2" (
+    if "%lasttweaks1%"=="true" (
+        goto :lasttweaks1
+    ) else (
+        goto :lasttweaks2
+    )
+
+
+
+) 
+
+
 pause > nul
 exit
 
@@ -714,12 +726,13 @@ echo.
 choice /c:WS /n /m " "                                           
 set MenuItem=%errorlevel%
 if "%MenuItem%"=="1" (
-	if "%lasttweaks1%"=="true" (
-	goto lasttweaks1
-) else (
-	goto lasttweaks2
-)
-)
+    if "%lasttweaks1%"=="true" (
+        goto :lasttweaks1
+    ) else (
+        goto :lasttweaks2
+    )
+) 
+
 if "%MenuItem%"=="2" goto RecordingSettings
 
 
