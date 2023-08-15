@@ -305,7 +305,7 @@ echo     ^│                             ^│          %l%%welcome2%%l% %l%%wel
 echo     ^│                             ^│
 echo     ^│            %r%Home%l%             ^│
 echo     ^│                             ^│       ┌───────────────────────────────────────────────────────────────────┐
-echo     ^│                             ^│       │ %ar%▼ %ar%Disclaimers%l%                                                      │
+echo     ^│                             ^│       │ %ar%▼ %ar%Disclaimers%l%                                                    │
 echo     ^│           Tweaks            ^│       │                                                                   │
 echo     ^│                             ^│       │ %ar%•%e% Use at Your Own Risk. %l%                                          │
 echo     ^│                             ^│       │                                                                   │
