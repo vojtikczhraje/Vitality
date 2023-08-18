@@ -3486,17 +3486,17 @@ Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm" /v "DisablePreempt
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm" /v "DisableCudaContextPreemption" /t REG_DWORD /d "1" /f >nul 2>&1
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler" /v "EnablePreemption" /t REG_DWORD /d "0" /f >nul 2>&1
 
-REM Applying Custon Nvidia Profile Inspector Config (HoneCTRL)
+REM Applying Custon Nvidia Profile Inspector Config (HoneCTRL) [https://github.com/Orbmu2k/nvidiaProfileInspector]
 if exist "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector" (
-    rd /s /q "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector"
+    rd /s /q "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector"  >nul 2>&1
 ) 
-if not exist "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector" md "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector"
-curl -g -L -# -o "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector\nvidiaProfileInspector.zip" "https://github.com/Orbmu2k/nvidiaProfileInspector/releases/latest/download/nvidiaProfileInspector.zip"
-powershell -NoProfile Expand-Archive '%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector\nvidiaProfileInspector.zip' -DestinationPath '%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector'
-del /F /Q "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector\nvidiaProfileInspector.zip"
-curl -g -L -# -o "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector\Vitality.nip" "https://cdn.discordapp.com/attachments/1140029335944835152/1142006515520249886/Vitality.nip"
-cd "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector\"
-nvidiaProfileInspector.exe "Vitality.nip"
+if not exist "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector" md "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector"  >nul 2>&1
+curl -g -L -# -o "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector\nvidiaProfileInspector.zip" "https://github.com/Orbmu2k/nvidiaProfileInspector/releases/latest/download/nvidiaProfileInspector.zip"  >nul 2>&1
+powershell -NoProfile Expand-Archive '%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector\nvidiaProfileInspector.zip' -DestinationPath '%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector' >nul 2>&1
+del /F /Q "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector\nvidiaProfileInspector.zip"  >nul 2>&1
+curl -g -L -# -o "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector\Vitality.nip" "https://cdn.discordapp.com/attachments/1140029335944835152/1142006515520249886/Vitality.nip"  >nul 2>&1
+cd "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector\"  >nul 2>&1
+nvidiaProfileInspector.exe "Vitality.nip" >nul 2>&1
 
 
 set "file=C:\Vitality\Info\gpu"
@@ -3707,7 +3707,7 @@ Reg.exe add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\amdfendr" /v "
 Reg.exe add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\amdfendrmgr" /v "Start" /t REG_DWORD /d "4" /f > nul 2>&1
 Reg.exe add "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\amdlog" /v "Start" /t REG_DWORD /d "4" /f > nul 2>&1
 
-REM Debloat AMD Drivers(Credits amitxv)
+REM Debloat AMD Drivers (Credits amitxv)
 rmdir /s /q "%PROGRAMFILES%\AMD\CNext\CNext\facebook" > nul 2>&1
 rmdir /s /q "%PROGRAMFILES%\AMD\CNext\CNext\ffmpeg" > nul 2>&1
 rmdir /s /q "%PROGRAMFILES%\AMD\CNext\CNext\Gfycat" > nul 2>&1
