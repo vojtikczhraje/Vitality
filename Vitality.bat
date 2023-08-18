@@ -162,7 +162,7 @@ REM Create Sub Directories
 cd C:\Vitality\
 mkdir C:\Vitality\Info
 mkdir C:\VItality\Backup
-
+mkdir C:\VItality\Resources
 cls
 
 REM Optimization Counter
@@ -177,18 +177,18 @@ for /f %%A in ('"prompt $H &echo on &for %%B in (1) do rem"') do set BS=%%A
 
 REM Welcome Message
 
-if exist C:\Vitality\welcome1 (
+if exist C:\Vitality\Info\welcome1 (
     set welcome1=Welcome back %r%%username%%e%, have a good time using Vitality.
 )
 
-if not exist C:\Vitality\welcome1 (
+if not exist C:\Vitality\Info\welcome1 (
     set welcome1=Welcome to Vitality %r%%username%%e%.
-    echo Vitality > C:\Vitality\welcome1
+    echo Vitality > C:\Vitality\Info\welcome1
 )
 
-if not exist C:\Vitality\welcome2 (
+if not exist C:\Vitality\Info\welcome2 (
     set welcome2=Are you ready to level up your gaming experience?
-    echo Vitality > C:\Vitality\welcome2
+    echo Vitality > C:\Vitality\Info\welcome2
 
 ) else (
     set welcome2=Let's optimize your Windows even more :P
@@ -267,7 +267,7 @@ if not exist C:\Vitality\Backup\RestorePoint (
 
 Ping www.google.nl -n 1 -w 1000 >nul
 if %errorlevel% neq 0 (
-echo %e%                                   No Internet Connection, press C to continue anyway
+echo %e%                                   No %r%Internet Connection%e%, press C to continue anyway
 choice /c:"CQ" /n /m "%l%                                              [ %r%C%l% ] Continue  [ %r%Q%l% ] Quit %r%" & if !errorlevel! equ 2 exit /b
 )
 
@@ -2593,10 +2593,11 @@ for /f %%i in ('wmic path Win32_NetworkAdapter get PNPDeviceID ^| findstr /L "VE
 for /f %%i in ('wmic path Win32_NetworkAdapter get PNPDeviceID ^| findstr /L "VEN_"') do reg delete "HKLM\System\CurrentControlSet\Enum\%%i\Device Parameters\Interrupt Management\Affinity Policy" /v "DevicePriority" /f >nul 2>&1
 
 REM Download Vitality Power Plan
-if exist "%SYSTEMDRIVE%\Vitality\Vitality.pow" del "%SYSTEMDRIVE%\Vitality\Vitality.pow" >nul 2>&1
+mkdir "%SYSTEMDRIVE%\Vitality\Resources\PowerPlan"
+if exist "%SYSTEMDRIVE%\Vitality\Resources\PowerPlan\Vitality.pow" del "%SYSTEMDRIVE%\Vitality\Resources\PowerPlan\Vitality.pow" >nul 2>&1
 powercfg /d 01010101-0101-0101-0101-010101010101 >nul 2>&1
-curl -g -k -L -# -o "%SYSTEMDRIVE%\Vitality\Vitality.pow" "https://cdn.discordapp.com/attachments/1140029335944835152/1140029390449819659/Vitality.pow" >nul 2>&1
-powercfg -import "%SYSTEMDRIVE%\Vitality\Vitality.pow" 01010101-0101-0101-0101-010101010101 >nul 2>&1
+curl -g -k -L -# -o "%SYSTEMDRIVE%\Vitality\Resources\PowerPlan\Vitality.pow" "https://cdn.discordapp.com/attachments/1140029335944835152/1140029390449819659/Vitality.pow" >nul 2>&1
+powercfg -import "%SYSTEMDRIVE%\Vitality\Resources\PowerPlan\Vitality.pow" 01010101-0101-0101-0101-010101010101 >nul 2>&1
 powercfg /changename 01010101-0101-0101-0101-010101010101 "Vitality" " " >nul 2>&1
 powercfg -setactive 01010101-0101-0101-0101-010101010101 >nul 2>&1
 
@@ -3484,6 +3485,20 @@ Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm\Parameters" /v "Thr
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm" /v "DisablePreemption" /t REG_DWORD /d "1" /f >nul 2>&1
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm" /v "DisableCudaContextPreemption" /t REG_DWORD /d "1" /f >nul 2>&1
 Reg.exe add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler" /v "EnablePreemption" /t REG_DWORD /d "0" /f >nul 2>&1
+
+REM Applying Custon Nvidia Profile Inspector Config (HoneCTRL)
+if exist "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector" (
+    rd /s /q "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector"
+) 
+if not exist "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector" md "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector"
+curl -g -L -# -o "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector\nvidiaProfileInspector.zip" "https://github.com/Orbmu2k/nvidiaProfileInspector/releases/latest/download/nvidiaProfileInspector.zip"
+powershell -NoProfile Expand-Archive '%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector\nvidiaProfileInspector.zip' -DestinationPath '%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector'
+del /F /Q "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector\nvidiaProfileInspector.zip"
+curl -g -L -# -o "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector\Vitality.nip" "https://cdn.discordapp.com/attachments/1140029335944835152/1142006515520249886/Vitality.nip"
+cd "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector\"
+nvidiaProfileInspector.exe "Vitality.nip"
+
+
 set "file=C:\Vitality\Info\gpu"
 if not exist "%file%" (
     echo Vitality > "%file%"
@@ -5364,8 +5379,9 @@ if "%PrivacyCleanup%"=="false" goto skippingprivacypleanup
 echo                                                   Applying Privacy Cleanup
 
 REM Remove adware, spyware, PUPs
-del /F /Q "%SYSTEMDRIVE%\Vitality\AdwCleaner.exe" >nul 2>&1
-curl -g -L -# -o "%SYSTEMDRIVE%\Vitality\AdwCleaner.exe" "https://adwcleaner.malwarebytes.com/adwcleaner?channel=release" >nul 2>&1
+if not exist "%SYSTEMDRIVE%\Vitality\Resources\AdwCleaner" mkdir "%SYSTEMDRIVE%\Vitality\Resources\AdwCleaner"
+del /F /Q "%SYSTEMDRIVE%\Vitality\Resources\AdwCleaner\AdwCleaner.exe" >nul 2>&1
+curl -g -L -# -o "%SYSTEMDRIVE%\Vitality\Resources\AdwCleaner\AdwCleaner.exe" "https://adwcleaner.malwarebytes.com/adwcleaner?channel=release" >nul 2>&1
 
 REM Startup Cleaner (shell:startup)
 if exist "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup\Vitality-Cleaner.bat" del "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup\Vitality-Cleaner.bat"
