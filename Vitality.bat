@@ -63,6 +63,32 @@ if '%errorlevel%' NEQ '0' (
     pushd "%CD%"
     CD /D "%~dp0"
 
+
+:: Check if this batch file has already determined the SystemType
+if exist "%temp%\SystemType.txt" (
+    set /p SystemType=<"%temp%\SystemType.txt"
+    goto :SkipCheck
+)
+
+:: Initialize variable
+set "SystemType=Unknown"
+
+:: Execute PowerShell command inline and get its output
+for /f %%i in ('powershell -NoProfile -ExecutionPolicy Bypass -Command "$enclosure = Get-WmiObject Win32_SystemEnclosure; switch ($enclosure.ChassisTypes) { { $_ -eq 3 } { 'Desktop'; break } { $_ -eq 9 } { 'Laptop'; break } default { 'Unknown' } }"') do (
+    set "SystemType=%%i"
+)
+
+:: Save the SystemType for future use
+echo %SystemType% > "%temp%\SystemType.txt"
+
+:: Relaunch the script
+set "batch_file=%~f0"
+start "" "%batch_file%"
+exit
+
+:SkipCheck
+
+
 REM Tweaks Page 1
 set FPS=false
 set Latency=false
@@ -271,7 +297,22 @@ echo %e%                                   No %r%Internet Connection%e%, press C
 choice /c:"CQ" /n /m "%l%                                              [ %r%C%l% ] Continue  [ %r%Q%l% ] Quit %r%" & if !errorlevel! equ 2 exit /b
 )
 
-timeout /nobreak /t 2 >nul 2>&1
+REM OS informations
+set "OSVersion=Unknown"
+systeminfo > temp.txt 2>nul
+for /f "delims=" %%i in ('findstr /B /C:"OS Name" temp.txt') do set "OSInfo=%%i"
+call :checkOS
+:checkOS
+if "%OSInfo%"=="OS Name:                   Microsoft Windows 8.1" set "OSVersion=Windows 8.1"
+if "%OSInfo%"=="OS Name:                   Microsoft Windows 10 Home" set "OSVersion=Windows 10"
+if "%OSInfo%"=="OS Name:                   Microsoft Windows 10 Pro" set "OSVersion=Windows 10"
+if "%OSInfo%"=="OS Name:                   Microsoft Windows 10 Enterprise" set "OSVersion=Windows 10 LTSC"
+if "%OSInfo%"=="OS Name:                   Microsoft Windows 11 Home" set "OSVersion=Windows 11"
+if "%OSInfo%"=="OS Name:                   Microsoft Windows 11 Pro" set "OSVersion=Windows 11"
+
+
+
+
 echo.
 echo.
 echo.
@@ -316,10 +357,10 @@ echo     ^│           Privacy           ^│       │ %ar%•%e% Understand t
 echo     ^│                             ^│       └───────────────────────────────────────────────────────────────────┘
 echo     ^│                             ^│
 echo     ^│           Backup            ^│		  
-echo     ^│                             ^│        %e%Applied Optimizations: %r%%formatted_optimizations%%l%      %e%Status of Backup: %statusc%%Status%%l%
+echo     ^│                             ^│        %e%Applied Optimizations: %r%%formatted_optimizations%%l%         %e%Status of Backup: %statusc%%Status%%l%
 echo     ^│                             ^│
 echo     ^│           Credits           ^│
-echo     ^│                             ^│
+echo     ^│                             ^│        %e%Operating System: %r%%OSVersion%%l%      %e%System Type: %r%%SystemType%%l%
 echo     ^│                             ^│
 echo     └─────────────────────────────┘
 choice /c:WS /n /m " "
@@ -693,18 +734,18 @@ echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r
 echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%  
 echo.    │ It's not that hard is it?   │
 echo     └─────────────────────────────┘                                                        
-echo     %l%┌─────────────────────────────┐
-echo     ^│                             ^│
+echo     %l%┌─────────────────────────────┐         %r%▲%e% Instruction: Press %r%6-9%e% and the button will turn green%l%
+echo     ^│                             ^│  Everything that's %r%green%l% means that will be optimized once you press %r%X%l%
 echo     ^│                             ^│   
 echo     ^│            Home             ^│         
-echo     ^│                             ^│      
-echo     ^│                             ^│                 
+echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  Minecraft  %l%                                 %Minecraftc%▼%l% 
+echo     ^│                             ^│             Currently only for 1.8.9
 echo     ^│           Tweaks            ^│         
 echo     ^│                             ^│     
 echo     ^│                             ^│          
 echo     ^│       %r%Ingame Settings%l%       ^│            
 echo     ^│                             ^│               
-echo     ^│                             ^│                           %e%under construction...%l%
+echo     ^│                             ^│                       
 echo     ^│      Recording Settings     ^│   
 echo     ^│                             ^│ 
 echo     ^│                             ^│   
@@ -720,7 +761,7 @@ echo     ^│                             ^│
 echo     └─────────────────────────────┘                                
 echo.                                                                    
 echo.                                                                   
-choice /c:WS /n /m " "                                           
+choice /c:WS1 /n /m " "                                           
 set MenuItem=%errorlevel%
 if "%MenuItem%"=="1" (
     if "%lasttweaks1%"=="true" (
@@ -731,8 +772,13 @@ if "%MenuItem%"=="1" (
 ) 
 
 if "%MenuItem%"=="2" goto RecordingSettings
-
-
+if "%MenuItem%"=="3" (
+    if "%Minecraft%"=="false" (
+        set "Minecraft=True"
+    ) else (
+        set "Minecraft=false"
+    )
+) && goto IngameSettings
 
 
 
@@ -998,41 +1044,43 @@ if "%MenuItem%"=="9" goto TweaksProceed
 
 :Backup
 set lastpage=:Backup
+set "SecurityStatus=Disabled"
+set "SystemStatus=Disabled"
+set "DefaultStatus=Disabled"
+
+set "EnabledCount=0"
+set "DisabledCount=0"
+
 if exist "C:\Vitality\Backup\Security.reg"  (
-    set "Status=Enabled"
+    set "SecurityStatus=Enabled"
+    set /a "EnabledCount+=1"
 ) else (
-    set "Status=Disabled"
+    set /a "DisabledCount+=1"
 )
 
 if exist "C:\Vitality\Backup\System.reg"  (
-    set "Status=Enabled"
+    set "SystemStatus=Enabled"
+    set /a "EnabledCount+=1"
 ) else (
-    set "Status=Disabled"
+    set /a "DisabledCount+=1"
 )
 
 if exist "C:\Vitality\Backup\Default.reg"  (
-    set "Status=Enabled"
+    set "DefaultStatus=Enabled"
+    set /a "EnabledCount+=1"
 ) else (
-    set "Status=Disabled"
+    set /a "DisabledCount+=1"
 )
 
-if exist "C:\Vitality\Backup\Security.reg" (
-    set "Status=Enabled"
-) else (
-    set "Status=Disabled"
-)
 
-if exist "C:\Vitality\Backup\RestorePoint" (
-    set "ResStatus=Enabled"
-) else (
-    set "ResStatus=Disabled"
-)
-
-set "statusc="
-if "%status%"=="Disabled" (
-    set "statusc=[38;5;203m"
-) else (
-    set "statusc=[38;5;34m"
+if %DisabledCount% gtr 0 (
+    if %EnabledCount% gtr 0 (
+        set "Status=Partially Enabled"
+        set "statusc=[38;5;216m"
+    ) else (
+        set "Status=Disabled"
+        set "statusc=[38;5;203m"
+    )
 )
 
 set "ResStatusc="
@@ -1880,99 +1928,34 @@ REM Set FeatureSettings and FeatureSettingsOverride for Memory Management.
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "FeatureSettings" /t REG_DWORD /d "1" /f >nul 2>&1
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "FeatureSettingsOverride" /t REG_DWORD /d "3" /f >nul 2>&1
 
-REM Disable platform clock usage.
+REM Configure Boot
 bcdedit /set useplatformclock No  >nul 2>&1
-
-REM Disable platform tick usage.
 bcdedit /set useplatformtick No  >nul 2>&1
-
-REM Disable dynamic tick.
 bcdedit /set disabledynamictick Yes  >nul 2>&1
-
-REM Disable legacy platform.
 bcdedit /set forcelegacyplatform No  >nul 2>&1
-
-REM Set TSC synchronization policy to Enhanced.
 bcdedit /set tscsyncpolicy Enhanced  >nul 2>&1
-
-REM Set avoid low memory threshold.
 bcdedit /set avoidlowmemory 0x8000000  >nul 2>&1
-
-REM Set first megabyte policy to UseAll.
 bcdedit /set firstmegabytepolicy UseAll  >nul 2>&1
-
-REM Disable low memory.
 bcdedit /set nolowmem Yes  >nul 2>&1
-
-REM Disable isolated context.
 bcdedit /set isolatedcontext No  >nul 2>&1
-
-REM Enable x2APIC policy.
 bcdedit /set x2apicpolicy Enable >nul 2>&1
-
-REM Disable use of physical destination mode.
 bcdedit /set usephysicaldestination No  >nul 2>&1
-
-REM Set linear address bit 57 usage policy to OptOut.
 bcdedit /set linearaddress57 OptOut  >nul 2>&1
-
-REM Enable no-execute memory protection.
 bcdedit /set noumex Yes  >nul 2>&1
-
-REM Set memory performance options.
 bcdedit /set perfmem 0 >nul 2>&1
-
-REM Set cluster mode addressing policy.
 bcdedit /set clustermodeaddressing 1 >nul 2>&1
-
-REM Set configuration flags.
 bcdedit /set configflags 0  >nul 2>&1
-
-REM Disable use of legacy APIC mode.
 bcdedit /set uselegacyapicmode No >nul 2>&1
-
-REM Disable ELAM (Early Launch Anti-Malware) drivers.
 bcdedit /set disableelamdrivers Yes >nul 2>&1
-
-REM Set VSM (Virtual Secure Mode) launch type to Off.
 bcdedit /set vsmlaunchtype Off >nul 2>&1
-
-REM Disable EMS (Emergency Management Services).
 bcdedit /set ems No >nul 2>&1
-
-REM Enable extended input for Windows.
 bcdedit /set extendedinput Yes  >nul 2>&1
-
-REM Set highest resolution mode policy.
 bcdedit /set highestmode Yes >nul 2>&1
-
-REM Disable FIPS (Federal Information Processing Standards) cryptography.
 bcdedit /set forcefipscrypto No >nul 2>&1
-
-REM Enable SOS (Seconds Operating System).
 bcdedit /set sos Yes >nul 2>&1
-
-
-REM Enable PAE (Physical Address Extension).
 bcdedit /set pae ForceEnable >nul 2>&1
-
-REM Disable debug settings.
 bcdedit /set debug No >nul 2>&1
-
-REM Disable hypervisor launch.
 bcdedit /set hypervisorlaunchtype Off >nul 2>&1
-
-REM Set memory usage behavior.
-fsutil behavior set memoryusage 2 >nul 2>&1
-
-REM Set MFT (Master File Table) zone behavior.
-fsutil behavior set mftzone 4 >nul 2>&1
-
-REM Disable last access update for files.
-fsutil behavior set disablelastaccess 1 >nul 2>&1
-
-REM Enable delete notification for files.
-fsutil behavior set disabledeletenotify 0 >nul 2>&1
 
 REM Delete micro code
 takeown /f "C:\Windows\System32\mcupdate_GenuineIntel.dll" /r /d y  >nul 2>&1
@@ -6629,6 +6612,114 @@ set "formatted_optimizations=%ran_optimizations%"
 if %formatted_optimizations% LSS 10 set "formatted_optimizations= %formatted_optimizations%"
 echo set "ran_optimizations=%ran_optimizations%"> v.bat
 :skippinguiforprivacy
+
+
+
+
+
+if "%Minecraft%"=="false" goto skippingminecraft
+echo                                       Applying Minecraft 1.8.9 Settings
+if exist "%appdata%\.minecraft\optionsof.txt-old" del "%appdata%\.minecraft\optionsof.txt-old"
+if exist "%appdata%\.minecraft\optionsof.txt" (
+    ren "%appdata%\.minecraft\optionsof.txt" "optionsof.txt-old"
+)
+echo ofFogType:3                 > "%appdata%\.minecraft\optionsof.txt"
+echo ofFogStart:0.8              >> "%appdata%\.minecraft\optionsof.txt"
+echo ofMipmapType:0              >> "%appdata%\.minecraft\optionsof.txt"
+echo ofOcclusionFancy:false      >> "%appdata%\.minecraft\optionsof.txt"
+echo ofSmoothFps:false           >> "%appdata%\.minecraft\optionsof.txt"
+echo ofSmoothWorld:true          >> "%appdata%\.minecraft\optionsof.txt"
+echo ofAoLevel:1.0               >> "%appdata%\.minecraft\optionsof.txt"
+echo ofClouds:3                  >> "%appdata%\.minecraft\optionsof.txt"
+echo ofCloudsHeight:0.0          >> "%appdata%\.minecraft\optionsof.txt"
+echo ofTrees:1                   >> "%appdata%\.minecraft\optionsof.txt"
+echo ofDroppedItems:1            >> "%appdata%\.minecraft\optionsof.txt"
+echo ofRain:0                    >> "%appdata%\.minecraft\optionsof.txt"
+echo ofAnimatedWater:0           >> "%appdata%\.minecraft\optionsof.txt"
+echo ofAnimatedLava:0            >> "%appdata%\.minecraft\optionsof.txt"
+echo ofAnimatedFire:true         >> "%appdata%\.minecraft\optionsof.txt"
+echo ofAnimatedPortal:true       >> "%appdata%\.minecraft\optionsof.txt"
+echo ofAnimatedRedstone:true     >> "%appdata%\.minecraft\optionsof.txt"
+echo ofAnimatedExplosion:true    >> "%appdata%\.minecraft\optionsof.txt"
+echo ofAnimatedFlame:true        >> "%appdata%\.minecraft\optionsof.txt"
+echo ofAnimatedSmoke:true        >> "%appdata%\.minecraft\optionsof.txt"
+echo ofVoidParticles:true        >> "%appdata%\.minecraft\optionsof.txt"
+echo ofWaterParticles:true       >> "%appdata%\.minecraft\optionsof.txt"
+echo ofPortalParticles:true      >> "%appdata%\.minecraft\optionsof.txt"
+echo ofPotionParticles:true      >> "%appdata%\.minecraft\optionsof.txt"
+echo ofFireworkParticles:true    >> "%appdata%\.minecraft\optionsof.txt"
+echo ofDrippingWaterLava:true    >> "%appdata%\.minecraft\optionsof.txt"
+echo ofAnimatedTerrain:true      >> "%appdata%\.minecraft\optionsof.txt"
+echo ofAnimatedTextures:true     >> "%appdata%\.minecraft\optionsof.txt"
+echo ofRainSplash:true           >> "%appdata%\.minecraft\optionsof.txt"
+echo ofLagometer:false           >> "%appdata%\.minecraft\optionsof.txt"
+echo ofShowFps:false             >> "%appdata%\.minecraft\optionsof.txt"
+echo ofAutoSaveTicks:4000        >> "%appdata%\.minecraft\optionsof.txt"
+echo ofBetterGrass:3             >> "%appdata%\.minecraft\optionsof.txt"
+echo ofConnectedTextures:2       >> "%appdata%\.minecraft\optionsof.txt"
+echo ofWeather:true              >> "%appdata%\.minecraft\optionsof.txt"
+echo ofSky:false                 >> "%appdata%\.minecraft\optionsof.txt"
+echo ofStars:false               >> "%appdata%\.minecraft\optionsof.txt"
+echo ofSunMoon:false             >> "%appdata%\.minecraft\optionsof.txt"
+echo ofVignette:1                >> "%appdata%\.minecraft\optionsof.txt"
+echo ofChunkUpdates:1            >> "%appdata%\.minecraft\optionsof.txt"
+echo ofChunkUpdatesDynamic:false >> "%appdata%\.minecraft\optionsof.txt"
+echo ofTime:0                    >> "%appdata%\.minecraft\optionsof.txt"
+echo ofClearWater:false          >> "%appdata%\.minecraft\optionsof.txt"
+echo ofAaLevel:0                 >> "%appdata%\.minecraft\optionsof.txt"
+echo ofAfLevel:1                 >> "%appdata%\.minecraft\optionsof.txt"
+echo ofProfiler:false            >> "%appdata%\.minecraft\optionsof.txt"
+echo ofBetterSnow:false          >> "%appdata%\.minecraft\optionsof.txt"
+echo ofSwampColors:true          >> "%appdata%\.minecraft\optionsof.txt"
+echo ofRandomEntities:true       >> "%appdata%\.minecraft\optionsof.txt"
+echo ofSmoothBiomes:true         >> "%appdata%\.minecraft\optionsof.txt"
+echo ofCustomFonts:true          >> "%appdata%\.minecraft\optionsof.txt"
+echo ofCustomColors:true         >> "%appdata%\.minecraft\optionsof.txt"
+echo ofCustomItems:true          >> "%appdata%\.minecraft\optionsof.txt"
+echo ofCustomSky:true            >> "%appdata%\.minecraft\optionsof.txt"
+echo ofShowCapes:true            >> "%appdata%\.minecraft\optionsof.txt"
+echo ofNaturalTextures:false     >> "%appdata%\.minecraft\optionsof.txt"
+echo ofEmissiveTextures:true     >> "%appdata%\.minecraft\optionsof.txt"
+echo ofLazyChunkLoading:true     >> "%appdata%\.minecraft\optionsof.txt"
+echo ofRenderRegions:false       >> "%appdata%\.minecraft\optionsof.txt"
+echo ofSmartAnimations:false     >> "%appdata%\.minecraft\optionsof.txt"
+echo ofDynamicFov:true           >> "%appdata%\.minecraft\optionsof.txt"
+echo ofAlternateBlocks:true      >> "%appdata%\.minecraft\optionsof.txt"
+echo ofDynamicLights:3           >> "%appdata%\.minecraft\optionsof.txt"
+echo ofScreenshotSize:1          >> "%appdata%\.minecraft\optionsof.txt"
+echo ofCustomEntityModels:true   >> "%appdata%\.minecraft\optionsof.txt"
+echo ofCustomGuis:true           >> "%appdata%\.minecraft\optionsof.txt"
+echo ofShowGlErrors:true         >> "%appdata%\.minecraft\optionsof.txt"
+echo ofFullscreenMode:Default    >> "%appdata%\.minecraft\optionsof.txt"
+echo ofFastMath:false            >> "%appdata%\.minecraft\optionsof.txt"
+echo ofFastRender:false          >> "%appdata%\.minecraft\optionsof.txt"
+echo ofTranslucentBlocks:1       >> "%appdata%\.minecraft\optionsof.txt"
+echo key_of.key.zoom:46          >> "%appdata%\.minecraft\optionsof.txt"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+:skippingminecraft
+
+
+
+
+
+
+
+
 
 
 
