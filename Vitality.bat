@@ -67,16 +67,19 @@ if '%errorlevel%' NEQ '0' (
 :: Check if this batch file has already determined the SystemType
 if exist "%temp%\SystemType.txt" (
     set /p SystemType=<"%temp%\SystemType.txt"
-    goto :SkipCheck
+    goto SkipCheck
 )
-
 :: Initialize variable
 set "SystemType=Unknown"
 
-:: Execute PowerShell command inline and get its output
-for /f %%i in ('powershell -NoProfile -ExecutionPolicy Bypass -Command "$enclosure = Get-WmiObject Win32_SystemEnclosure; switch ($enclosure.ChassisTypes) { { $_ -eq 3 } { 'Desktop'; break } { $_ -eq 9 } { 'Laptop'; break } default { 'Unknown' } }"') do (
+:: Run PowerShell command and assign output to SystemType
+for /f %%i in ('powershell -Command "try {$enclosure = Get-WmiObject Win32_SystemEnclosure; switch ($enclosure.ChassisTypes) { 3 {'Desktop'} 9 {'Laptop'} default {'Unknown'} }} catch {'Error'}"') do (
     set "SystemType=%%i"
 )
+
+
+
+
 
 :: Save the SystemType for future use
 echo %SystemType% > "%temp%\SystemType.txt"
@@ -87,6 +90,10 @@ start "" "%batch_file%"
 exit
 
 :SkipCheck
+if %SystemType%==Desktop set "SystemType=Desktop            "          
+if %SystemType%==Laptop set "SystemType=Laptop             "
+
+
 
 
 REM Tweaks Page 1
@@ -202,23 +209,14 @@ for /f %%A in ('"prompt $H &echo on &for %%B in (1) do rem"') do set BS=%%A
 
 
 REM Welcome Message
-
 if exist C:\Vitality\Info\welcome1 (
     set welcome1=Welcome back %r%%username%%e%, have a good time using Vitality.
-)
-
-if not exist C:\Vitality\Info\welcome1 (
-    set welcome1=Welcome to Vitality %r%%username%%e%.
+) else (
+    set welcome1=Welcome to Vitality %r%%username%%e%. Optimize your PC to %r%MAX%l%
     echo Vitality > C:\Vitality\Info\welcome1
 )
 
-if not exist C:\Vitality\Info\welcome2 (
-    set welcome2=Are you ready to level up your gaming experience?
-    echo Vitality > C:\Vitality\Info\welcome2
 
-) else (
-    set welcome2=Let's optimize your Windows even more :P
-)
 
 
 for /F "tokens=* skip=1" %%n in ('WMIC path Win32_VideoController get Name ^| findstr "."') do set GPU_NAME=%%n
@@ -298,17 +296,17 @@ choice /c:"CQ" /n /m "%l%                                              [ %r%C%l%
 )
 
 REM OS informations
-set "OSVersion=Unknown"
+set "OSVersion=Unknown         "
 systeminfo > temp.txt 2>nul
 for /f "delims=" %%i in ('findstr /B /C:"OS Name" temp.txt') do set "OSInfo=%%i"
 call :checkOS
 :checkOS
-if "%OSInfo%"=="OS Name:                   Microsoft Windows 8.1" set "OSVersion=Windows 8.1"
-if "%OSInfo%"=="OS Name:                   Microsoft Windows 10 Home" set "OSVersion=Windows 10"
-if "%OSInfo%"=="OS Name:                   Microsoft Windows 10 Pro" set "OSVersion=Windows 10"
-if "%OSInfo%"=="OS Name:                   Microsoft Windows 10 Enterprise" set "OSVersion=Windows 10 LTSC"
-if "%OSInfo%"=="OS Name:                   Microsoft Windows 11 Home" set "OSVersion=Windows 11"
-if "%OSInfo%"=="OS Name:                   Microsoft Windows 11 Pro" set "OSVersion=Windows 11"
+if "%OSInfo%"=="OS Name:                   Microsoft Windows 8.1" set "OSVersion=Windows 8.1     "
+if "%OSInfo%"=="OS Name:                   Microsoft Windows 10 Home" set "OSVersion=Windows 10      "
+if "%OSInfo%"=="OS Name:                   Microsoft Windows 10 Pro" set "OSVersion=Windows 10      "
+if "%OSInfo%"=="OS Name:                   Microsoft Windows 10 Enterprise" set "OSVersion=Windows 10      "
+if "%OSInfo%"=="OS Name:                   Microsoft Windows 11 Home" set "OSVersion=Windows 11      "
+if "%OSInfo%"=="OS Name:                   Microsoft Windows 11 Pro" set "OSVersion=Windows 11      "
 
 
 
@@ -339,29 +337,29 @@ echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_
 echo.    │ It's not that hard is it?   │
 echo     └─────────────────────────────┘                                                        
 echo     %l%┌─────────────────────────────┐         %r%▲%e% %welcome1% %l%
-echo     ^│                             ^│          %l%%welcome2%%l% %l%%welcome3%%l%
 echo     ^│                             ^│
-echo     ^│            %r%Home%l%             ^│
 echo     ^│                             ^│       ┌───────────────────────────────────────────────────────────────────┐
-echo     ^│                             ^│       │ %ar%▼ %ar%Disclaimers%l%                                                     │
-echo     ^│           Tweaks            ^│       │                                                                   │
+echo     ^│            %r%Home%l%             ^│       │ %ar%▼ %ar%Disclaimers%l%                                                     │
+echo     ^│                             ^│       │                                                                   │
 echo     ^│                             ^│       │ %ar%•%e% Use at Your Own Risk. %l%                                          │
+echo     ^│           Tweaks            ^│       │                                                                   │
+echo     ^│                             ^│       │ %ar%•%e% Not guaranteed to be compatible with all configurations. %l%       │
 echo     ^│                             ^│       │                                                                   │
-echo     ^│       Ingame Settings       ^│       │ %ar%•%e% Not guaranteed to be compatible with all configurations. %l%       │
+echo     ^│       Ingame Settings       ^│       │ %ar%•%e% Create a full system backup before applying any tweaks. %l%        │
 echo     ^│                             ^│       │                                                                   │
-echo     ^│                             ^│       │ %ar%•%e% Create a full system backup before applying any tweaks. %l%        │
-echo     ^│      Recording Settings     ^│       │                                                                   │
 echo     ^│                             ^│       │ %ar%•%e% Disable antivirus to avoid conflicts. %l%                          │
-echo     ^│                             ^│       │                                                                   │
-echo     ^│           Privacy           ^│       │ %ar%•%e% Understand the implications of each tweak before applying it. %l%  │
+echo     ^│      Recording Settings     ^│       │                                                                   │
+echo     ^│                             ^│       │ %ar%•%e% Understand the implications of each tweak before applying it. %l%  │
 echo     ^│                             ^│       └───────────────────────────────────────────────────────────────────┘
-echo     ^│                             ^│
-echo     ^│           Backup            ^│		  
-echo     ^│                             ^│        %e%Applied Optimizations: %r%%formatted_optimizations%%l%         %e%Status of Backup: %statusc%%Status%%l%
-echo     ^│                             ^│
-echo     ^│           Credits           ^│
-echo     ^│                             ^│        %e%Operating System: %r%%OSVersion%%l%      %e%System Type: %r%%SystemType%%l%
-echo     ^│                             ^│
+echo     ^│           Privacy           ^│
+echo     ^│                             ^│       ┌───────────────────────────────────────────────────────────────────┐
+echo     ^│                             ^│       │ %r%▼ %r%Informations%l%                                                    │
+echo     ^│           Backup            ^│       │                                                                   │
+echo     ^│                             ^│       │ %e%Applied Optimizations: %r%%formatted_optimizations%%l%         %e%Status of Backup: %r%%Status%%l%       │
+echo     ^│                             ^│       │                                                                   │
+echo     ^│           Credits           ^│       │ %e%Operating System: %r%%OSVersion%%l%%e%System Type: %r%%SystemType%%l%│
+echo     ^│                             ^│       │                                                                   │
+echo     ^│                             ^│       └───────────────────────────────────────────────────────────────────┘
 echo     └─────────────────────────────┘
 choice /c:WS /n /m " "
 set MenuItem=%errorlevel%
@@ -734,15 +732,15 @@ echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r
 echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%  
 echo.    │ It's not that hard is it?   │
 echo     └─────────────────────────────┘                                                        
-echo     %l%┌─────────────────────────────┐         %r%▲%e% Instruction: Press %r%6-9%e% and the button will turn green%l%
+echo     %l%┌─────────────────────────────┐         %r%▲%e% Instruction: Press %r%1-2%e% and the button will turn green%l%
 echo     ^│                             ^│  Everything that's %r%green%l% means that will be optimized once you press %r%X%l%
 echo     ^│                             ^│   
 echo     ^│            Home             ^│         
 echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  Minecraft  %l%                                 %Minecraftc%▼%l% 
 echo     ^│                             ^│             Currently only for 1.8.9
 echo     ^│           Tweaks            ^│         
-echo     ^│                             ^│     
-echo     ^│                             ^│          
+echo     ^│                             ^│     %e%[%r% 2 %e%]  %r%•%e%  Valorant  %l%                                  %Valorantc%▼%l%
+echo     ^│                             ^│             Set screen resolution to your own, currently 1920x1080.
 echo     ^│       %r%Ingame Settings%l%       ^│            
 echo     ^│                             ^│               
 echo     ^│                             ^│                       
@@ -758,10 +756,10 @@ echo     ^│                             ^│
 echo     ^│           Credits           ^│  
 echo     ^│                             ^│    
 echo     ^│                             ^│
-echo     └─────────────────────────────┘                                
-echo.                                                                    
-echo.                                                                   
-choice /c:WS1 /n /m " "                                           
+echo     └─────────────────────────────┘                                %l%┌───────────────┐
+echo                                                                    %l%│   %e%Apply [%r%X%e%]%l%   │
+echo                                                                    └───────────────┘
+choice /c:WSX12 /n /m " "                                           
 set MenuItem=%errorlevel%
 if "%MenuItem%"=="1" (
     if "%lasttweaks1%"=="true" (
@@ -772,7 +770,8 @@ if "%MenuItem%"=="1" (
 ) 
 
 if "%MenuItem%"=="2" goto RecordingSettings
-if "%MenuItem%"=="3" (
+if "%MenuItem%"=="3" goto TweaksProceed
+if "%MenuItem%"=="4" (
     if "%Minecraft%"=="false" (
         set "Minecraft=True"
     ) else (
@@ -780,7 +779,13 @@ if "%MenuItem%"=="3" (
     )
 ) && goto IngameSettings
 
-
+if "%MenuItem%"=="5" (
+    if "%Valorant%"=="false" (
+        set "Valorant=True"
+    ) else (
+        set "Valorant=false"
+    )
+) && goto IngameSettings
 
 
 :RecordingSettings
@@ -6695,27 +6700,92 @@ echo ofFastMath:false            >> "%appdata%\.minecraft\optionsof.txt"
 echo ofFastRender:false          >> "%appdata%\.minecraft\optionsof.txt"
 echo ofTranslucentBlocks:1       >> "%appdata%\.minecraft\optionsof.txt"
 echo key_of.key.zoom:46          >> "%appdata%\.minecraft\optionsof.txt"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 :skippingminecraft
 
 
 
 
+
+if "%Valorant%"=="false" goto skippingvalorant
+:: Initialize the root directory for search
+set "rootDir=C:\Users\voj\AppData\Local\VALORANT\Saved\Config"
+
+:: Initialize the target file name
+set "targetFile=GameUserSettings.ini"
+
+:: Initialize a flag variable to indicate whether the file was found
+set "fileFound=false"
+
+:: Check if the root directory exists
+if not exist "%rootDir%\" (
+    REM echo Root directory does not exist or cannot be accessed.
+    goto EndScript
+)  >nul 2>&1
+
+:: Recursive search for the file
+for /r "%rootDir%" %%a in (%targetFile%) do (
+    if exist "%%~fa" (
+        REM echo File found at: %%~fa
+        set "fileFound=true"
+        
+        :: Define a temporary file name
+        set "tempFile=%%~dpaTempGameUserSettings.ini"
+
+        :: Create a new GameUserSettings.ini file with the specified content
+        > "!tempFile!" (
+            echo [/Script/ShooterGame.ShooterGameUserSettings]
+            echo bShouldLetterbox=False
+            echo bLastConfirmedShouldLetterbox=False
+            echo bUseVSync=False
+            echo bUseDynamicResolution=False
+            echo ResolutionSizeX=1920
+            echo ResolutionSizeY=1080
+            echo LastUserConfirmedResolutionSizeX=1920
+            echo LastUserConfirmedResolutionSizeY=1080
+            echo WindowPosX=0
+            echo WindowPosY=0
+            echo LastConfirmedFullscreenMode=0
+            echo PreferredFullscreenMode=0
+            echo AudioQualityLevel=0
+            echo LastConfirmedAudioQualityLevel=0
+            echo FrameRateLimit=0.000000
+            echo DesiredScreenWidth=1920
+            echo DesiredScreenHeight=1080
+            echo LastUserConfirmedDesiredScreenWidth=1920
+            echo LastUserConfirmedDesiredScreenHeight=1080
+            echo.
+            echo [/Script/Engine.GameUserSettings]
+            echo bUseDesiredScreenHeight=False
+            echo.
+            echo [ScalabilityGroups]
+            echo sg.ResolutionQuality=100.000000
+            echo sg.ViewDistanceQuality=2
+            echo sg.AntiAliasingQuality=2
+            echo sg.ShadowQuality=2
+            echo sg.PostProcessQuality=2
+            echo sg.TextureQuality=2
+            echo sg.EffectsQuality=2
+            echo sg.FoliageQuality=2
+            echo sg.ShadingQuality=2
+            echo.
+            echo [ShaderPipelineCache.CacheFile]
+            echo LastOpened=ShooterGame
+        ) 
+
+        :: Rename the original file and replace with the new file
+        move /y "%%~fa" "%%~dpaGameUserSettings.ini.old"  >nul 2>&1
+        move /y "!tempFile!" "%%~fa"  >nul 2>&1
+    ) >nul 2>&1
+) >nul 2>&1
+
+:: Check if the file was not found
+if "%fileFound%"=="false" (
+    REM echo File not found.
+) 
+
+:: End of script
+:EndScript
+:skippingvalorant
 
 
 
