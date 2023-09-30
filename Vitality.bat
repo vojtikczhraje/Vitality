@@ -1,4 +1,6 @@
 @echo off
+
+REM Setup Basic Things
 setlocal enabledelayedexpansion
 mode 120, 36
 chcp 65001 >nul
@@ -20,14 +22,14 @@ set g=[38;5;248m
 set mg=[38;5;243m
 
 ::Ask for ADMIN permissions inside batch (https://stackoverflow.com/questions/1894967/how-to-request-administrator-access-inside-a-batch-file)
-REM  --> Check for permissions
-    IF "%PROCESSOR_ARCHITECTURE%" EQU "amd64" (
+REM  Check for permissions
+    if "%PROCESSOR_ARCHITECTURE%" EQU "amd64" (
 >nul 2>&1 "%SYSTEMROOT%\SysWOW64\cacls.exe" "%SYSTEMROOT%\SysWOW64\config\system"
-) ELSE (
+) else (
 >nul 2>&1 "%SYSTEMROOT%\system32\cacls.exe" "%SYSTEMROOT%\system32\config\system"
 )
 
-REM --> If error flag set, we do not have admin.
+REM If error flag set, we do not have admin.
 if '%errorlevel%' NEQ '0' (
     echo.
     echo.
@@ -191,15 +193,11 @@ if %errorlevel%==0 (
     set "cpu1=AMD"
 )
 
+REM Go to last know page after applying tweaks
+if defined lastpage goto %lastpage%
 
 :Loading
 cls
-if "%lastpage%"==":Home" goto Home
-if "%lastpage%"==":Tweaks" goto Tweaks
-if "%lastpage%"==":IngameSettings" goto IngameSettings
-if "%lastpage%"==":RecordingSettings" goto RecordingSettings
-if "%lastpage%"==":Backup" goto Backup
-if "%lastpage%"==":Credits" goto Credits
 echo.
 echo.
 echo.
@@ -218,6 +216,7 @@ echo                                       %r% _      _  _____   __    _     _  
 echo                                      %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%
 echo                                        %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%
 echo.
+
 cd "C:\Vitality\Backup"
 if not exist "%SYSTEMDRIVE%\Vitality\Backup\regbackup.reg" Regedit /e "%SYSTEMDRIVE%\Vitality\Backup\regbackup.reg" >nul 2>&1
 
@@ -231,13 +230,6 @@ if not exist C:\Vitality\Backup\RestorePoint (
     start /min "" "%SYSTEMDRIVE%\Vitality\Backup\RestorePoint.bat"
 )
 
-REM Download Timer Resolution (Credits to Amitxv)
-if exist "%SYSTEMDRIVE%\SetTimerResolution.exe" del "%SYSTEMDRIVE%\SetTimerResolution.exe" >nul 2>&1
-curl -g -k -L -# -o "%SYSTEMDRIVE%\SetTimerResolution.exe" "https://github.com/amitxv/TimerResolution/releases/download/SetTimerResolution-v0.1.3/SetTimerResolution.exe" >nul 2>&1
-REM Set TimerResolution Variables
-    set "targetPath=C:\SetTimerResolution.exe"
-    set "args=--resolution 5000 --no-console"
-    set "shortcutName=TimerResolutionShortcut.lnk"
 
 Ping www.google.nl -n 1 -w 1000 >nul
 if %errorlevel% neq 0 (
@@ -268,6 +260,7 @@ If exist "%SYSTEMDRIVE%\Vitality\Backup\RestorePoint.bat" (
     set "MStatus=Enabled       "
     goto skippingbackupstatus
 ) else set set "MStatus=Disabled      "
+
 
 :skippingbackupstatus
 
@@ -489,17 +482,14 @@ if "%MenuItem%"=="2" (
     ) else (
         goto :lasttweaks2
     )
-
-
-
 ) 
 
 
 :Tweaks 
+:lasttweaks1
 set lastpage=:Tweaks
 set lasttweaks1=true
 set lasttweaks2=false
-:lasttweaks1
 
 
 set "FPSc="
@@ -667,11 +657,11 @@ if "%MenuItem%"=="12" goto %lastConfiguration%
 
 
 :Tweaks2 
-set lastpage=:Tweaks2
-
-set lasttweaks2=true
-set lasttweaks1=false
 :lasttweaks2
+set lastpage=:Tweaks2
+set lasttweaks1=false
+set lasttweaks2=true
+
 
 set "RAMc="
 if "%RAM%"=="false" (
@@ -2874,6 +2864,15 @@ echo set "ran_optimizations=%ran_optimizations%"> v.bat
 
 if "%Latency%"=="false" goto skippinglatency
 echo                                                  Applying Latency Tweaks
+REM Download Timer Resolution (Credits to Amitxv)
+if exist "%SYSTEMDRIVE%\SetTimerResolution.exe" del "%SYSTEMDRIVE%\SetTimerResolution.exe" >nul 2>&1
+curl -g -k -L -# -o "%SYSTEMDRIVE%\SetTimerResolution.exe" "https://github.com/amitxv/TimerResolution/releases/download/SetTimerResolution-v0.1.3/SetTimerResolution.exe" >nul 2>&1
+REM Set TimerResolution Variables
+    set "targetPath=C:\SetTimerResolution.exe"
+    set "args=--resolution 5000 --no-console"
+    set "shortcutName=TimerResolutionShortcut.lnk"
+
+
 if "%SpectreMeltdown%" equ "True" (
 REM Disable Spectre and Meltdown
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "FeatureSettings" /t REG_DWORD /d 1 /f >nul 2>&1
@@ -2980,6 +2979,7 @@ REM Downloading Low Audio Latency (Credits to sppdl)
 if exist "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup\low_audio_latency_no_console.exe" del "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup\low_audio_latency_no_console.exe" >nul 2>&1
 curl -g -k -L -# -o "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup\low_audio_latency_no_console.exe" "https://github.com/spddl/LowAudioLatency/releases/download/v2.0.1/low_audio_latency_no_console.exe" >nul 2>&1
 )
+
 
 If "%TimerResolution%" equ "True" (
     del "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup\TimerResolutionShortcut.lnk" >nul 2>&1
@@ -3419,7 +3419,7 @@ if not exist "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector" md "%SYST
 curl -g -L -# -o "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector\nvidiaProfileInspector.zip" "https://github.com/Orbmu2k/nvidiaProfileInspector/releases/latest/download/nvidiaProfileInspector.zip"  >nul 2>&1
 powershell -NoProfile Expand-Archive '%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector\nvidiaProfileInspector.zip' -DestinationPath '%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector' >nul 2>&1
 del /F /Q "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector\nvidiaProfileInspector.zip"  >nul 2>&1
-curl -g -L -# -o "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector\Vitality.nip" "https://cdn.discordapp.com/attachments/1140029335944835152/1142006515520249886/Vitality.nip"  >nul 2>&1
+curl -g -L -# -o "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector\Vitality.nip" "https://cdn.discordapp.com/attachments/1140029335944835152/1155469748755247135/Vitality.nip"  >nul 2>&1
 cd "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector\"  >nul 2>&1
 nvidiaProfileInspector.exe "Vitality.nip" >nul 2>&1
 )
