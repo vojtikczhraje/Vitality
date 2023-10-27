@@ -928,7 +928,7 @@ if "%MenuItem%"=="2" goto RecordingSettings
 if "%MenuItem%"=="3" goto TweaksProceed
 if "%MenuItem%"=="4" (
     if "%Minecraft%"=="false" (
-        set "Minecraft=True"
+        set "Minecraft=true"
     ) else (
         set "Minecraft=false"
     )
@@ -936,7 +936,7 @@ if "%MenuItem%"=="4" (
 
 if "%MenuItem%"=="5" (
     if "%Valorant%"=="false" (
-        set "Valorant=True"
+        set "Valorant=true"
     ) else (
         set "Valorant=false"
     )
@@ -944,7 +944,7 @@ if "%MenuItem%"=="5" (
 
 if "%MenuItem%"=="6" (
     if "%Fortnite%"=="false" (
-        set "Fortnite=True"
+        set "Fortnite=true"
     ) else (
         set "Fortnite=false"
     )
@@ -5843,6 +5843,7 @@ reg add "HKLM\SYSTEM\currentcontrolset\control\session manager\Memory Management
 
 :skippingram
 
+
 set "file=C:\Vitality\Info\ram"
 if not exist "%file%" (
     echo Vitality > "%file%"
@@ -5911,6 +5912,8 @@ if %formatted_optimizations% LSS 10 set "formatted_optimizations= %formatted_opt
 echo set "ran_optimizations=%ran_optimizations%"> v.bat
 
 :skippingdisk
+
+
 
 if "%Windows%"=="false" goto skippingwindows
 echo                                                   Applying Windows Tweaks
@@ -6231,7 +6234,6 @@ REM Clear History Of Recently Opened Documents On Exit
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "ClearRecentDocsOnExit" /t REG_DWORD /d "1" /f >nul 2>&1
 )
 
-
 set "file=C:\Vitality\Info\windows"
 if not exist "%file%" (
     echo Vitality > "%file%"
@@ -6243,8 +6245,9 @@ if %formatted_optimizations% LSS 10 set "formatted_optimizations= %formatted_opt
 echo set "ran_optimizations=%ran_optimizations%"> v.bat
 :skippingwindows
 
+
 if "%CPU%"=="false" goto skippingcpu
-if %cpu%==Intel (
+if %cpu1%==Intel (
     goto intel
 ) else (
     goto amd
@@ -6301,7 +6304,6 @@ if %formatted_optimizations% LSS 10 set "formatted_optimizations= %formatted_opt
 echo set "ran_optimizations=%ran_optimizations%"> v.bat
 goto skippingcpu
 
-
 :amd
 echo                                                   Applying AMD CPU Tweaks
 
@@ -6348,7 +6350,6 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel" /v "Disab
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel" /v "EnableTsx" /t REG_DWORD /d "0" /f > NUL 2>&1
 )
 
-
 set "file=C:\Vitality\Info\cpu"
 if not exist "%file%" (
     echo Vitality > "%file%"
@@ -6361,7 +6362,6 @@ echo set "ran_optimizations=%ran_optimizations%"> v.bat
 goto skippingcpu
 
 :skippingcpu
-
 
 if "%HighQuality%"=="false" goto skippinghighquality
 echo                                           Applying High Quality Recording Settings
@@ -6531,15 +6531,7 @@ if %gpu1% == NaN (
     goto obsend
 )
 
-
-
-
 :skippinghighquality
-
-
-
-
-
 
 if "%MediumQuality%"=="false" goto skippingmediumquality
 echo                                          Applying Medium Quality Recording Settings
@@ -6902,7 +6894,6 @@ if %gpu1% == NaN (
 
 
 :obsend
-
 
 
 
@@ -8165,11 +8156,7 @@ if %formatted_optimizations% LSS 10 set "formatted_optimizations= %formatted_opt
 echo set "ran_optimizations=%ran_optimizations%"> v.bat
 :skippinguiforprivacy
 
-
-
-
-
-if "%Minecraft%"=="False" goto skippingminecraft
+if "%Minecraft%"=="false" goto skippingminecraft
 echo                                       Applying Minecraft 1.8.9 Settings
 if exist "%appdata%\.minecraft\optionsof.txt-old" del "%appdata%\.minecraft\optionsof.txt-old"
 if exist "%appdata%\.minecraft\optionsof.txt" (
@@ -8249,23 +8236,15 @@ echo ofTranslucentBlocks:1       >> "%appdata%\.minecraft\optionsof.txt"
 echo key_of.key.zoom:46          >> "%appdata%\.minecraft\optionsof.txt"
 :skippingminecraft
 
-
-
-
-
-if "%Valorant%"=="True" (
+if "%Minecraft%"=="false" goto skippingvalorant
 echo                                          Applying Valorant Tweaks
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\VALORANT-Win64-Shipping.exe\PerfOptions" /v "CpuPriorityClass" /t REG_DWORD /d "3" /f
-)
+:skippingvalorant
 
-if "%Fortnite%"=="True"
+if "%Fortnite%"=="false" goto skippingfortnite 
 echo                                          Applying Fortnite Tweaks
 Reg.exe add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\FortniteClient-Win64-Shipping.exe\PerfOptions" /v "CpuPriorityClass" /t REG_DWORD /d "3" /f
-)
-
-
-
-
+:skippingfortnite
 
 :End
 cls
@@ -8299,4 +8278,6 @@ goto %lastpage%
 :Restart
 start "" "%batch_file%"
 exit
+
+
 
