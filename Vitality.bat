@@ -8169,7 +8169,7 @@ echo set "ran_optimizations=%ran_optimizations%"> v.bat
 
 
 
-if "%Minecraft%"=="false" goto skippingminecraft
+if "%Minecraft%"=="False" goto skippingminecraft
 echo                                       Applying Minecraft 1.8.9 Settings
 if exist "%appdata%\.minecraft\optionsof.txt-old" del "%appdata%\.minecraft\optionsof.txt-old"
 if exist "%appdata%\.minecraft\optionsof.txt" (
@@ -8253,12 +8253,15 @@ echo key_of.key.zoom:46          >> "%appdata%\.minecraft\optionsof.txt"
 
 
 
-if "%Valorant%"=="true" (
-REM set Valorant Priority to high
+if "%Valorant%"=="True" (
+echo                                          Applying Valorant Tweaks
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\VALORANT-Win64-Shipping.exe\PerfOptions" /v "CpuPriorityClass" /t REG_DWORD /d "3" /f
 )
 
-
+if "%Fortnite%"=="True"
+echo                                          Applying Fortnite Tweaks
+Reg.exe add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\FortniteClient-Win64-Shipping.exe\PerfOptions" /v "CpuPriorityClass" /t REG_DWORD /d "3" /f
+)
 
 
 
