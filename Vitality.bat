@@ -79,79 +79,28 @@ for /f %%i in ('powershell -Command "try {$enclosure = Get-WmiObject Win32_Syste
     set "SystemType=%%i"
 )
 
-
-
-
-
 :: Save the SystemType for future use
 echo %SystemType% > "%temp%\SystemType.txt"
 
 :: Relaunch the script
-set "batch_file=%~f0"
+set "batch_file=%~f0" 
 start "" "%batch_file%"
 exit
 
 :SkipCheck
-if %SystemType%==Desktop set "SystemType=Desktop            "          
+if %SystemType%==Desktop set "SystemType=Desktop            " 
 if %SystemType%==Laptop set "SystemType=Laptop             "
-
-
-
-
-REM Tweaks Page 1
-set FPS=false
-set Latency=false
-set GPU=false
-set Task=false
-set KBM=false
-set CPU=false
-set Network=false
-
-REM Tweaks Page 2
-set RAM=false
-set DISK=false
-set Windows=false
-
-REM Recording Settings
-set HighQuality=false
-set MediumQuality=false
-set LowQuality=false
-
-REM Game Settings
-set Minecraft=false
-set CSGO=false
-set Valorant=false
-set Fortnite=false
-Set COD=false
-set Apex=false
-set Rust=false
-
-REM Privacy
-set PrivacyCleanup=false
-set DataCol=false
-set SecurityImp=false
-set ConfigurePro=false
-set PrivacyOverSec=false
-set UIForPrivacy=false
-
-set lasttweaks1=true
-
-
 
 
 REM Create Required Directories 
     REM Create Main Directory
-    cd C:\
     mkdir C:\Vitality
-    cd C:\Vitality
+    mkdir C:\Vitality\Info
+    mkdir C:\Vitality\Backup 
+    mkdir C:\Vitality\Resources 
+    cd C:\Vitality 
     cls
 
-    REM Create Sub Directories
-    cd C:\Vitality\
-    mkdir C:\Vitality\Info
-    mkdir C:\VItality\Backup
-    mkdir C:\VItality\Resources
-    cls
 
 REM Optimization Counter
 if not exist "C:\Vitality\v.bat" echo set "ran_optimizations=0"> v.bat
@@ -162,7 +111,6 @@ if %formatted_optimizations% LSS 10 set "formatted_optimizations= %formatted_opt
 REM Choice Setup
 for /f %%A in ('"prompt $H &echo on &for %%B in (1) do rem"') do set BS=%%A
 
-
 REM Welcome Message
 if exist C:\Vitality\Info\welcome1 (
     set welcome1=Welcome back %r%%username%%e%, have a good time using Vitality.
@@ -171,13 +119,16 @@ if exist C:\Vitality\Info\welcome1 (
     echo Vitality > C:\Vitality\Info\welcome1
 )
 
-
-
-
 for /F "tokens=* skip=1" %%n in ('WMIC path Win32_VideoController get Name ^| findstr "."') do set GPU_NAME=%%n >nul
+REM Tweaks Part
 echo %GPU_NAME% | find "NVIDIA" && set gpu1=Nvidia >nul 2>&1
 echo %GPU_NAME% | find "AMD" && set gpu1=AMD >nul 2>&1
 if not defined GPU_NAME set gpu1=NaN
+
+REM Configuration Part / For some reason i can't use: if "%gpu1%"=="%Nvidia/AMD%" set Configuration10=Configuration10AMD/Nvidia
+echo %GPU_NAME% | find "AMD" && set Configuration10=:Configuration10AMD
+echo %GPU_NAME% | find "NVIDIA" && set Configuration10=:Configuration10Nvidia
+if not defined GPU_NAME set Configuration10=:Configuration10NaN
 
 
 for /F "skip=1 delims=" %%A in ('wmic cpu get name') do (
@@ -189,8 +140,10 @@ for /F "skip=1 delims=" %%A in ('wmic cpu get name') do (
 echo %cpuName% | find "Intel" >nul 2>&1
 if %errorlevel%==0 (
     set "cpu1=Intel"
+    set "Configuration23=:Configuration23Intel"
 ) else (
     set "cpu1=AMD"
+    set "Configuration23=:Configuration23AMD"
 )
 
 REM Go to last know page after applying tweaks
@@ -221,7 +174,7 @@ cd "C:\Vitality\Backup"
 if not exist "%SYSTEMDRIVE%\Vitality\Backup\regbackup.reg" Regedit /e "%SYSTEMDRIVE%\Vitality\Backup\regbackup.reg" >nul 2>&1
 
 
-if not exist C:\Vitality\Backup\RestorePoint (
+if not exist "C:\Vitality\Backup\RestorePoint.bat" (
     echo @echo off > "%SYSTEMDRIVE%\Vitality\Backup\RestorePoint.bat"
     echo reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore" /v "SystemRestorePointCreationFrequency" /t REG_DWORD /d 0 /f >> "C:\Vitality\Backup\RestorePoint.bat"
     echo powershell -ExecutionPolicy Unrestricted -NoProfile Enable-ComputerRestore -Drive 'C:\', 'D:\', 'E:\', 'F:\', 'G:\' >> "C:\Vitality\Backup\RestorePoint.bat"
@@ -261,12 +214,9 @@ If exist "%SYSTEMDRIVE%\Vitality\Backup\RestorePoint.bat" (
     goto skippingbackupstatus
 ) else set set "MStatus=Disabled      "
 
-
 :skippingbackupstatus
 
-set "lastConfiguration=:Configuration"
-
-
+set "lastConfiguration=:Configuration1"
 
 REM OS informations
 set "OSVersion=Unknown         "
@@ -281,20 +231,103 @@ if "%OSInfo%"=="OS Name:                   Microsoft Windows 10 Enterprise" set 
 if "%OSInfo%"=="OS Name:                   Microsoft Windows 11 Home" set "OSVersion=Windows 11      "
 if "%OSInfo%"=="OS Name:                   Microsoft Windows 11 Pro" set "OSVersion=Windows 11      "
 
-REM Configuration Page 1 [FPS and Input]
+REM Tweaks Page 1 / FPS, Latency, GPU, Task Scheduler, Keboard and Mouse, CPU, Network
+set "FPS=false"
+set "Latency=false"
+set "GPU=false"
+set "Task=false"
+set "KBM=false"
+set "CPU=false"
+set "Network=false"
+
+REM Tweaks Page 2 / RAM, Disk, Windows Settings
+set "RAM=false"
+set "DISK=false"
+set "Windows=false"
+
+REM Recording Settings
+set "HighQuality=false"
+set "MediumQuality=false"
+set "LowQuality=false"
+
+REM Game Settings
+set "Minecraft=false"
+set "CSGO=false"
+set "Valorant=false"
+set "Fortnite=false"
+Set "COD=false"
+set "Apex=false"
+set "Rust=false"
+
+REM Privacy
+set "PrivacyCleanup=false"
+set "DataCol=false"
+set "SecurityImp=false"
+set "ConfigurePro=false"
+set "PrivacyOverSec=false"
+set "UIForPrivacy=false"
+
+set "lasttweaks1=true"
+
+
+REM Set Number Of Configuration Pages
+set "ConfigurationsPages=23"
+
+REM Set Number of Configuration Category Pages
+set "CategoryFPS_Pages=5"
+set "CategoryLatency_Pages=2"
+set "CategoryNvidiaGPU_Pages=3"
+set "CategoryAMDGPU_Pages=1"
+set "CategoryTaskSCH_Pages=1"
+set "CategoryKBM_Pages=1"
+set "CategoryNetwork_Pages=1"
+set "CategoryRAM_Pages=1"
+set "CategoryDISK_Pages=1"
+set "CategoryWindows_Pages=7"
+set "CategoryIntelCPU_Pages=1"
+set "CategoryAMDCPU_Pages=1"
+
+REM Configuration Page 1 / Category [FPS and Input Tweaks] Page 1
 set "Visuals=True"
 set "WindowsUpdates=True"
 set "WindowsDefender=True"
 set "ProcessMitigations=True"
 set "DebloatWindows=True"
 set "FSE=True"
+
+REM Configuration Page 2 / Category [FPS and Input Tweaks] Page 2
 if %SystemType%==Desktop (
 	set "PowerPlan=True"
 ) else (
 	set "PowerPlan=False"
 )
+set "WindowsServices=True"
+set "Win32PrioritySeparation=True"
+set "DisableSearchIndexing=True"
+set "DisableFastStartup=True"
+set "ReserveCPUResources=True"
 
-REM Configuration Page2 [Latency]
+REM Configuration Page 3 / Category [FPS and Input Tweaks] Page 3
+set "DisableBackgroundApps=True"
+set "Winlogon=True"
+set "IntelMicroCode=True"
+set "AMDMicroCode=True"
+set "EnableGPUSheduling=True"
+set "DisableSettingsSynchroniyation=True"
+
+REM Configuration Page 4 / Category [FPS and Input Tweaks] Page 4
+set "DisableRemoteAssistance=True"
+set "DisableGamebarpresencewriter=True"
+set "DisableSystemEnergySaving=True"
+set "SVCSplitThreshold=True"
+set "DisableUSBPowerSavings=True"
+set "EnableMSIMode=True"
+
+REM Configuration Page 5 / Category [FPS and Input Tweaks] Page 5
+set "DevicePriorityUndefined=True"
+
+
+REM Configuration Page 6 / Category [Latency Tweaks] Page 1
 set "SpectreMeltdown=True"
 if %SystemType%==Desktop (
 	set "DisableIDLE=True"
@@ -305,134 +338,168 @@ set "MMCSS=True"
 set "CSRSS=True"
 set "LowProcessPriority=True"
 set "LowAudioLatency=True"
-set "TimerResolution=True"
 
-REM Configuration Page 3 [Network]
+
+
+REM Configuration Page 7 / Category [Latency Tweaks] Page 2
+set "TimerResolution=True"
+set "BCDLowLatency=True"
+set "DisableNetworkTrhottling=True"
+set "LatencyTolerance=True"
+
+REM Configuration Page 8 / Category [Network Tweaks] Page 1
 set "DisableNaglesAlgorithm=True"
 set "NIC=True"
 set "DNS=True"
 set "WindowsNetworkSettigns=True"
 set "Autotunning=False"
 
-REM Set GPU
-    set "GameMode=True"
-    set "NvidiaTelemetry=True"
-    set "P0States=True"
-    set "HDCP=True"
-    set "Preemption=True"
-    set "Logging=True"
-    set "NvidiaProfileInspector=True"
-    set "GameModeAMD=True"
-    set "AMDOptimizedSettings=True"
-    set "AMDDebloat=True"
+REM Configuration Page 9 / Category [Keyboard and Mouse Tweaks] Page 1
+set "KeyboardDataSize=True"
+set "AdjustKeyboardParameters=True"
+set "KeyboardAccessibilitySettings=True"
+set "MouseDataSize=True"
+set "DisablePointerAcceleration=True"
+set "MouseAccessibilitySettings=True"
 
-If "!gpu1!"=="Nvidia" (
-    set "GameModeAMD=False"
-    set "AMDOptimizedSettings=False"
-    set "AMDDebloat=False"
-)
+REM Configuration Page 10 / Category [Nvidia Tweaks] Page 1
+set "GameMode=True"
+set "NvidiaTelemetry=True"
+set "P0States=True"
+set "HDCP=True"
+set "Preemption=True"
+set "Logging=True"
 
-If "!gpu1!"=="AMD" (
-    set "GameMode=False"
-    set "NvidiaTelemetry=False"
-    set "P0States=False"
-    set "HDCP=False"
-    set "Preemption=False"
-    set "Logging=False"
-    set "NvidiaProfileInspector=False"
-)
+REM Configuration Page 11 / Category [Nvidia Tweaks] Page 2
+set "NvidiaProfileInspector=True"
+set "DisableTiledDisplay=True"
+set "DisableTCC=True"
+set "ForceContiguousMemoryAllocation=True"
+set "KBoost=True"
+set "DisableScaling=True"
 
-If "!gpu1!"=="NaN" (
-    set "GameMode=False"
-    set "NvidiaTelemetry=False"
-    set "P0States=False"
-    set "HDCP=False"
-    set "Preemption=False"
-    set "Logging=False"
-    set "NvidiaProfileInspector=False"
-    set "GameModeAMD=False"
-    set "AMDOptimizedSettings=False"
-    set "AMDDebloat=False"
-)
+REM Configuration Page 12 / Category [Nvidia Tweaks] Page 3
+set "NoECC=True"
+set "UnrestrictedClockPolicy=True"
 
-REM Configuration 6 [Disk]
+REM Configuration Page 13 / Category [AMD GPU Tweaks] Page 1
+set "GameModeAMD=True"
+set "AMDOptimizedSettings=True"
+set "AMDDebloat=True"
+
+
+REM Configuration Page 14 / Category [RAM Tweaks] Page 1
+set "MemoryManagment=True"
+set "LargePageDrivers=True"
+
+REM Configuration Page 15 / Category [Disk Tweaks] Page 1
 set "FileSystemOptimization=True"
 set "Cleaner=True"
 set "Startupcleaner=True"
 
-REM Configuration 7 [Windows Settings]
+REM Configuration Page 16 / Category [Windows Tweaks] Page 1
 set "DisableTelemetry=True"
 set "DisableHibernation=True"
 set "BootOptions=True"
 set "PasswordOnWakeUp=True"
 set "DisableAutomaticMaintenance=True"
 set "DisableLocationTracking=True"
-set "ShowFileExtension=True"
 
-REM Configuration 8/9
-set "IntelCpuVirtualization=False"
-set "IntelCoreIsolation=False"
-set "IntelCStates=False"
-set "IntelPowerThrottling=False"
-set "AMDServices=False"
-set "IntelTSX=False"
+REM Configuration Page 17 / Category [Windows Tweaks] Page 2
+set "DisablePushNotifications=True"
+set "DisableDriverSearching=True"
+set "DisableWindowsNotifications=True"
+set "DisableTransparency=True"
+set "PauseMapsUpdates=True"
+set "DisableSettingsSync=True"
 
-set "AMDCpuVirtualization=False"
-set "AMDCoreIsolation=False"
-set "AMDCStates=False"
-set "AMDPowerThrottling=False"
-set "IntelServices=False"
-set "AMDTSX=False"
+REM Configuration Page 18 / Category [Windows Tweaks] Page 3
+set "DisableAdvertisingID=True"
+set "DisableWebInSearch=True"
+set "DisableRemoteAssistance=True"
+set "DisableInventoryCollector=True"
+set "DisableWindowsErrorReporting=True"
+set "DisableCustomerExperienceProgram=True"
 
-REM Configuration 8 [Intel CPU]
-If "%cpu1%"=="Intel" (
-    set "Configuration8=:ConfigurationIntel"
-    set "IntelCpuVirtualization=True"
-    set "IntelCoreIsolation=True"
-    if %SystemType%==Desktop (
-        set "IntelCStates=True"
-        set "IntelPowerThrottling=True"
-    ) else (
-        set "IntelCStates=False"
-        set "IntelPowerThrottling=False"
-    )
-    set "AMDServices=True"
-    set "IntelTSX=True"
-) else (
-    REM Configuration 8 [AMD CPU]
-    set "Configuration8=:ConfigurationAMD"
-    set "AMDCpuVirtualization=True"
-    set "AMDCoreIsolation=True"
-    if %SystemType%==Desktop (
-        set "AMDCStates=True"
-        set "AMDPowerThrottling=True"
-    ) else (
-        set "AMDCStates=False"
-        set "AMDPowerThrottling=False"
-    )
-    set "IntelServices=True"
-    set "AMDTSX=True"
-)
+REM Configuration Page 19 / Category [Windows Tweaks] Page 4
+set "DisableOneDriveSync=True"
+set "DisableBiometrics=True"
+set "DenyCapabilityForApps=True"
+set "DisableLocationServices=True"
+set "PreventWindowsMarkingFiles=True"
+set "DisableLanguageBar=False"
 
-set "ConfigurationsPages=8"
+REM Configuration Page 20 / Category [Windows Tweaks] Page 5
+set "DisableStickyKeys=True"
+set "DisableProgramCompatibilityAssistant=True"
+set "DisableFaultTolerantHeap=True"
+set "DisablePowerShellTelemtry=True"
+set "DisableWindowsErrorReporting=True"
+set "DisableRemoteAssistance=True"
+
+REM Configuration Page 21 / Category [Windows Tweaks] Page 6
+set "Remove3DObjectsFromExplorer=True"
+set "DisableSignInAndLockLastUser=True"
+set "DisableOnlineTips=True"
+set "DisableTypingInsights=True"
+set "DisableSuggestionsInTheSearchBox=True"
+set "RestoreOldContextMenu=True"
+
+REM Configuration Page 22 / Category [Windows Tweaks] Page 7
+set "RemovePinToQuickAccess=True"
+set "HideFoldersInQuickAccess=False"
+set "HideQuickAccessFromFileExplorer=True"
+set "LaunchFileExplorerToThisPC=True"
+set "TurnOffDisplayOfRecentSearch=True"
+set "ClearHistoryOfRecentlyOpenedDocumentsOnExit=True"
+
+REM Configuration Page 23 / Category [Intel CPU Tweaks] Page 1
+set "IntelCpuVirtualization=True"
+set "IntelCoreIsolation=True"
+set "IntelCStates=True"
+set "IntelPowerThrottling=True"
+set "AMDServices=True"
+set "IntelTSX=True"
+
+REM Configuration Page 23 / Category [AMD CPU Tweaks] Page 1
+set "AMDCpuVirtualization=True"
+set "AMDCoreIsolation=True"
+set "AMDCStates=True"
+set "AMDPowerThrottling=True"
+set "IntelServices=True"
+set "AMDTSX=True"
 
 
-
-
-
-
-
-echo.
-echo.
-echo.
-echo.
-echo.
-echo.
-echo.
-echo.
-echo.
-echo.
-echo.
+REM Code for guessing which CPU is user using
+:: REM Configuration 8 [Intel CPU]
+:: If "%cpu1%"=="Intel" (
+::     set "Configuration8=:ConfigurationIntel"
+::     set "IntelCpuVirtualization=True"
+::     set "IntelCoreIsolation=True"
+::     if %SystemType%==Desktop (
+::         set "IntelCStates=True"
+::         set "IntelPowerThrottling=True"
+::     ) else (
+::         set "IntelCStates=False"
+::         set "IntelPowerThrottling=False"
+::     )
+::     set "AMDServices=True"
+::     set "IntelTSX=True"
+:: ) else (
+::     REM Configuration 8 [AMD CPU]
+::     set "Configuration8=:ConfigurationAMD"
+::     set "AMDCpuVirtualization=True"
+::     set "AMDCoreIsolation=True"
+::     if %SystemType%==Desktop (
+::         set "AMDCStates=True"
+::         set "AMDPowerThrottling=True"
+::     ) else (
+::         set "AMDCStates=False"
+::         set "AMDPowerThrottling=False"
+::     )
+::     set "IntelServices=True"
+::     set "AMDTSX=True"
+:: )
 
 
 
@@ -787,19 +854,6 @@ if "%Minecraft%"=="false" (
     set "Minecraftc=[38;5;34m"
 )
 
-set "CSGOc="
-if "%CSGO%"=="false" (
-    set "CSGOc=[38;5;203m"
-) else (
-    set "CSGOc=[38;5;34m"
-)
-
-set "Rustc="
-if "%Rust%"=="false" (
-    set "Rustc=[38;5;203m"
-) else (
-    set "Rustc=[38;5;34m"
-)
 
 set "Valorantc="
 if "%Valorant%"=="false" (
@@ -815,19 +869,15 @@ if "%Fortnite%"=="false" (
     set "Fortnitec=[38;5;34m"
 )
 
-set "CODc="
-if "%COD%"=="false" (
-    set "CODc=[38;5;203m"
+set "CSGOc="
+if "%CSGO%"=="false" (
+    set "CSGOc=[38;5;203m"
 ) else (
-    set "CODc=[38;5;34m"
+    set "CSGOc=[38;5;34m"
 )
 
-set "Apexc="
-if "%Apex%"=="false" (
-    set "Apexc=[38;5;203m"
-) else (
-    set "Apexc=[38;5;34m"
-)
+
+
 
 cls
 echo.                                
@@ -837,19 +887,19 @@ echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r
 echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%  
 echo.    │ It's not that hard is it?   │
 echo     └─────────────────────────────┘                                                        
-echo     %l%┌─────────────────────────────┐         %r%▲%e% Instruction: Press %r%1-2%e% and the button will turn green%l%
+echo     %l%┌─────────────────────────────┐         %r%▲%e% Instruction: Press %r%1-3%e% and the button will turn green%l%
 echo     ^│                             ^│  Everything that's %r%green%l% means that will be optimized once you press %r%X%l%
 echo     ^│                             ^│   
 echo     ^│            Home             ^│         
-echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  Minecraft  %l%                                 %Minecraftc%▼%l% 
-echo     ^│                             ^│             Currently only for 1.8.9
+echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  Minecraft%l%                                   %Minecraftc%▼%l% 
+echo     ^│                             ^│             Configure Minecraft Settings (1.8.9)
 echo     ^│           Tweaks            ^│         
-echo     ^│                             ^│     %e%[%r% 2 %e%]  %r%•%e%  Valorant  %l%                                  %Valorantc%▼%l%
-echo     ^│                             ^│             Set screen resolution to your own, currently 1920x1080.
+echo     ^│                             ^│     %e%[%r% 2 %e%]  %r%•%e%  Valorant%l%                                    %Valorantc%▼%l%
+echo     ^│                             ^│             Valorant High Priority
 echo     ^│       %r%Ingame Settings%l%       ^│            
-echo     ^│                             ^│               
-echo     ^│                             ^│                       
-echo     ^│      Recording Settings     ^│   
+echo     ^│                             ^│     %e%[%r% 3 %e%]  %r%•%e%  Fortnite%l%                                    %Fortnitec%▼%l%
+echo     ^│                             ^│             Set Fortnite High Priority
+echo     ^│      Recording Settings     ^│
 echo     ^│                             ^│ 
 echo     ^│                             ^│   
 echo     ^│           Privacy           ^│              
@@ -864,7 +914,7 @@ echo     ^│                             ^│
 echo     └─────────────────────────────┘                                %l%┌───────────────┐
 echo                                                                    %l%│   %e%Apply [%r%X%e%]%l%   │
 echo                                                                    └───────────────┘
-choice /c:WSX12 /n /m " "                                           
+choice /c:WSX123 /n /m " "                                           
 set MenuItem=%errorlevel%
 if "%MenuItem%"=="1" (
     if "%lasttweaks1%"=="true" (
@@ -889,6 +939,14 @@ if "%MenuItem%"=="5" (
         set "Valorant=True"
     ) else (
         set "Valorant=false"
+    )
+) && goto IngameSettings
+
+if "%MenuItem%"=="6" (
+    if "%Fortnite%"=="false" (
+        set "Fortnite=True"
+    ) else (
+        set "Fortnite=false"
     )
 ) && goto IngameSettings
 
@@ -1152,8 +1210,9 @@ if "%MenuItem%"=="9" goto TweaksProceed
 
 
 
-:Configuration
-set lastConfiguration=:Configuration
+:Configuration1
+set lastConfiguration=:Configuration1
+
 
 set "Visualsc="
 if "%Visuals%"=="False" (
@@ -1197,24 +1256,18 @@ if "%FSE%"=="False" (
     set "FSEc=[38;5;34m"
 )
 
-set "PowerPlanc="
-if "%PowerPlan%"=="False" (
-    set "PowerPlanc=[38;5;203m"
-) else (
-    set "PowerPlanc=[38;5;34m"
-)
 
 
 cls
 echo.                                
 echo     %l%┌─────────────────────────────┐                       
 echo     │ %r%W%l% = %e%Up%l%       %r%D%l% = %e%Right%l%      │           %r% _      _  _____   __    _     _  _____  _%l%    
-echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      %r%▲%e% Pages  [%r%1%e%/%ConfigurationsPages%]%l%
-echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%  
-echo.    │ It's not that hard is it?   │
+echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      %r%▲%e% Pages [%r%1%e%/%ConfigurationsPages%]%l% 
+echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%          %e%Cat. [%r%1%e%/%CategoryFPS_Pages%]%l%
+echo.    │ It's not that hard is it?   │                                                                                
 echo     └─────────────────────────────┘                                                        
-echo     %l%┌─────────────────────────────┐         %r%▲%e% Configuration: %r%FPS And Input Delay%l%
-echo     ^│                             ^│  You Can Manually Set What Tweaks (Not All) Will Be Runned%l%
+echo     %l%┌─────────────────────────────┐         %r%▲%e% Configuration: %r%FPS And Input Delay%l% 
+echo     ^│                             ^│   Here you can configure all settings that are going to be applied
 echo     ^│                             ^│
 echo     ^│            Home             ^│ 
 echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  Visuals%l%                                     %Visualsc%▼%l%
@@ -1235,12 +1288,12 @@ echo     ^│        %r%Configuration%l%        ^│
 echo     ^│                             ^│     %e%[%r% 6 %e%]  %r%•%e%  FSE%l%                                         %FSEc%▼%l%
 echo     ^│                             ^│         Disables FSO and Enables FSE
 echo     ^│           Credits           ^│
-echo     ^│                             ^│     %e%[%r% 7 %e%]  %r%•%e%  Power Plan%l%                                  %PowerPlanc%▼%l%          
-echo     ^│                             ^│         Configures Power Plan For Best Performance
-echo     └─────────────────────────────┘                                
-echo.
-echo.
-choice /c:WS1234657DA /n /m " "                                           
+echo     ^│                             ^│             
+echo     ^│                             ^│         
+echo     └─────────────────────────────┘           %l%┌──────────────────────┐   ┌───────────────────┐     
+echo                                               %l%│ %e%Go to Tweaks Tab [%r%G%e%]%l% │   │ %e%Skip Category [%r%N%e%]%l% │
+echo                                               └──────────────────────┘   └───────────────────┘
+choice /c:WS123456GNDA /n /m " "                                           
 set MenuItem=%errorlevel%
 if "%MenuItem%"=="1" goto Privacy
 if "%MenuItem%"=="2" goto Credits
@@ -1251,7 +1304,7 @@ if "%MenuItem%"=="3" (
     ) else (
         set "Visuals=False"
     )
-) && goto Configuration
+) && goto %lastConfiguration%
 
 if "%MenuItem%"=="4" (
     if "%WindowsUpdates%"=="False" (
@@ -1259,7 +1312,7 @@ if "%MenuItem%"=="4" (
     ) else (
         set "WindowsUpdates=False"
     )
-) && goto Configuration
+) && goto %lastConfiguration%
 
 if "%MenuItem%"=="5" (
     if "%WindowsDefender%"=="False" (
@@ -1267,7 +1320,7 @@ if "%MenuItem%"=="5" (
     ) else (
         set "WindowsDefender=False"
     )
-) && goto Configuration
+) && goto %lastConfiguration%
 
 if "%MenuItem%"=="6" (
     if "%ProcessMitigations%"=="False" (
@@ -1275,40 +1328,570 @@ if "%MenuItem%"=="6" (
     ) else (
         set "ProcessMitigations=False"
     )
-) && goto Configuration
+) && goto %lastConfiguration%
 
-if "%MenuItem%"=="8" (
+if "%MenuItem%"=="7" (
     if "%DebloatWindows%"=="False" (
         set "DebloatWindows=True"
     ) else (
         set "DebloatWindows=False"
     )
-) && goto Configuration
+) && goto %lastConfiguration%
 
-if "%MenuItem%"=="7" (
+
+if "%MenuItem%"=="8" (
     if "%FSE%"=="False" (
         set "FSE=True"
     ) else (
         set "FSE=False"
     )
-) && goto Configuration
+) && goto %lastConfiguration%
 
 if "%MenuItem%"=="9" (
-    if "%PowerPlan%"=="False" (
-        set "PowerPlan=True"
+    if "%lasttweaks1%"=="true" (
+        goto :lasttweaks1
     ) else (
-        set "PowerPlan=False"
+        goto :lasttweaks2
     )
-) && goto Configuration
+) 
+if "%MenuItem%"=="10" goto Configuration6
+if "%MenuItem%"=="11" goto Configuration2
+if "%MenuItem%"=="12" goto %Configuration23%
 
-if "%MenuItem%"=="10" goto Configuration2
-if "%MenuItem%"=="11" goto %Configuration8%
 
 
 
 
 :Configuration2
 set lastConfiguration=:Configuration2
+
+
+set "PowerPlanc="
+if "%PowerPlan%"=="False" (
+    set "PowerPlanc=[38;5;203m"
+) else (
+    set "PowerPlanc=[38;5;34m"
+)
+
+set "WindowsServicesc="
+if "%WindowsServices%"=="False" (
+    set "WindowsServicesc=[38;5;203m"
+) else (
+    set "WindowsServicesc=[38;5;34m"
+)
+
+set "Win32PrioritySeparationc="
+if "%Win32PrioritySeparation%"=="False" (
+    set "Win32PrioritySeparationc=[38;5;203m"
+) else (
+    set "Win32PrioritySeparationc=[38;5;34m"
+)
+
+set "DisableSearchIndexingc="
+if "%DisableSearchIndexing%"=="False" (
+    set "DisableSearchIndexingc=[38;5;203m"
+) else (
+    set "DisableSearchIndexingc=[38;5;34m"
+)
+
+set "DisableFastStartupc="
+if "%DisableFastStartup%"=="False" (
+    set "DisableFastStartupc=[38;5;203m"
+) else (
+    set "DisableFastStartupc=[38;5;34m"
+)
+
+set "ReserveCPUResourcesc="
+if "%ReserveCPUResources%"=="False" (
+    set "ReserveCPUResourcesc=[38;5;203m"
+) else (
+    set "ReserveCPUResourcesc=[38;5;34m"
+)
+
+
+
+cls
+echo.                                
+echo     %l%┌─────────────────────────────┐                       
+echo     │ %r%W%l% = %e%Up%l%       %r%D%l% = %e%Right%l%      │           %r% _      _  _____   __    _     _  _____  _%l%    
+echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      %r%▲%e% Pages [%r%2%e%/%ConfigurationsPages%]%l% 
+echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%          %e%Cat. [%r%2%e%/%CategoryFPS_Pages%]%l%
+echo.    │ It's not that hard is it?   │                                                                                
+echo     └─────────────────────────────┘                                                        
+echo     %l%┌─────────────────────────────┐         %r%▲%e% Configuration: %r%FPS And Input Delay%l% 
+echo     ^│                             ^│   Here you can configure all settings that are going to be applied
+echo     ^│                             ^│
+echo     ^│            Home             ^│ 
+echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  Power Plan%l%                                  %PowerPlanc%▼%l%
+echo     ^│                             ^│          Set up Power Plan For Optimal Performance
+echo     ^│           Tweaks            ^│      
+echo     ^│                             ^│     %e%[%r% 2 %e%]  %r%•%e%  Windows Services%l%                            %WindowsServicesc%▼%l%
+echo     ^│                             ^│          Disable Useless Windows Services
+echo     ^│       Ingame Settings       ^│
+echo     ^│                             ^│     %e%[%r% 3 %e%]  %r%•%e%  Win32 Priority Separation%l%                   %Win32PrioritySeparationc%▼%l%
+echo     ^│                             ^│          Set Win32 Priority Separation to 26Hex
+echo     ^│      Recording Settings     ^│
+echo     ^│                             ^│     %e%[%r% 4 %e%]  %r%•%e%  Search Indexing%l%                             %DisableSearchIndexingc%▼%l%
+echo     ^│                             ^│          Disable Search Indexing
+echo     ^│           Privacy           ^│
+echo     ^│                             ^│     %e%[%r% 5 %e%]  %r%•%e%  Fast Startup%l%                                %DisableFastStartupc%▼%l%
+echo     ^│                             ^│         Disable Hiberboot/Fast Starup
+echo     ^│        %r%Configuration%l%        ^│ 
+echo     ^│                             ^│     %e%[%r% 6 %e%]  %r%•%e%  Reserve CPU Resources%l%                       %ReserveCPUResourcesc%▼%l%
+echo     ^│                             ^│         Set Reserve CPU Resources to 10%
+echo     ^│           Credits           ^│
+echo     ^│                             ^│             
+echo     ^│                             ^│         
+echo     └─────────────────────────────┘           %l%┌──────────────────────┐   ┌───────────────────┐     
+echo                                               %l%│ %e%Go to Tweaks Tab [%r%G%e%]%l% │   │ %e%Skip Category [%r%N%e%]%l% │
+echo                                               └──────────────────────┘   └───────────────────┘
+choice /c:WS123456GNDA /n /m " "                                           
+set MenuItem=%errorlevel%
+if "%MenuItem%"=="1" goto Privacy
+if "%MenuItem%"=="2" goto Credits
+
+if "%MenuItem%"=="3" (
+    if "%PowerPlan%"=="False" (
+        set "PowerPlan=True"
+    ) else (
+        set "PowerPlan=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="4" (
+    if "%WindowsServices%"=="False" (
+        set "WindowsServices=True"
+    ) else (
+        set "WindowsServices=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="5" (
+    if "%Win32PrioritySeparation%"=="False" (
+        set "Win32PrioritySeparation=True"
+    ) else (
+        set "Win32PrioritySeparation=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="6" (
+    if "%DisableSearchIndexing%"=="False" (
+        set "DisableSearchIndexing=True"
+    ) else (
+        set "DisableSearchIndexing=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="7" (
+    if "%DisableFastStartup%"=="False" (
+        set "DisableFastStartup=True"
+    ) else (
+        set "DisableFastStartup=False"
+    )
+) && goto %lastConfiguration%
+
+
+if "%MenuItem%"=="8" (
+    if "%ReserveCPUResources%"=="False" (
+        set "ReserveCPUResources=True"
+    ) else (
+        set "ReserveCPUResources=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="9" (
+    if "%lasttweaks1%"=="true" (
+        goto :lasttweaks1
+    ) else (
+        goto :lasttweaks2
+    )
+) 
+if "%MenuItem%"=="10" goto Configuration6
+if "%MenuItem%"=="11" goto Configuration3
+if "%MenuItem%"=="12" goto Configuration1
+
+
+
+
+
+:Configuration3
+set lastConfiguration=:Configuration3
+
+
+set "DisableBackgroundAppsc="
+if "%DisableBackgroundApps%"=="False" (
+    set "DisableBackgroundAppsc=[38;5;203m"
+) else (
+    set "DisableBackgroundAppsc=[38;5;34m"
+)
+
+set "Winlogonc="
+if "%Winlogon%"=="False" (
+    set "Winlogonc=[38;5;203m"
+) else (
+    set "Winlogonc=[38;5;34m"
+)
+
+set "IntelMicroCodec="
+if "%IntelMicroCode%"=="False" (
+    set "IntelMicroCodec=[38;5;203m"
+) else (
+    set "IntelMicroCodec=[38;5;34m"
+)
+
+set "AMDMicroCodec="
+if "%AMDMicroCode%"=="False" (
+    set "AMDMicroCodec=[38;5;203m"
+) else (
+    set "AMDMicroCodec=[38;5;34m"
+)
+
+set "EnableGPUShedulingc="
+if "%EnableGPUSheduling%"=="False" (
+    set "EnableGPUShedulingc=[38;5;203m"
+) else (
+    set "EnableGPUShedulingc=[38;5;34m"
+)
+
+set "DisableSettingsSynchronizationc="
+if "%DisableSettingsSynchronization%"=="False" (
+    set "DisableSettingsSynchronizationc=[38;5;203m"
+) else (
+    set "DisableSettingsSynchronizationc=[38;5;34m"
+)
+
+
+
+cls
+echo.                                
+echo     %l%┌─────────────────────────────┐                       
+echo     │ %r%W%l% = %e%Up%l%       %r%D%l% = %e%Right%l%      │           %r% _      _  _____   __    _     _  _____  _%l%    
+echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      %r%▲%e% Pages [%r%3%e%/%ConfigurationsPages%]%l% 
+echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%          %e%Cat. [%r%3%e%/%CategoryFPS_Pages%]%l%
+echo.    │ It's not that hard is it?   │                                                                                
+echo     └─────────────────────────────┘                                                        
+echo     %l%┌─────────────────────────────┐         %r%▲%e% Configuration: %r%FPS And Input Delay%l% 
+echo     ^│                             ^│   Here you can configure all settings that are going to be applied
+echo     ^│                             ^│
+echo     ^│            Home             ^│ 
+echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  Background Apps%l%                             %DisableBackgroundAppsc%▼%l%
+echo     ^│                             ^│          Disable Background Applicatons
+echo     ^│           Tweaks            ^│      
+echo     ^│                             ^│     %e%[%r% 2 %e%]  %r%•%e%  Winlogon%l%                                    %Winlogonc%▼%l%
+echo     ^│                             ^│          Configure Winlogon
+echo     ^│       Ingame Settings       ^│
+echo     ^│                             ^│     %e%[%r% 3 %e%]  %r%•%e%  Intel Micro Code%l%                            %IntelMicroCodec%▼%l%
+echo     ^│                             ^│          Delete Intel Micro Code
+echo     ^│      Recording Settings     ^│
+echo     ^│                             ^│     %e%[%r% 4 %e%]  %r%•%e%  AMD Micro Code%l%                              %AMDMicroCodec%▼%l%
+echo     ^│                             ^│          Delete AMD Micro Code
+echo     ^│           Privacy           ^│
+echo     ^│                             ^│     %e%[%r% 5 %e%]  %r%•%e%  HWSCH%l%                                       %EnableGPUShedulingc%▼%l%
+echo     ^│                             ^│          Enable Hardware GPU Scheduling
+echo     ^│        %r%Configuration%l%        ^│ 
+echo     ^│                             ^│     %e%[%r% 6 %e%]  %r%•%e%  Synchronization%l%                             %DisableSettingsSynchronizationc%▼%l%
+echo     ^│                             ^│         Set Reserve CPU Resources to 10%
+echo     ^│           Credits           ^│
+echo     ^│                             ^│             
+echo     ^│                             ^│         
+echo     └─────────────────────────────┘           %l%┌──────────────────────┐   ┌───────────────────┐     
+echo                                               %l%│ %e%Go to Tweaks Tab [%r%G%e%]%l% │   │ %e%Skip Category [%r%N%e%]%l% │
+echo                                               └──────────────────────┘   └───────────────────┘
+choice /c:WS123456GNDA /n /m " "                                           
+set MenuItem=%errorlevel%
+if "%MenuItem%"=="1" goto Privacy
+if "%MenuItem%"=="2" goto Credits
+
+if "%MenuItem%"=="3" (
+    if "%DisableBackgroundApps%"=="False" (
+        set "DisableBackgroundApps=True"
+    ) else (
+        set "DisableBackgroundApps=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="4" (
+    if "%Winlogon%"=="False" (
+        set "Winlogon=True"
+    ) else (
+        set "Winlogon=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="5" (
+    if "%IntelMicroCode%"=="False" (
+        set "IntelMicroCode=True"
+    ) else (
+        set "IntelMicroCode=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="6" (
+    if "%AMDMicroCode%"=="False" (
+        set "AMDMicroCode=True"
+    ) else (
+        set "AMDMicroCode=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="7" (
+    if "%EnableGPUSheduling%"=="False" (
+        set "EnableGPUSheduling=True"
+    ) else (
+        set "EnableGPUSheduling=False"
+    )
+) && goto %lastConfiguration%
+
+
+if "%MenuItem%"=="8" (
+    if "%DisableSettingsSynchronization%"=="False" (
+        set "DisableSettingsSynchronization=True"
+    ) else (
+        set "DisableSettingsSynchronization=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="9" (
+    if "%lasttweaks1%"=="true" (
+        goto :lasttweaks1
+    ) else (
+        goto :lasttweaks2
+    )
+) 
+if "%MenuItem%"=="10" goto Configuration6
+if "%MenuItem%"=="11" goto Configuration4
+if "%MenuItem%"=="12" goto Configuration2
+
+
+
+:Configuration4
+set lastConfiguration=:Configuration4
+
+
+set "DisableRemoteAssistancec="
+if "%DisableRemoteAssistance%"=="False" (
+    set "DisableRemoteAssistancec=[38;5;203m"
+) else (
+    set "DisableRemoteAssistancec=[38;5;34m"
+)
+
+set "DisableGamebarpresencewriterc="
+if "%DisableGamebarpresencewriter%"=="False" (
+    set "DisableGamebarpresencewriterc=[38;5;203m"
+) else (
+    set "DisableGamebarpresencewriterc=[38;5;34m"
+)
+
+set "DisableSystemEnergySavingc="
+if "%DisableSystemEnergySaving%"=="False" (
+    set "DisableSystemEnergySavingc=[38;5;203m"
+) else (
+    set "DisableSystemEnergySavingc=[38;5;34m"
+)
+
+set "SVCSplitThresholdc="
+if "%SVCSplitThreshold%"=="False" (
+    set "SVCSplitThresholdc=[38;5;203m"
+) else (
+    set "SVCSplitThresholdc=[38;5;34m"
+)
+
+set "DisableUSBPowerSavingsc="
+if "%DisableUSBPowerSavings%"=="False" (
+    set "DisableUSBPowerSavingsc=[38;5;203m"
+) else (
+    set "DisableUSBPowerSavingsc=[38;5;34m"
+)
+
+set "EnableMSIModec="
+if "%EnableMSIMode%"=="False" (
+    set "EnableMSIModec=[38;5;203m"
+) else (
+    set "EnableMSIModec=[38;5;34m"
+)
+
+
+
+cls
+echo.                                
+echo     %l%┌─────────────────────────────┐                       
+echo     │ %r%W%l% = %e%Up%l%       %r%D%l% = %e%Right%l%      │           %r% _      _  _____   __    _     _  _____  _%l%    
+echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      %r%▲%e% Pages [%r%4%e%/%ConfigurationsPages%]%l% 
+echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%          %e%Cat. [%r%4%e%/%CategoryFPS_Pages%]%l%
+echo.    │ It's not that hard is it?   │                                                                                
+echo     └─────────────────────────────┘                                                        
+echo     %l%┌─────────────────────────────┐         %r%▲%e% Configuration: %r%FPS And Input Delay%l% 
+echo     ^│                             ^│   Here you can configure all settings that are going to be applied
+echo     ^│                             ^│
+echo     ^│            Home             ^│ 
+echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  Remote Assistance%l%                           %DisableRemoteAssistancec%▼%l%
+echo     ^│                             ^│          Disable Remore Assistance
+echo     ^│           Tweaks            ^│      
+echo     ^│                             ^│     %e%[%r% 2 %e%]  %r%•%e%  Gamebarpresencewriter%l%                       %DisableGamebarpresencewriterc%▼%l%
+echo     ^│                             ^│          Disable Gamebarpresencewriter
+echo     ^│       Ingame Settings       ^│
+echo     ^│                             ^│     %e%[%r% 3 %e%]  %r%•%e%  System Energy Savings%l%                       %DisableSystemEnergySavingc%▼%l%
+echo     ^│                             ^│          Disable System Energy Savings
+echo     ^│      Recording Settings     ^│
+echo     ^│                             ^│     %e%[%r% 4 %e%]  %r%•%e%  SVCSplitThreshold%l%                           %SVCSplitThresholdc%▼%l%
+echo     ^│                             ^│          Configure SVCSplitThreshold
+echo     ^│           Privacy           ^│
+echo     ^│                             ^│     %e%[%r% 5 %e%]  %r%•%e%  USB Power Savings%l%                           %DisableUSBPowerSavingsc%▼%l%
+echo     ^│                             ^│          Disable USB Power Savings
+echo     ^│        %r%Configuration%l%        ^│ 
+echo     ^│                             ^│     %e%[%r% 6 %e%]  %r%•%e%  MSI Mode%l%                                    %EnableMSIModec%▼%l%
+echo     ^│                             ^│         Enable MSI Mode
+echo     ^│           Credits           ^│
+echo     ^│                             ^│             
+echo     ^│                             ^│         
+echo     └─────────────────────────────┘           %l%┌──────────────────────┐   ┌───────────────────┐     
+echo                                               %l%│ %e%Go to Tweaks Tab [%r%G%e%]%l% │   │ %e%Skip Category [%r%N%e%]%l% │
+echo                                               └──────────────────────┘   └───────────────────┘
+choice /c:WS123456GNDA /n /m " "                                           
+set MenuItem=%errorlevel%
+if "%MenuItem%"=="1" goto Privacy
+if "%MenuItem%"=="2" goto Credits
+
+if "%MenuItem%"=="3" (
+    if "%DisableRemoteAssistance%"=="False" (
+        set "DisableRemoteAssistance=True"
+    ) else (
+        set "DisableRemoteAssistance=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="4" (
+    if "%DisableGamebarpresencewriter%"=="False" (
+        set "DisableGamebarpresencewriter=True"
+    ) else (
+        set "DisableGamebarpresencewriter=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="5" (
+    if "%DisableSystemEnergySaving%"=="False" (
+        set "DisableSystemEnergySaving=True"
+    ) else (
+        set "DisableSystemEnergySaving=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="6" (
+    if "%SVCSplitThreshold%"=="False" (
+        set "SVCSplitThreshold=True"
+    ) else (
+        set "SVCSplitThreshold=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="7" (
+    if "%DisableUSBPowerSavings%"=="False" (
+        set "DisableUSBPowerSavings=True"
+    ) else (
+        set "DisableUSBPowerSavings=False"
+    )
+) && goto %lastConfiguration%
+
+
+if "%MenuItem%"=="8" (
+    if "%EnableMSIMode%"=="False" (
+        set "EnableMSIMode=True"
+    ) else (
+        set "EnableMSIMode=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="9" (
+    if "%lasttweaks1%"=="true" (
+        goto :lasttweaks1
+    ) else (
+        goto :lasttweaks2
+    )
+) 
+if "%MenuItem%"=="10" goto Configuration6
+if "%MenuItem%"=="11" goto Configuration5
+if "%MenuItem%"=="12" goto Configuration3
+
+
+
+
+:Configuration5
+set lastConfiguration=:Configuration5
+
+
+set "DevicePriorityUndefinedc="
+if "%DevicePriorityUndefined%"=="False" (
+    set "DevicePriorityUndefinedc=[38;5;203m"
+) else (
+    set "DevicePriorityUndefinedc=[38;5;34m"
+)
+
+
+cls
+echo.                                
+echo     %l%┌─────────────────────────────┐                       
+echo     │ %r%W%l% = %e%Up%l%       %r%D%l% = %e%Right%l%      │           %r% _      _  _____   __    _     _  _____  _%l%    
+echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      %r%▲%e% Pages [%r%5%e%/%ConfigurationsPages%]%l% 
+echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%          %e%Cat. [%r%5%e%/%CategoryFPS_Pages%]%l%
+echo.    │ It's not that hard is it?   │                                                                                
+echo     └─────────────────────────────┘                                                        
+echo     %l%┌─────────────────────────────┐         %r%▲%e% Configuration: %r%FPS And Input Delay%l% 
+echo     ^│                             ^│   Here you can configure all settings that are going to be applied
+echo     ^│                             ^│
+echo     ^│            Home             ^│ 
+echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  Device Priority%l%                           %DevicePriorityUndefinedc%▼%l%
+echo     ^│                             ^│          Set Device Priority to Underfined
+echo     ^│           Tweaks            ^│      
+echo     ^│                             ^│ 
+echo     ^│                             ^│  
+echo     ^│       Ingame Settings       ^│
+echo     ^│                             ^│  
+echo     ^│                             ^│  
+echo     ^│      Recording Settings     ^│
+echo     ^│                             ^│  
+echo     ^│                             ^│  
+echo     ^│           Privacy           ^│
+echo     ^│                             ^│  
+echo     ^│                             ^│  
+echo     ^│        %r%Configuration%l%        ^│ 
+echo     ^│                             ^│     
+echo     ^│                             ^│     
+echo     ^│           Credits           ^│
+echo     ^│                             ^│             
+echo     ^│                             ^│         
+echo     └─────────────────────────────┘           %l%┌──────────────────────┐   ┌───────────────────┐     
+echo                                               %l%│ %e%Go to Tweaks Tab [%r%G%e%]%l% │   │ %e%Skip Category [%r%N%e%]%l% │
+echo                                               └──────────────────────┘   └───────────────────┘
+choice /c:WS123456GNDA /n /m " "                                           
+set MenuItem=%errorlevel%
+if "%MenuItem%"=="1" goto Privacy
+if "%MenuItem%"=="2" goto Credits
+
+if "%MenuItem%"=="3" (
+    if "%DevicePriorityUndefined%"=="False" (
+        set "DevicePriorityUndefined=True"
+    ) else (
+        set "DevicePriorityUndefined=False"
+    )
+) && goto %lastConfiguration%
+
+
+if "%MenuItem%"=="9" (
+    if "%lasttweaks1%"=="true" (
+        goto :lasttweaks1
+    ) else (
+        goto :lasttweaks2
+    )
+) 
+if "%MenuItem%"=="10" goto Configuration6
+if "%MenuItem%"=="11" goto Configuration6
+if "%MenuItem%"=="12" goto Configuration4
+
+
+
+:Configuration6
+set lastConfiguration=:Configuration6
+
 
 set "SpectreMeltdownc="
 if "%SpectreMeltdown%"=="False" (
@@ -1352,50 +1935,44 @@ if "%LowAudioLatency%"=="False" (
     set "LowAudioLatencyc=[38;5;34m"
 )
 
-set "TimerResolutionc="
-if "%TimerResolution%"=="False" (
-    set "TimerResolutionc=[38;5;203m"
-) else (
-    set "TimerResolutionc=[38;5;34m"
-)
 
 
 cls
 echo.                                
 echo     %l%┌─────────────────────────────┐                       
 echo     │ %r%W%l% = %e%Up%l%       %r%D%l% = %e%Right%l%      │           %r% _      _  _____   __    _     _  _____  _%l%    
-echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      %r%▲%e% Pages  [%r%2%e%/%ConfigurationsPages%]%l%
-echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%  
-echo.    │ It's not that hard is it?   │
+echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      %r%▲%e% Pages [%r%6%e%/%ConfigurationsPages%]%l% 
+echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%          %e%Cat. [%r%1%e%/%CategoryLatency_Pages%]%l%
+echo.    │ It's not that hard is it?   │                                                                                
 echo     └─────────────────────────────┘                                                        
-echo     %l%┌─────────────────────────────┐         %r%▲%e% Configuration: %r%Latency%l%
-echo     ^│                             ^│  You Can Manually Set What Tweaks (Not All) Will Be Runned%l%
+echo     %l%┌─────────────────────────────┐         %r%▲%e% Configuration: %r%Latency%l% 
+echo     ^│                             ^│   Here you can configure all settings that are going to be applied
 echo     ^│                             ^│
 echo     ^│            Home             ^│ 
-echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  Spectre And Meltdown%l%                        %SpectreMeltdownc%▼%l%
-echo     ^│                             ^│          Disable Spectre And Meltdown 
+echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  Spectre Meltdown%l%                            %SpectreMeltdownc%▼%l%
+echo     ^│                             ^│          Disable Spectre and Meltdown
 echo     ^│           Tweaks            ^│      
-echo     ^│                             ^│     %e%[%r% 2 %e%]  %r%•%e%  Disable IDLE%l%                                %DisableIDLEc%▼%l%
-echo     ^│                             ^│          Disables Windows Updates
+echo     ^│                             ^│     %e%[%r% 2 %e%]  %r%•%e%  IDLE%l%                                        %DisableIDLEc%▼%l%
+echo     ^│                             ^│          Disable IDLE in powercfg
 echo     ^│       Ingame Settings       ^│
-echo     ^│                             ^│     %e%[%r% 3 %e%]  %r%•%e%  Configure MMCSS%l%                             %MMCSSc%▼%l%
-echo     ^│                             ^│          Optimizes MMCSS Settings
+echo     ^│                             ^│     %e%[%r% 3 %e%]  %r%•%e%  MMCSS%l%                                       %MMCSSc%▼%l%
+echo     ^│                             ^│          Configure MMCSS
 echo     ^│      Recording Settings     ^│
-echo     ^│                             ^│     %e%[%r% 4 %e%]  %r%•%e%  CSRSS High Priority%l%                         %CSRSSc%▼%l%
-echo     ^│                             ^│          Set CSRSS To High Priority
+echo     ^│                             ^│     %e%[%r% 4 %e%]  %r%•%e%  CSRSS%l%                                       %CSRSSc%▼%l%
+echo     ^│                             ^│          Configure CSRSS
 echo     ^│           Privacy           ^│
 echo     ^│                             ^│     %e%[%r% 5 %e%]  %r%•%e%  Low Process Priority%l%                        %LowProcessPriorityc%▼%l%
-echo     ^│                             ^│         Set Low Process Priority To Processes That Uses Cycles
+echo     ^│                             ^│          Set Some Windows Process to Low Priority
 echo     ^│        %r%Configuration%l%        ^│ 
 echo     ^│                             ^│     %e%[%r% 6 %e%]  %r%•%e%  Low Audio Latency%l%                           %LowAudioLatencyc%▼%l%
-echo     ^│                             ^│         Download Low Audio Latency
-echo     ^│           Credits           ^│
-echo     ^│                             ^│     %e%[%r% 7 %e%]  %r%•%e%  Timer Resolution%l%                            %TimerResolutionc%▼%l%          
-echo     ^│                             ^│         Donwload And Configure Timer Resolution
-echo     └─────────────────────────────┘                                
-echo.
-echo.
-choice /c:WS1234657AD /n /m " "                                           
+echo     ^│                             ^│         Download and Configure Low Audio Latency
+echo     ^│           Credits           ^│  
+echo     ^│                             ^│          
+echo     ^│                             ^│         
+echo     └─────────────────────────────┘           %l%┌──────────────────────┐   ┌───────────────────┐     
+echo                                               %l%│ %e%Go to Tweaks Tab [%r%G%e%]%l% │   │ %e%Skip Category [%r%N%e%]%l% │
+echo                                               └──────────────────────┘   └───────────────────┘
+choice /c:WS123456GNDA /n /m " "                                           
 set MenuItem=%errorlevel%
 if "%MenuItem%"=="1" goto Privacy
 if "%MenuItem%"=="2" goto Credits
@@ -1406,7 +1983,7 @@ if "%MenuItem%"=="3" (
     ) else (
         set "SpectreMeltdown=False"
     )
-) && goto Configuration2
+) && goto %lastConfiguration%
 
 if "%MenuItem%"=="4" (
     if "%DisableIDLE%"=="False" (
@@ -1414,7 +1991,7 @@ if "%MenuItem%"=="4" (
     ) else (
         set "DisableIDLE=False"
     )
-) && goto Configuration2
+) && goto %lastConfiguration%
 
 if "%MenuItem%"=="5" (
     if "%MMCSS%"=="False" (
@@ -1422,7 +1999,7 @@ if "%MenuItem%"=="5" (
     ) else (
         set "MMCSS=False"
     )
-) && goto Configuration2
+) && goto %lastConfiguration%
 
 if "%MenuItem%"=="6" (
     if "%CSRSS%"=="False" (
@@ -1430,41 +2007,154 @@ if "%MenuItem%"=="6" (
     ) else (
         set "CSRSS=False"
     )
-) && goto Configuration2
+) && goto %lastConfiguration%
 
-if "%MenuItem%"=="8" (
+if "%MenuItem%"=="7" (
     if "%LowProcessPriority%"=="False" (
         set "LowProcessPriority=True"
     ) else (
         set "LowProcessPriority=False"
     )
-) && goto Configuration2
+) && goto %lastConfiguration%
 
-if "%MenuItem%"=="7" (
+
+if "%MenuItem%"=="8" (
     if "%LowAudioLatency%"=="False" (
         set "LowAudioLatency=True"
     ) else (
         set "LowAudioLatency=False"
     )
-) && goto Configuration2
+) && goto %lastConfiguration%
 
 if "%MenuItem%"=="9" (
+    if "%lasttweaks1%"=="true" (
+        goto :lasttweaks1
+    ) else (
+        goto :lasttweaks2
+    )
+) 
+if "%MenuItem%"=="10" goto Configuration8
+if "%MenuItem%"=="11" goto Configuration7
+if "%MenuItem%"=="12" goto Configuration5
+
+
+
+:Configuration7
+set lastConfiguration=:Configuration7
+
+
+set "TimerResolutionc="
+if "%TimerResolution%"=="False" (
+    set "TimerResolutionc=[38;5;203m"
+) else (
+    set "TimerResolutionc=[38;5;34m"
+)
+
+set "BCDLowLatencyc="
+if "%BCDLowLatency%"=="False" (
+    set "BCDLowLatencyc=[38;5;203m"
+) else (
+    set "BCDLowLatencyc=[38;5;34m"
+)
+
+set "DisableNetworkTrhottlingc="
+if "%DisableNetworkTrhottling%"=="False" (
+    set "DisableNetworkTrhottlingc=[38;5;203m"
+) else (
+    set "DisableNetworkTrhottlingc=[38;5;34m"
+)
+
+set "LatencyTolerancec="
+if "%LatencyTolerance%"=="False" (
+    set "LatencyTolerancec=[38;5;203m"
+) else (
+    set "LatencyTolerancec=[38;5;34m"
+)
+
+
+
+
+cls
+echo.                                
+echo     %l%┌─────────────────────────────┐                       
+echo     │ %r%W%l% = %e%Up%l%       %r%D%l% = %e%Right%l%      │           %r% _      _  _____   __    _     _  _____  _%l%    
+echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      %r%▲%e% Pages [%r%7%e%/%ConfigurationsPages%]%l% 
+echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%          %e%Cat. [%r%2%e%/%CategoryLatency_Pages%]%l%
+echo.    │ It's not that hard is it?   │                                                                                
+echo     └─────────────────────────────┘                                                        
+echo     %l%┌─────────────────────────────┐         %r%▲%e% Configuration: %r%Latency%l% 
+echo     ^│                             ^│   Here you can configure all settings that are going to be applied
+echo     ^│                             ^│
+echo     ^│            Home             ^│ 
+echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  Timer Resolution%l%                            %TimerResolutionc%▼%l%
+echo     ^│                             ^│          Set Timer Resolution to 0.5ms
+echo     ^│           Tweaks            ^│      
+echo     ^│                             ^│     %e%[%r% 2 %e%]  %r%•%e%  BCD Latency%l%                                 %BCDLowLatencyc%▼%l%
+echo     ^│                             ^│          Configure Low Latency BCD Settings (Needed for TimerResolution)
+echo     ^│       Ingame Settings       ^│
+echo     ^│                             ^│     %e%[%r% 3 %e%]  %r%•%e%  Network Throttling%l%                          %DisableNetworkTrhottlingc%▼%l%
+echo     ^│                             ^│          Disable Network Throttling
+echo     ^│      Recording Settings     ^│
+echo     ^│                             ^│   
+echo     ^│                             ^│    
+echo     ^│           Privacy           ^│
+echo     ^│                             ^│ 
+echo     ^│                             ^│     
+echo     ^│        %r%Configuration%l%        ^│ 
+echo     ^│                             ^│    
+echo     ^│                             ^│ 
+echo     ^│           Credits           ^│   
+echo     ^│                             ^│             
+echo     ^│                             ^│         
+echo     └─────────────────────────────┘           %l%┌──────────────────────┐   ┌───────────────────┐     
+echo                                               %l%│ %e%Go to Tweaks Tab [%r%G%e%]%l% │   │ %e%Skip Category [%r%N%e%]%l% │
+echo                                               └──────────────────────┘   └───────────────────┘
+choice /c:WS123456GNDA /n /m " "                                           
+set MenuItem=%errorlevel%
+if "%MenuItem%"=="1" goto Privacy
+if "%MenuItem%"=="2" goto Credits
+
+if "%MenuItem%"=="3" (
     if "%TimerResolution%"=="False" (
         set "TimerResolution=True"
     ) else (
         set "TimerResolution=False"
     )
-) && goto Configuration2
+) && goto %lastConfiguration%
 
-if "%MenuItem%"=="10" goto Configuration
-if "%MenuItem%"=="11" goto Configuration3
+if "%MenuItem%"=="4" (
+    if "%BCDLowLatency%"=="False" (
+        set "BCDLowLatency=True"
+    ) else (
+        set "BCDLowLatency=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="5" (
+    if "%DisableNetworkTrhottling%"=="False" (
+        set "DisableNetworkTrhottling=True"
+    ) else (
+        set "DisableNetworkTrhottling=False"
+    )
+) && goto %lastConfiguration%
 
 
 
+if "%MenuItem%"=="9" (
+    if "%lasttweaks1%"=="true" (
+        goto :lasttweaks1
+    ) else (
+        goto :lasttweaks2
+    )
+) 
+if "%MenuItem%"=="10" goto Configuration8
+if "%MenuItem%"=="11" goto Configuration8
+if "%MenuItem%"=="12" goto Configuration6
 
 
-:Configuration3
-set lastConfiguration=:Configuration3
+:Configuration8
+set lastConfiguration=:Configuration8
+
 
 set "DisableNaglesAlgorithmc="
 if "%DisableNaglesAlgorithm%"=="False" (
@@ -1503,42 +2193,43 @@ if "%Autotunning%"=="False" (
 
 
 
+
 cls
 echo.                                
 echo     %l%┌─────────────────────────────┐                       
 echo     │ %r%W%l% = %e%Up%l%       %r%D%l% = %e%Right%l%      │           %r% _      _  _____   __    _     _  _____  _%l%    
-echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      %r%▲%e% Pages  [%r%3%e%/%ConfigurationsPages%]%l%
-echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%  
-echo.    │ It's not that hard is it?   │
+echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      %r%▲%e% Pages [%r%8%e%/%ConfigurationsPages%]%l% 
+echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%          %e%Cat. [%r%1%e%/%CategoryNetwork_Pages%]%l%
+echo.    │ It's not that hard is it?   │                                                                                
 echo     └─────────────────────────────┘                                                        
-echo     %l%┌─────────────────────────────┐         %r%▲%e% Configuration: %r%Network%l%
-echo     ^│                             ^│  You Can Manually Set What Tweaks (Not All) Will Be Runned%l%
+echo     %l%┌─────────────────────────────┐         %r%▲%e% Configuration: %r%Network%l% 
+echo     ^│                             ^│   Here you can configure all settings that are going to be applied
 echo     ^│                             ^│
 echo     ^│            Home             ^│ 
 echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  Nagles Algorithm%l%                            %DisableNaglesAlgorithmc%▼%l%
 echo     ^│                             ^│          Disable Nagles Algorithm
 echo     ^│           Tweaks            ^│      
 echo     ^│                             ^│     %e%[%r% 2 %e%]  %r%•%e%  NIC%l%                                         %NICc%▼%l%
-echo     ^│                             ^│          Configure Windows NIC Settings
+echo     ^│                             ^│          Configure NIC Settings
 echo     ^│       Ingame Settings       ^│
 echo     ^│                             ^│     %e%[%r% 3 %e%]  %r%•%e%  DNS%l%                                         %DNSc%▼%l%
-echo     ^│                             ^│          Set DNS to "1.1.1.1" ^& "1.0.0.1"
+echo     ^│                             ^│          Set DNS to 1.1.1.1 ^& 1.0.0.1
 echo     ^│      Recording Settings     ^│
 echo     ^│                             ^│     %e%[%r% 4 %e%]  %r%•%e%  Windows Network Settings%l%                    %WindowsNetworkSettignsc%▼%l%
-echo     ^│                             ^│          Optimizes Your Windows Network Settigns
+echo     ^│                             ^│          Configure Windows Network Settings
 echo     ^│           Privacy           ^│
 echo     ^│                             ^│     %e%[%r% 5 %e%]  %r%•%e%  Autotunning%l%                                 %Autotunningc%▼%l%
-echo     ^│                             ^│         Disable Autotunning
+echo     ^│                             ^│          Disable Autotunning
 echo     ^│        %r%Configuration%l%        ^│ 
-echo     ^│                             ^│
-echo     ^│                             ^│
-echo     ^│           Credits           ^│
+echo     ^│                             ^│     
+echo     ^│                             ^│     
+echo     ^│           Credits           ^│  
 echo     ^│                             ^│          
-echo     ^│                             ^│        
-echo     └─────────────────────────────┘                               
-echo.
-echo.
-choice /c:WS12345AD /n /m " "                                           
+echo     ^│                             ^│         
+echo     └─────────────────────────────┘           %l%┌──────────────────────┐   ┌───────────────────┐     
+echo                                               %l%│ %e%Go to Tweaks Tab [%r%G%e%]%l% │   │ %e%Skip Category [%r%N%e%]%l% │
+echo                                               └──────────────────────┘   └───────────────────┘
+choice /c:WS123456GNDA /n /m " "                                           
 set MenuItem=%errorlevel%
 if "%MenuItem%"=="1" goto Privacy
 if "%MenuItem%"=="2" goto Credits
@@ -1549,7 +2240,7 @@ if "%MenuItem%"=="3" (
     ) else (
         set "DisableNaglesAlgorithm=False"
     )
-) && goto Configuration3
+) && goto %lastConfiguration%
 
 if "%MenuItem%"=="4" (
     if "%NIC%"=="False" (
@@ -1557,7 +2248,7 @@ if "%MenuItem%"=="4" (
     ) else (
         set "NIC=False"
     )
-) && goto Configuration3
+) && goto %lastConfiguration%
 
 if "%MenuItem%"=="5" (
     if "%DNS%"=="False" (
@@ -1565,7 +2256,7 @@ if "%MenuItem%"=="5" (
     ) else (
         set "DNS=False"
     )
-) && goto Configuration3
+) && goto %lastConfiguration%
 
 if "%MenuItem%"=="6" (
     if "%WindowsNetworkSettigns%"=="False" (
@@ -1573,7 +2264,7 @@ if "%MenuItem%"=="6" (
     ) else (
         set "WindowsNetworkSettigns=False"
     )
-) && goto Configuration3
+) && goto %lastConfiguration%
 
 if "%MenuItem%"=="7" (
     if "%Autotunning%"=="False" (
@@ -1581,15 +2272,173 @@ if "%MenuItem%"=="7" (
     ) else (
         set "Autotunning=False"
     )
-) && goto Configuration3
-
-if "%MenuItem%"=="8" goto Configuration2
-if "%MenuItem%"=="9" goto Configuration4
+) && goto %lastConfiguration%
 
 
+if "%MenuItem%"=="9" (
+    if "%lasttweaks1%"=="true" (
+        goto :lasttweaks1
+    ) else (
+        goto :lasttweaks2
+    )
+) 
+if "%MenuItem%"=="10" goto Configuration9
+if "%MenuItem%"=="11" goto Configuration9
+if "%MenuItem%"=="12" goto Configuration7
 
-:Configuration4
-set lastConfiguration=:Configuration4
+
+:Configuration9
+set lastConfiguration=:Configuration9
+
+
+set "KeyboardDataSizec="
+if "%KeyboardDataSize%"=="False" (
+    set "KeyboardDataSizec=[38;5;203m"
+) else (
+    set "KeyboardDataSizec=[38;5;34m"
+)
+
+set "AdjustKeyboardParametersc="
+if "%AdjustKeyboardParameters%"=="False" (
+    set "AdjustKeyboardParametersc=[38;5;203m"
+) else (
+    set "AdjustKeyboardParametersc=[38;5;34m"
+)
+
+set "KeyboardAccessibilitySettingsc="
+if "%KeyboardAccessibilitySettings%"=="False" (
+    set "KeyboardAccessibilitySettingsc=[38;5;203m"
+) else (
+    set "KeyboardAccessibilitySettingsc=[38;5;34m"
+)
+
+set "MouseDataSizec="
+if "%MouseDataSize%"=="False" (
+    set "MouseDataSizec=[38;5;203m"
+) else (
+    set "MouseDataSizec=[38;5;34m"
+)
+
+set "DisablePointerAccelerationc="
+if "%DisablePointerAcceleration%"=="False" (
+    set "DisablePointerAccelerationc=[38;5;203m"
+) else (
+    set "DisablePointerAccelerationc=[38;5;34m"
+)
+
+set "MouseAccessibilitySettingsc="
+if "%MouseAccessibilitySettings%"=="False" (
+    set "MouseAccessibilitySettingsc=[38;5;203m"
+) else (
+    set "MouseAccessibilitySettingsc=[38;5;34m"
+)
+
+
+
+cls
+echo.                                
+echo     %l%┌─────────────────────────────┐                       
+echo     │ %r%W%l% = %e%Up%l%       %r%D%l% = %e%Right%l%      │           %r% _      _  _____   __    _     _  _____  _%l%    
+echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      %r%▲%e% Pages [%r%9%e%/%ConfigurationsPages%]%l% 
+echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%          %e%Cat. [%r%1%e%/%CategoryNetwork_Pages%]%l%
+echo.    │ It's not that hard is it?   │                                                                                
+echo     └─────────────────────────────┘                                                        
+echo     %l%┌─────────────────────────────┐         %r%▲%e% Configuration: %r%Keyboard and Mouse%l% 
+echo     ^│                             ^│   Here you can configure all settings that are going to be applied
+echo     ^│                             ^│
+echo     ^│            Home             ^│ 
+echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  Keyboard Data Size%l%                          %KeyboardDataSizec%▼%l%
+echo     ^│                             ^│          Set Keyboard Data Size Queue to 50dec
+echo     ^│           Tweaks            ^│      
+echo     ^│                             ^│     %e%[%r% 2 %e%]  %r%•%e%  Keyboard Parameters%l%                         %AdjustKeyboardParametersc%▼%l%
+echo     ^│                             ^│          Adjust Keyboard Parameters
+echo     ^│       Ingame Settings       ^│
+echo     ^│                             ^│     %e%[%r% 3 %e%]  %r%•%e%  Keyboard Accessibility Settings%l%             %KeyboardAccessibilitySettingsc%▼%l%
+echo     ^│                             ^│          Configure Keyboard Accessibility Settings
+echo     ^│      Recording Settings     ^│
+echo     ^│                             ^│     %e%[%r% 4 %e%]  %r%•%e%  Mouse Data Size%l%                             %MouseDataSizec%▼%l%
+echo     ^│                             ^│          Set Mouse Data Size Queue to 50dec
+echo     ^│           Privacy           ^│
+echo     ^│                             ^│     %e%[%r% 5 %e%]  %r%•%e%  Pointer Acceleration%l%                        %DisablePointerAccelerationc%▼%l%
+echo     ^│                             ^│          Disable Pointer Acceleration
+echo     ^│        %r%Configuration%l%        ^│ 
+echo     ^│                             ^│     %e%[%r% 6 %e%]  %r%•%e%  Mouse Accessibility Settings%l%                %MouseAccessibilitySettingsc%▼%l%
+echo     ^│                             ^│         Configure Mouse Accessibility Settings
+echo     ^│           Credits           ^│  
+echo     ^│                             ^│          
+echo     ^│                             ^│         
+echo     └─────────────────────────────┘           %l%┌──────────────────────┐   ┌───────────────────┐     
+echo                                               %l%│ %e%Go to Tweaks Tab [%r%G%e%]%l% │   │ %e%Skip Category [%r%N%e%]%l% │
+echo                                               └──────────────────────┘   └───────────────────┘
+choice /c:WS123456GNDA /n /m " "                                           
+set MenuItem=%errorlevel%
+if "%MenuItem%"=="1" goto Privacy
+if "%MenuItem%"=="2" goto Credits
+
+if "%MenuItem%"=="3" (
+    if "%KeyboardDataSize%"=="False" (
+        set "KeyboardDataSize=True"
+    ) else (
+        set "KeyboardDataSize=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="4" (
+    if "%AdjustKeyboardParameters%"=="False" (
+        set "AdjustKeyboardParameters=True"
+    ) else (
+        set "AdjustKeyboardParameters=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="5" (
+    if "%KeyboardAccessibilitySettings%"=="False" (
+        set "KeyboardAccessibilitySettings=True"
+    ) else (
+        set "KeyboardAccessibilitySettings=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="6" (
+    if "%MouseDataSize%"=="False" (
+        set "MouseDataSize=True"
+    ) else (
+        set "MouseDataSize=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="7" (
+    if "%DisablePointerAcceleration%"=="False" (
+        set "DisablePointerAcceleration=True"
+    ) else (
+        set "DisablePointerAcceleration=False"
+    )
+) && goto %lastConfiguration%
+
+
+if "%MenuItem%"=="8" (
+    if "%MouseAccessibilitySettings%"=="False" (
+        set "MouseAccessibilitySettings=True"
+    ) else (
+        set "MouseAccessibilitySettings=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="9" (
+    if "%lasttweaks1%"=="true" (
+        goto :lasttweaks1
+    ) else (
+        goto :lasttweaks2
+    )
+) 
+if "%MenuItem%"=="10" goto %Configuration10%
+if "%MenuItem%"=="11" goto %Configuration10%
+if "%MenuItem%"=="12" goto Configuration8
+
+
+:Configuration10Nvidia
+set lastConfiguration=:Configuration10Nvidia
+
 
 set "GameModec="
 if "%GameMode%"=="False" (
@@ -1633,50 +2482,44 @@ if "%Logging%"=="False" (
     set "Loggingc=[38;5;34m"
 )
 
-set "NvidiaProfileInspectorc="
-if "%NvidiaProfileInspector%"=="False" (
-    set "NvidiaProfileInspectorc=[38;5;203m"
-) else (
-    set "NvidiaProfileInspectorc=[38;5;34m"
-)
 
 
 cls
 echo.                                
 echo     %l%┌─────────────────────────────┐                       
 echo     │ %r%W%l% = %e%Up%l%       %r%D%l% = %e%Right%l%      │           %r% _      _  _____   __    _     _  _____  _%l%    
-echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      %r%▲%e% Pages  [%r%4%e%/%ConfigurationsPages%]%l%
-echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%  
-echo.    │ It's not that hard is it?   │
+echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      %r%▲%e% Pages [%r%10%e%/%ConfigurationsPages%]%l% 
+echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%          %e%Cat. [%r%1%e%/%CategoryNvidiaGPU_Pages%]%l%
+echo.    │ It's not that hard is it?   │                                                                                
 echo     └─────────────────────────────┘                                                        
-echo     %l%┌─────────────────────────────┐         %r%▲%e% Configuration: %r%Nvidia GPU%l%
-echo     ^│                             ^│  You Can Manually Set What Tweaks (Not All) Will Be Runned%l%
+echo     %l%┌─────────────────────────────┐         %r%▲%e% Configuration: %r%Nvidia GPU%l% 
+echo     ^│                             ^│   Here you can configure all settings that are going to be applied
 echo     ^│                             ^│
 echo     ^│            Home             ^│ 
 echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  Game Mode%l%                                   %GameModec%▼%l%
 echo     ^│                             ^│          Enable Game Mode
-echo     ^│           Tweaks            ^│
-echo     ^│                             ^│     %e%[%r% 2 %e%]  %r%•%e%  Nvidia Telemtry%l%                             %NvidiaTelemetryc%▼%l%
-echo     ^│                             ^│          Disable Nvidia Telemtry
+echo     ^│           Tweaks            ^│      
+echo     ^│                             ^│     %e%[%r% 2 %e%]  %r%•%e%  Nvidia Telemetry%l%                            %NvidiaTelemetryc%▼%l%
+echo     ^│                             ^│          Remove Nvidia Telemetry
 echo     ^│       Ingame Settings       ^│
 echo     ^│                             ^│     %e%[%r% 3 %e%]  %r%•%e%  P0-States%l%                                   %P0Statesc%▼%l%
 echo     ^│                             ^│          Force P0-States
 echo     ^│      Recording Settings     ^│
 echo     ^│                             ^│     %e%[%r% 4 %e%]  %r%•%e%  HDCP%l%                                        %HDCPc%▼%l%
-echo     ^│                             ^│          Disable HDCP
+echo     ^│                             ^│          Set Mouse Data Size Queue to 50dec
 echo     ^│           Privacy           ^│
 echo     ^│                             ^│     %e%[%r% 5 %e%]  %r%•%e%  Preemption%l%                                  %Preemptionc%▼%l%
 echo     ^│                             ^│          Disable Preemption
 echo     ^│        %r%Configuration%l%        ^│ 
 echo     ^│                             ^│     %e%[%r% 6 %e%]  %r%•%e%  Logging%l%                                     %Loggingc%▼%l%
-echo     ^│                             ^│         Disable Nvidia Logging
-echo     ^│           Credits           ^│
-echo     ^│                             ^│     %e%[%r% 7 %e%]  %r%•%e%  Nvidia Profile Inspector%l%                    %NvidiaProfileInspectorc%▼%l%          
-echo     ^│                             ^│         Set Vitality Nvidia Profile Inspector Config
-echo     └─────────────────────────────┘                                
-echo.
-echo.
-choice /c:WS1234657AD /n /m " "                                           
+echo     ^│                             ^│          Configure Nvidia Logging
+echo     ^│           Credits           ^│  
+echo     ^│                             ^│          
+echo     ^│                             ^│         
+echo     └─────────────────────────────┘           %l%┌──────────────────────┐   ┌───────────────────┐     
+echo                                               %l%│ %e%Go to Tweaks Tab [%r%G%e%]%l% │   │ %e%Skip Category [%r%N%e%]%l% │
+echo                                               └──────────────────────┘   └───────────────────┘
+choice /c:WS123456GNDA /n /m " "                                           
 set MenuItem=%errorlevel%
 if "%MenuItem%"=="1" goto Privacy
 if "%MenuItem%"=="2" goto Credits
@@ -1687,7 +2530,7 @@ if "%MenuItem%"=="3" (
     ) else (
         set "GameMode=False"
     )
-) && goto Configuration4
+) && goto %lastConfiguration%
 
 if "%MenuItem%"=="4" (
     if "%NvidiaTelemetry%"=="False" (
@@ -1695,7 +2538,7 @@ if "%MenuItem%"=="4" (
     ) else (
         set "NvidiaTelemetry=False"
     )
-) && goto Configuration4
+) && goto %lastConfiguration%
 
 if "%MenuItem%"=="5" (
     if "%P0States%"=="False" (
@@ -1703,7 +2546,7 @@ if "%MenuItem%"=="5" (
     ) else (
         set "P0States=False"
     )
-) && goto Configuration4
+) && goto %lastConfiguration%
 
 if "%MenuItem%"=="6" (
     if "%HDCP%"=="False" (
@@ -1711,43 +2554,277 @@ if "%MenuItem%"=="6" (
     ) else (
         set "HDCP=False"
     )
-) && goto Configuration4
+) && goto %lastConfiguration%
 
-if "%MenuItem%"=="8" (
+if "%MenuItem%"=="7" (
     if "%Preemption%"=="False" (
         set "Preemption=True"
     ) else (
         set "Preemption=False"
     )
-) && goto Configuration4
+) && goto %lastConfiguration%
 
-if "%MenuItem%"=="7" (
+
+if "%MenuItem%"=="8" (
     if "%Logging%"=="False" (
         set "Logging=True"
     ) else (
         set "Logging=False"
     )
-) && goto Configuration4
+) && goto %lastConfiguration%
 
 if "%MenuItem%"=="9" (
+    if "%lasttweaks1%"=="true" (
+        goto :lasttweaks1
+    ) else (
+        goto :lasttweaks2
+    )
+) 
+if "%MenuItem%"=="10" goto Configuration14
+if "%MenuItem%"=="11" goto Configuration11
+if "%MenuItem%"=="12" goto Configuration9
+
+:Configuration11
+set lastConfiguration=:Configuration11
+
+
+set "NvidiaProfileInspectorc="
+if "%NvidiaProfileInspector%"=="False" (
+    set "NvidiaProfileInspectorc=[38;5;203m"
+) else (
+    set "NvidiaProfileInspectorc=[38;5;34m"
+)
+
+set "DisableTiledDisplayc="
+if "%DisableTiledDisplay%"=="False" (
+    set "DisableTiledDisplayc=[38;5;203m"
+) else (
+    set "DisableTiledDisplayc=[38;5;34m"
+)
+
+set "DisableTCCc="
+if "%DisableTCC%"=="False" (
+    set "DisableTCCc=[38;5;203m"
+) else (
+    set "DisableTCCc=[38;5;34m"
+)
+
+set "ForceContiguousMemoryAllocationc="
+if "%ForceContiguousMemoryAllocation%"=="False" (
+    set "ForceContiguousMemoryAllocationc=[38;5;203m"
+) else (
+    set "ForceContiguousMemoryAllocationc=[38;5;34m"
+)
+
+set "KBoostc="
+if "%KBoost%"=="False" (
+    set "KBoostc=[38;5;203m"
+) else (
+    set "KBoostc=[38;5;34m"
+)
+
+set "DisableScalingc="
+if "%DisableScaling%"=="False" (
+    set "DisableScalingc=[38;5;203m"
+) else (
+    set "DisableScalingc=[38;5;34m"
+)
+
+
+
+cls
+echo.                                
+echo     %l%┌─────────────────────────────┐                       
+echo     │ %r%W%l% = %e%Up%l%       %r%D%l% = %e%Right%l%      │           %r% _      _  _____   __    _     _  _____  _%l%    
+echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      %r%▲%e% Pages [%r%11%e%/%ConfigurationsPages%]%l% 
+echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%          %e%Cat. [%r%2%e%/%CategoryNvidiaGPU_Pages%]%l%
+echo.    │ It's not that hard is it?   │                                                                                
+echo     └─────────────────────────────┘                                                        
+echo     %l%┌─────────────────────────────┐         %r%▲%e% Configuration: %r%Nvidia GPU%l% 
+echo     ^│                             ^│   Here you can configure all settings that are going to be applied
+echo     ^│                             ^│
+echo     ^│            Home             ^│ 
+echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  Nvidia Profile Inspector%l%                    %NvidiaProfileInspectorc%▼%l%
+echo     ^│                             ^│          Configure Nvidia Profile Inspector Settings
+echo     ^│           Tweaks            ^│      
+echo     ^│                             ^│     %e%[%r% 2 %e%]  %r%•%e%  Titled Display%l%                              %DisableTiledDisplayc%▼%l%
+echo     ^│                             ^│          Disable Tilted Display
+echo     ^│       Ingame Settings       ^│
+echo     ^│                             ^│     %e%[%r% 3 %e%]  %r%•%e%  TCC%l%                                         %DisableTCCc%▼%l%
+echo     ^│                             ^│          Disable TCC
+echo     ^│      Recording Settings     ^│
+echo     ^│                             ^│     %e%[%r% 4 %e%]  %r%•%e%  Memory Allocation%l%                           %ForceContiguousMemoryAllocationc%▼%l%
+echo     ^│                             ^│          Force Contiguous Memory Allocation
+echo     ^│           Privacy           ^│
+echo     ^│                             ^│     %e%[%r% 5 %e%]  %r%•%e%  KBoost%l%                                      %KBoostc%▼%l%
+echo     ^│                             ^│          Enable KBoost
+echo     ^│        %r%Configuration%l%        ^│ 
+echo     ^│                             ^│     %e%[%r% 6 %e%]  %r%•%e%  Scaling%l%                                     %DisableScalingc%▼%l%
+echo     ^│                             ^│          Disable Display Scaling
+echo     ^│           Credits           ^│  
+echo     ^│                             ^│          
+echo     ^│                             ^│         
+echo     └─────────────────────────────┘           %l%┌──────────────────────┐   ┌───────────────────┐     
+echo                                               %l%│ %e%Go to Tweaks Tab [%r%G%e%]%l% │   │ %e%Skip Category [%r%N%e%]%l% │
+echo                                               └──────────────────────┘   └───────────────────┘
+choice /c:WS123456GNDA /n /m " "                                           
+set MenuItem=%errorlevel%
+if "%MenuItem%"=="1" goto Privacy
+if "%MenuItem%"=="2" goto Credits
+
+if "%MenuItem%"=="3" (
     if "%NvidiaProfileInspector%"=="False" (
         set "NvidiaProfileInspector=True"
     ) else (
         set "NvidiaProfileInspector=False"
     )
-) && goto Configuration4
+) && goto %lastConfiguration%
 
-if "%MenuItem%"=="10" goto Configuration3
-if "%MenuItem%"=="11" goto Configuration5
+if "%MenuItem%"=="4" (
+    if "%DisableTiledDisplay%"=="False" (
+        set "DisableTiledDisplay=True"
+    ) else (
+        set "DisableTiledDisplay=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="5" (
+    if "%DisableTCC%"=="False" (
+        set "DisableTCC=True"
+    ) else (
+        set "DisableTCC=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="6" (
+    if "%ForceContiguousMemoryAllocation%"=="False" (
+        set "ForceContiguousMemoryAllocation=True"
+    ) else (
+        set "ForceContiguousMemoryAllocation=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="7" (
+    if "%KBoost%"=="False" (
+        set "KBoost=True"
+    ) else (
+        set "KBoost=False"
+    )
+) && goto %lastConfiguration%
+
+
+if "%MenuItem%"=="8" (
+    if "%DisableScaling%"=="False" (
+        set "DisableScaling=True"
+    ) else (
+        set "DisableScaling=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="9" (
+    if "%lasttweaks1%"=="true" (
+        goto :lasttweaks1
+    ) else (
+        goto :lasttweaks2
+    )
+) 
+if "%MenuItem%"=="10" goto Configuration14
+if "%MenuItem%"=="11" goto Configuration12
+if "%MenuItem%"=="12" goto %Configuration10%
 
 
 
+:Configuration12
+set lastConfiguration=:Configuration12
 
 
-:Configuration5
+set "NoECCc="
+if "%NoECC%"=="False" (
+    set "NoECCc=[38;5;203m"
+) else (
+    set "NoECCc=[38;5;34m"
+)
+
+set "UnrestrictedClockPolicyc="
+if "%UnrestrictedClockPolicy%"=="False" (
+    set "UnrestrictedClockPolicyc=[38;5;203m"
+) else (
+    set "UnrestrictedClockPolicyc=[38;5;34m"
+)
 
 
-set lastConfiguration=:Configuration5
+
+cls
+echo.                                
+echo     %l%┌─────────────────────────────┐                       
+echo     │ %r%W%l% = %e%Up%l%       %r%D%l% = %e%Right%l%      │           %r% _      _  _____   __    _     _  _____  _%l%    
+echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      %r%▲%e% Pages [%r%12%e%/%ConfigurationsPages%]%l% 
+echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%          %e%Cat. [%r%3%e%/%CategoryNvidiaGPU_Pages%]%l%
+echo.    │ It's not that hard is it?   │                                                                                
+echo     └─────────────────────────────┘                                                        
+echo     %l%┌─────────────────────────────┐         %r%▲%e% Configuration: %r%Nvidia GPU%l% 
+echo     ^│                             ^│   Here you can configure all settings that are going to be applied
+echo     ^│                             ^│
+echo     ^│            Home             ^│ 
+echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  ECC%l%                                         %NoECCc%▼%l%
+echo     ^│                             ^│          Disable Nvidia ECC
+echo     ^│           Tweaks            ^│      
+echo     ^│                             ^│     %e%[%r% 2 %e%]  %r%•%e%  Clock Policy%l%                                %UnrestrictedClockPolicyc%▼%l%
+echo     ^│                             ^│          Configure Unrestricted Clock Policy
+echo     ^│       Ingame Settings       ^│
+echo     ^│                             ^│
+echo     ^│                             ^│
+echo     ^│      Recording Settings     ^│
+echo     ^│                             ^│
+echo     ^│                             ^│
+echo     ^│           Privacy           ^│
+echo     ^│                             ^│
+echo     ^│                             ^│
+echo     ^│        %r%Configuration%l%        ^│ 
+echo     ^│                             ^│
+echo     ^│                             ^│
+echo     ^│           Credits           ^│  
+echo     ^│                             ^│          
+echo     ^│                             ^│         
+echo     └─────────────────────────────┘           %l%┌──────────────────────┐   ┌───────────────────┐     
+echo                                               %l%│ %e%Go to Tweaks Tab [%r%G%e%]%l% │   │ %e%Skip Category [%r%N%e%]%l% │
+echo                                               └──────────────────────┘   └───────────────────┘
+choice /c:WS123456GNDA /n /m " "                                           
+set MenuItem=%errorlevel%
+if "%MenuItem%"=="1" goto Privacy
+if "%MenuItem%"=="2" goto Credits
+
+if "%MenuItem%"=="3" (
+    if "%NoECC%"=="False" (
+        set "NoECC=True"
+    ) else (
+        set "NoECC=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="4" (
+    if "%UnrestrictedClockPolicy%"=="False" (
+        set "UnrestrictedClockPolicy=True"
+    ) else (
+        set "UnrestrictedClockPolicy=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="9" (
+    if "%lasttweaks1%"=="true" (
+        goto :lasttweaks1
+    ) else (
+        goto :lasttweaks2
+    )
+) 
+if "%MenuItem%"=="10" goto Configuration14
+if "%MenuItem%"=="11" goto Configuration14
+if "%MenuItem%"=="12" goto Configuration11
+
+
+:Configuration10AMD
+set lastConfiguration=:Configuration10AMD
+
 
 set "GameModeAMDc="
 if "%GameModeAMD%"=="False" (
@@ -1771,42 +2848,43 @@ if "%AMDDebloat%"=="False" (
 )
 
 
+
 cls
 echo.                                
 echo     %l%┌─────────────────────────────┐                       
 echo     │ %r%W%l% = %e%Up%l%       %r%D%l% = %e%Right%l%      │           %r% _      _  _____   __    _     _  _____  _%l%    
-echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      %r%▲%e% Pages  [%r%5%e%/%ConfigurationsPages%]%l%
-echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%  
-echo.    │ It's not that hard is it?   │
+echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      %r%▲%e% Pages [%r%10%e%/%ConfigurationsPages%]%l% 
+echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%          %e%Cat. [%r%1%e%/%CategoryAMDGPU_Pages%]%l%
+echo.    │ It's not that hard is it?   │                                                                                
 echo     └─────────────────────────────┘                                                        
-echo     %l%┌─────────────────────────────┐         %r%▲%e% Configuration: %r%AMD GPU%l%
-echo     ^│                             ^│  You Can Manually Set What Tweaks (Not All) Will Be Runned%l%
+echo     %l%┌─────────────────────────────┐         %r%▲%e% Configuration: %r%AMD GPU%l% 
+echo     ^│                             ^│   Here you can configure all settings that are going to be applied
 echo     ^│                             ^│
 echo     ^│            Home             ^│ 
 echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  Game Mode%l%                                   %GameModeAMDc%▼%l%
 echo     ^│                             ^│          Disable Game Mode
-echo     ^│           Tweaks            ^│
+echo     ^│           Tweaks            ^│      
 echo     ^│                             ^│     %e%[%r% 2 %e%]  %r%•%e%  AMD Optimized Settings%l%                      %AMDOptimizedSettingsc%▼%l%
-echo     ^│                             ^│          Optimize ALL Amd Settings
+echo     ^│                             ^│          Optimize AMD Radoeon Software Settings
 echo     ^│       Ingame Settings       ^│
 echo     ^│                             ^│     %e%[%r% 3 %e%]  %r%•%e%  AMD Debloat%l%                                 %AMDDebloatc%▼%l%
-echo     ^│                             ^│          Debloat AMD Drivers
+echo     ^│                             ^│          Debloat AMD GPU
 echo     ^│      Recording Settings     ^│
-echo     ^│                             ^│      
-echo     ^│                             ^│         
+echo     ^│                             ^│
+echo     ^│                             ^│
 echo     ^│           Privacy           ^│
-echo     ^│                             ^│       
-echo     ^│                             ^│   
+echo     ^│                             ^│
+echo     ^│                             ^│
 echo     ^│        %r%Configuration%l%        ^│ 
+echo     ^│                             ^│ 
+echo     ^│                             ^│ 
+echo     ^│           Credits           ^│  
+echo     ^│                             ^│          
 echo     ^│                             ^│         
-echo     ^│                             ^│     
-echo     ^│           Credits           ^│
-echo     ^│                             ^│         
-echo     ^│                             ^│      
-echo     └─────────────────────────────┘                                
-echo.
-echo.
-choice /c:WS123AD /n /m " "                                           
+echo     └─────────────────────────────┘           %l%┌──────────────────────┐   ┌───────────────────┐     
+echo                                               %l%│ %e%Go to Tweaks Tab [%r%G%e%]%l% │   │ %e%Skip Category [%r%N%e%]%l% │
+echo                                               └──────────────────────┘   └───────────────────┘
+choice /c:WS123456GNDA /n /m " "                                           
 set MenuItem=%errorlevel%
 if "%MenuItem%"=="1" goto Privacy
 if "%MenuItem%"=="2" goto Credits
@@ -1817,7 +2895,7 @@ if "%MenuItem%"=="3" (
     ) else (
         set "GameModeAMD=False"
     )
-) && goto Configuration5
+) && goto %lastConfiguration%
 
 if "%MenuItem%"=="4" (
     if "%AMDOptimizedSettings%"=="False" (
@@ -1825,7 +2903,7 @@ if "%MenuItem%"=="4" (
     ) else (
         set "AMDOptimizedSettings=False"
     )
-) && goto Configuration5
+) && goto %lastConfiguration%
 
 if "%MenuItem%"=="5" (
     if "%AMDDebloat%"=="False" (
@@ -1833,20 +2911,114 @@ if "%MenuItem%"=="5" (
     ) else (
         set "AMDDebloat=False"
     )
-) && goto Configuration5
+) && goto %lastConfiguration%
+
+
+if "%MenuItem%"=="9" (
+    if "%lasttweaks1%"=="true" (
+        goto :lasttweaks1
+    ) else (
+        goto :lasttweaks2
+    )
+) 
+if "%MenuItem%"=="10" goto Configuration14
+if "%MenuItem%"=="11" goto Configuration14
+if "%MenuItem%"=="12" goto Configuration9
+
+
+:Configuration14
+set lastConfiguration=:Configuration14
+
+
+set "MemoryManagmentc="
+if "%MemoryManagment%"=="False" (
+    set "MemoryManagmentc=[38;5;203m"
+) else (
+    set "MemoryManagmentc=[38;5;34m"
+)
+
+set "LargePageDriversc="
+if "%LargePageDrivers%"=="False" (
+    set "LargePageDriversc=[38;5;203m"
+) else (
+    set "LargePageDriversc=[38;5;34m"
+)
 
 
 
-if "%MenuItem%"=="6" goto Configuration4
-if "%MenuItem%"=="7" goto Configuration6
+
+cls
+echo.                                
+echo     %l%┌─────────────────────────────┐                       
+echo     │ %r%W%l% = %e%Up%l%       %r%D%l% = %e%Right%l%      │           %r% _      _  _____   __    _     _  _____  _%l%    
+echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      %r%▲%e% Pages [%r%14%e%/%ConfigurationsPages%]%l% 
+echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%          %e%Cat. [%r%1%e%/%CategoryRAM_Pages%]%l%
+echo.    │ It's not that hard is it?   │                                                                                
+echo     └─────────────────────────────┘                                                        
+echo     %l%┌─────────────────────────────┐         %r%▲%e% Configuration: %r%RAM%l% 
+echo     ^│                             ^│   Here you can configure all settings that are going to be applied
+echo     ^│                             ^│
+echo     ^│            Home             ^│ 
+echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  Memory Management%l%                           %MemoryManagmentc%▼%l%
+echo     ^│                             ^│          Configure Memory Management
+echo     ^│           Tweaks            ^│      
+echo     ^│                             ^│     %e%[%r% 2 %e%]  %r%•%e%  Large Page Drivers%l%                          %LargePageDriversc%▼%l%
+echo     ^│                             ^│          Enable Large Page Drivers
+echo     ^│       Ingame Settings       ^│
+echo     ^│                             ^│     
+echo     ^│                             ^│     
+echo     ^│      Recording Settings     ^│
+echo     ^│                             ^│
+echo     ^│                             ^│
+echo     ^│           Privacy           ^│
+echo     ^│                             ^│
+echo     ^│                             ^│
+echo     ^│        %r%Configuration%l%        ^│ 
+echo     ^│                             ^│ 
+echo     ^│                             ^│ 
+echo     ^│           Credits           ^│  
+echo     ^│                             ^│          
+echo     ^│                             ^│         
+echo     └─────────────────────────────┘           %l%┌──────────────────────┐   ┌───────────────────┐     
+echo                                               %l%│ %e%Go to Tweaks Tab [%r%G%e%]%l% │   │ %e%Skip Category [%r%N%e%]%l% │
+echo                                               └──────────────────────┘   └───────────────────┘
+choice /c:WS123456GNDA /n /m " "                                           
+set MenuItem=%errorlevel%
+if "%MenuItem%"=="1" goto Privacy
+if "%MenuItem%"=="2" goto Credits
+
+if "%MenuItem%"=="3" (
+    if "%MemoryManagment%"=="False" (
+        set "MemoryManagment=True"
+    ) else (
+        set "MemoryManagment=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="4" (
+    if "%LargePageDrivers%"=="False" (
+        set "LargePageDrivers=True"
+    ) else (
+        set "LargePageDrivers=False"
+    )
+) && goto %lastConfiguration%
 
 
+if "%MenuItem%"=="9" (
+    if "%lasttweaks1%"=="true" (
+        goto :lasttweaks1
+    ) else (
+        goto :lasttweaks2
+    )
+) 
+if "%MenuItem%"=="10" goto Configuration15
+if "%MenuItem%"=="11" goto Configuration15
+if "%MenuItem%"=="12" goto %Configuration10%
 
 
-:Configuration6
+:Configuration15
+set lastConfiguration=:Configuration15
 
-
-set lastConfiguration=:Configuration6
 
 set "FileSystemOptimizationc="
 if "%FileSystemOptimization%"=="False" (
@@ -1870,42 +3042,43 @@ if "%Startupcleaner%"=="False" (
 )
 
 
+
 cls
 echo.                                
 echo     %l%┌─────────────────────────────┐                       
 echo     │ %r%W%l% = %e%Up%l%       %r%D%l% = %e%Right%l%      │           %r% _      _  _____   __    _     _  _____  _%l%    
-echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      %r%▲%e% Pages  [%r%6%e%/%ConfigurationsPages%]%l%
-echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%  
-echo.    │ It's not that hard is it?   │
+echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      %r%▲%e% Pages [%r%15%e%/%ConfigurationsPages%]%l% 
+echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%          %e%Cat. [%r%1%e%/%CategoryDISK_Pages%]%l%
+echo.    │ It's not that hard is it?   │                                                                                
 echo     └─────────────────────────────┘                                                        
-echo     %l%┌─────────────────────────────┐         %r%▲%e% Configuration: %r%Disk%l%
-echo     ^│                             ^│  You Can Manually Set What Tweaks (Not All) Will Be Runned%l%
+echo     %l%┌─────────────────────────────┐         %r%▲%e% Configuration: %r%Disk%l% 
+echo     ^│                             ^│   Here you can configure all settings that are going to be applied
 echo     ^│                             ^│
-echo     ^│            Home             ^│
+echo     ^│            Home             ^│ 
 echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  File System%l%                                 %FileSystemOptimizationc%▼%l%
-echo     ^│                             ^│          Optimize File System Settings
-echo     ^│           Tweaks            ^│
+echo     ^│                             ^│          Optimize File System
+echo     ^│           Tweaks            ^│      
 echo     ^│                             ^│     %e%[%r% 2 %e%]  %r%•%e%  Cleaner%l%                                     %Cleanerc%▼%l%
-echo     ^│                             ^│          Delete Useless Windows Stuff
+echo     ^│                             ^│          Clean Junk Files
 echo     ^│       Ingame Settings       ^│
 echo     ^│                             ^│     %e%[%r% 3 %e%]  %r%•%e%  Startup Cleaner%l%                             %Startupcleanerc%▼%l%
-echo     ^│                             ^│          Delete Useless Windows Stuff On Startup
+echo     ^│                             ^│          Add Startup Cleaner
 echo     ^│      Recording Settings     ^│
-echo     ^│                             ^│      
-echo     ^│                             ^│         
+echo     ^│                             ^│
+echo     ^│                             ^│
 echo     ^│           Privacy           ^│
-echo     ^│                             ^│       
-echo     ^│                             ^│   
+echo     ^│                             ^│
+echo     ^│                             ^│
 echo     ^│        %r%Configuration%l%        ^│ 
+echo     ^│                             ^│ 
+echo     ^│                             ^│ 
+echo     ^│           Credits           ^│  
+echo     ^│                             ^│          
 echo     ^│                             ^│         
-echo     ^│                             ^│     
-echo     ^│           Credits           ^│
-echo     ^│                             ^│         
-echo     ^│                             ^│      
-echo     └─────────────────────────────┘                                
-echo.
-echo.
-choice /c:WS123AD /n /m " "                                           
+echo     └─────────────────────────────┘           %l%┌──────────────────────┐   ┌───────────────────┐     
+echo                                               %l%│ %e%Go to Tweaks Tab [%r%G%e%]%l% │   │ %e%Skip Category [%r%N%e%]%l% │
+echo                                               └──────────────────────┘   └───────────────────┘
+choice /c:WS123456GNDA /n /m " "                                           
 set MenuItem=%errorlevel%
 if "%MenuItem%"=="1" goto Privacy
 if "%MenuItem%"=="2" goto Credits
@@ -1916,7 +3089,7 @@ if "%MenuItem%"=="3" (
     ) else (
         set "FileSystemOptimization=False"
     )
-) && goto Configuration6
+) && goto %lastConfiguration%
 
 if "%MenuItem%"=="4" (
     if "%Cleaner%"=="False" (
@@ -1924,7 +3097,7 @@ if "%MenuItem%"=="4" (
     ) else (
         set "Cleaner=False"
     )
-) && goto Configuration6
+) && goto %lastConfiguration%
 
 if "%MenuItem%"=="5" (
     if "%Startupcleaner%"=="False" (
@@ -1932,16 +3105,25 @@ if "%MenuItem%"=="5" (
     ) else (
         set "Startupcleaner=False"
     )
-) && goto Configuration6
+) && goto %lastConfiguration%
+
+
+if "%MenuItem%"=="9" (
+    if "%lasttweaks1%"=="true" (
+        goto :lasttweaks1
+    ) else (
+        goto :lasttweaks2
+    )
+) 
+if "%MenuItem%"=="10" goto Configuration16
+if "%MenuItem%"=="11" goto Configuration16
+if "%MenuItem%"=="12" goto Configuration14
 
 
 
-if "%MenuItem%"=="6" goto Configuration5
-if "%MenuItem%"=="7" goto Configuration7
+:Configuration16
+set lastConfiguration=:Configuration16
 
-
-:Configuration7
-set lastConfiguration=:Configuration7
 
 set "DisableTelemetryc="
 if "%DisableTelemetry%"=="False" (
@@ -1985,50 +3167,44 @@ if "%DisableLocationTracking%"=="False" (
     set "DisableLocationTrackingc=[38;5;34m"
 )
 
-set "ShowFileExtensionc="
-if "%ShowFileExtension%"=="False" (
-    set "ShowFileExtensionc=[38;5;203m"
-) else (
-    set "ShowFileExtensionc=[38;5;34m"
-)
 
 
 cls
 echo.                                
 echo     %l%┌─────────────────────────────┐                       
 echo     │ %r%W%l% = %e%Up%l%       %r%D%l% = %e%Right%l%      │           %r% _      _  _____   __    _     _  _____  _%l%    
-echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      %r%▲%e% Pages  [%r%7%e%/%ConfigurationsPages%]%l%
-echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%  
-echo.    │ It's not that hard is it?   │
+echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      %r%▲%e% Pages [%r%16%e%/%ConfigurationsPages%]%l% 
+echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%          %e%Cat. [%r%1%e%/%CategoryWindows_Pages%]%l% 
+echo.    │ It's not that hard is it?   │                                                                                
 echo     └─────────────────────────────┘                                                        
-echo     %l%┌─────────────────────────────┐         %r%▲%e% Configuration: %r%Windows Settings%l%
-echo     ^│                             ^│  You Can Manually Set What Tweaks (Not All) Will Be Runned%l%
+echo     %l%┌─────────────────────────────┐         %r%▲%e% Configuration: %r%Windows%l% 
+echo     ^│                             ^│   Here you can configure all settings that are going to be applied
 echo     ^│                             ^│
 echo     ^│            Home             ^│ 
-echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  Telemetry%l%                                   %DisableTelemetryc%▼%l%
-echo     ^│                             ^│          Disable Telemtry
-echo     ^│           Tweaks            ^│
-echo     ^│                             ^│     %e%[%r% 2 %e%]  %r%•%e%  Disable Hibernation%l%                         %DisableHibernationc%▼%l%
-echo     ^│                             ^│          Disable Fast boot/Hibernation
+echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  Telemtry%l%                                    %DisableTelemetryc%▼%l%
+echo     ^│                             ^│          Disable Telemetry
+echo     ^│           Tweaks            ^│      
+echo     ^│                             ^│     %e%[%r% 2 %e%]  %r%•%e%  Hibernation%l%                                 %DisableHibernationc%▼%l%
+echo     ^│                             ^│          Disable Hibernation
 echo     ^│       Ingame Settings       ^│
-echo     ^│                             ^│     %e%[%r% 3 %e%]  %r%•%e%  Boot Options%l%                                %BootOptionsc%▼%l%
-echo     ^│                             ^│          Optimize Windows Boot Options
+echo     ^│                             ^│     %e%[%r% 3 %e%]  %r%•%e%  Boot Settings%l%                               %BootOptionsc%▼%l%
+echo     ^│                             ^│          Configure Boot Settings
 echo     ^│      Recording Settings     ^│
-echo     ^│                             ^│     %e%[%r% 4 %e%]  %r%•%e%  Password On Wakeup%l%                          %PasswordOnWakeUpc%▼%l%
-echo     ^│                             ^│          Disable Password On Wakeup
+echo     ^│                             ^│     %e%[%r% 4 %e%]  %r%•%e%  Password On Wake Up%l%                         %PasswordOnWakeUpc%▼%l%
+echo     ^│                             ^│          Disable Password On Wake Up
 echo     ^│           Privacy           ^│
-echo     ^│                             ^│     %e%[%r% 5 %e%]  %r%•%e%  Locaiton Tracking%l%                           %DisableAutomaticMaintenancec%▼%l%
-echo     ^│                             ^│          Disable Windows Location Tracking
+echo     ^│                             ^│     %e%[%r% 5 %e%]  %r%•%e%  Automatic Maintenance%l%                       %DisableAutomaticMaintenancec%▼%l%
+echo     ^│                             ^│          Disable Automatic Maintenance
 echo     ^│        %r%Configuration%l%        ^│ 
-echo     ^│                             ^│     %e%[%r% 6 %e%]  %r%•%e%  File Extension%l%                              %DisableLocationTrackingc%▼%l%
-echo     ^│                             ^│         Show File Extensions
-echo     ^│           Credits           ^│
-echo     ^│                             ^│     %e%[%r% 7 %e%]  %r%•%e%  Automatic Maintenance%l%                       %ShowFileExtensionc%▼%l%          
-echo     ^│                             ^│         Disable Automatic Maintenance
-echo     └─────────────────────────────┘                                
-echo.
-echo.
-choice /c:WS1234657AD /n /m " "                                           
+echo     ^│                             ^│     %e%[%r% 6 %e%]  %r%•%e%  Locatino Tracking%l%                           %DisableLocationTrackingc%▼%l%
+echo     ^│                             ^│          Disable Location Tracking
+echo     ^│           Credits           ^│  
+echo     ^│                             ^│          
+echo     ^│                             ^│         
+echo     └─────────────────────────────┘           %l%┌──────────────────────┐   ┌───────────────────┐     
+echo                                               %l%│ %e%Go to Tweaks Tab [%r%G%e%]%l% │   │ %e%Skip Category [%r%N%e%]%l% │
+echo                                               └──────────────────────┘   └───────────────────┘
+choice /c:WS123456GNDA /n /m " "                                           
 set MenuItem=%errorlevel%
 if "%MenuItem%"=="1" goto Privacy
 if "%MenuItem%"=="2" goto Credits
@@ -2039,7 +3215,7 @@ if "%MenuItem%"=="3" (
     ) else (
         set "DisableTelemetry=False"
     )
-) && goto Configuration7
+) && goto %lastConfiguration%
 
 if "%MenuItem%"=="4" (
     if "%DisableHibernation%"=="False" (
@@ -2047,7 +3223,7 @@ if "%MenuItem%"=="4" (
     ) else (
         set "DisableHibernation=False"
     )
-) && goto Configuration7
+) && goto %lastConfiguration%
 
 if "%MenuItem%"=="5" (
     if "%BootOptions%"=="False" (
@@ -2055,7 +3231,7 @@ if "%MenuItem%"=="5" (
     ) else (
         set "BootOptions=False"
     )
-) && goto Configuration7
+) && goto %lastConfiguration%
 
 if "%MenuItem%"=="6" (
     if "%PasswordOnWakeUp%"=="False" (
@@ -2063,48 +3239,927 @@ if "%MenuItem%"=="6" (
     ) else (
         set "PasswordOnWakeUp=False"
     )
-) && goto Configuration7
+) && goto %lastConfiguration%
 
-if "%MenuItem%"=="8" (
+if "%MenuItem%"=="7" (
     if "%DisableAutomaticMaintenance%"=="False" (
         set "DisableAutomaticMaintenance=True"
     ) else (
         set "DisableAutomaticMaintenance=False"
     )
-) && goto Configuration7
+) && goto %lastConfiguration%
 
-if "%MenuItem%"=="7" (
+
+if "%MenuItem%"=="8" (
     if "%DisableLocationTracking%"=="False" (
         set "DisableLocationTracking=True"
     ) else (
         set "DisableLocationTracking=False"
     )
-) && goto Configuration7
+) && goto %lastConfiguration%
 
 if "%MenuItem%"=="9" (
-    if "%ShowFileExtension%"=="False" (
-        set "ShowFileExtension=True"
+    if "%lasttweaks1%"=="true" (
+        goto :lasttweaks1
     ) else (
-        set "ShowFileExtension=False"
+        goto :lasttweaks2
     )
-) && goto Configuration7
+) 
+if "%MenuItem%"=="10" goto %Configuration23%
+if "%MenuItem%"=="11" goto Configuration17
+if "%MenuItem%"=="12" goto Configuration15
 
-if "%MenuItem%"=="10" goto Configuration6
-if "%MenuItem%"=="11" goto %Configuration8%
-
-
-
-
-
+:Configuration17
+set lastConfiguration=:Configuration17
 
 
+set "DisablePushNotificationsc="
+if "%DisablePushNotifications%"=="False" (
+    set "DisablePushNotificationsc=[38;5;203m"
+) else (
+    set "DisablePushNotificationsc=[38;5;34m"
+)
+
+set "DisableDriverSearchingc="
+if "%DisableDriverSearching%"=="False" (
+    set "DisableDriverSearchingc=[38;5;203m"
+) else (
+    set "DisableDriverSearchingc=[38;5;34m"
+)
+
+set "DisableWindowsNotificationsc="
+if "%DisableWindowsNotifications%"=="False" (
+    set "DisableWindowsNotificationsc=[38;5;203m"
+) else (
+    set "DisableWindowsNotificationsc=[38;5;34m"
+)
+
+set "DisableTransparencyc="
+if "%DisableTransparency%"=="False" (
+    set "DisableTransparencyc=[38;5;203m"
+) else (
+    set "DisableTransparencyc=[38;5;34m"
+)
+
+set "PauseMapsUpdatesc="
+if "%PauseMapsUpdates%"=="False" (
+    set "PauseMapsUpdatesc=[38;5;203m"
+) else (
+    set "PauseMapsUpdatesc=[38;5;34m"
+)
+
+set "DisableSettingsSyncc="
+if "%DisableSettingsSync%"=="False" (
+    set "DisableSettingsSyncc=[38;5;203m"
+) else (
+    set "DisableSettingsSyncc=[38;5;34m"
+)
 
 
 
+cls
+echo.                                
+echo     %l%┌─────────────────────────────┐                       
+echo     │ %r%W%l% = %e%Up%l%       %r%D%l% = %e%Right%l%      │           %r% _      _  _____   __    _     _  _____  _%l%    
+echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      %r%▲%e% Pages [%r%17%e%/%ConfigurationsPages%]%l% 
+echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%          %e%Cat. [%r%2%e%/%CategoryWindows_Pages%]%l% 
+echo.    │ It's not that hard is it?   │                                                                                
+echo     └─────────────────────────────┘                                                        
+echo     %l%┌─────────────────────────────┐         %r%▲%e% Configuration: %r%Windows%l% 
+echo     ^│                             ^│   Here you can configure all settings that are going to be applied
+echo     ^│                             ^│
+echo     ^│            Home             ^│ 
+echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  Push Notifications%l%                          %DisablePushNotificationsc%▼%l%
+echo     ^│                             ^│          Disable Push Notifications
+echo     ^│           Tweaks            ^│      
+echo     ^│                             ^│     %e%[%r% 2 %e%]  %r%•%e%  Driver Searching%l%                            %DisableDriverSearchingc%▼%l%
+echo     ^│                             ^│          Disable Driver Searching
+echo     ^│       Ingame Settings       ^│
+echo     ^│                             ^│     %e%[%r% 3 %e%]  %r%•%e%  Windows Notifications%l%                       %DisableWindowsNotificationsc%▼%l%
+echo     ^│                             ^│          Disable Windows Notifications
+echo     ^│      Recording Settings     ^│
+echo     ^│                             ^│     %e%[%r% 4 %e%]  %r%•%e%  Transparency%l%                                %DisableTransparencyc%▼%l%
+echo     ^│                             ^│          Disable Transparency
+echo     ^│           Privacy           ^│
+echo     ^│                             ^│     %e%[%r% 5 %e%]  %r%•%e%  Maps Updates%l%                                %PauseMapsUpdatesc%▼%l%
+echo     ^│                             ^│          Pause Maps Updates
+echo     ^│        %r%Configuration%l%        ^│ 
+echo     ^│                             ^│     %e%[%r% 6 %e%]  %r%•%e%  Settings Synchronization%l%                    %DisableSettingsSyncc%▼%l%
+echo     ^│                             ^│          Disable Settings Synchronization
+echo     ^│           Credits           ^│  
+echo     ^│                             ^│          
+echo     ^│                             ^│         
+echo     └─────────────────────────────┘           %l%┌──────────────────────┐   ┌───────────────────┐     
+echo                                               %l%│ %e%Go to Tweaks Tab [%r%G%e%]%l% │   │ %e%Skip Category [%r%N%e%]%l% │
+echo                                               └──────────────────────┘   └───────────────────┘
+choice /c:WS123456GNDA /n /m " "                                           
+set MenuItem=%errorlevel%
+if "%MenuItem%"=="1" goto Privacy
+if "%MenuItem%"=="2" goto Credits
+
+if "%MenuItem%"=="3" (
+    if "%DisablePushNotifications%"=="False" (
+        set "DisablePushNotifications=True"
+    ) else (
+        set "DisablePushNotifications=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="4" (
+    if "%DisableDriverSearching%"=="False" (
+        set "DisableDriverSearching=True"
+    ) else (
+        set "DisableDriverSearching=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="5" (
+    if "%DisableWindowsNotifications%"=="False" (
+        set "DisableWindowsNotifications=True"
+    ) else (
+        set "DisableWindowsNotifications=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="6" (
+    if "%DisableTransparency%"=="False" (
+        set "DisableTransparency=True"
+    ) else (
+        set "DisableTransparency=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="7" (
+    if "%PauseMapsUpdates%"=="False" (
+        set "PauseMapsUpdates=True"
+    ) else (
+        set "PauseMapsUpdates=False"
+    )
+) && goto %lastConfiguration%
 
 
-:ConfigurationIntel
-set lastConfiguration=:ConfigurationIntel
+if "%MenuItem%"=="8" (
+    if "%DisableSettingsSync%"=="False" (
+        set "DisableSettingsSync=True"
+    ) else (
+        set "DisableSettingsSync=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="9" (
+    if "%lasttweaks1%"=="true" (
+        goto :lasttweaks1
+    ) else (
+        goto :lasttweaks2
+    )
+) 
+if "%MenuItem%"=="10" goto %Configuration23%
+if "%MenuItem%"=="11" goto Configuration18
+if "%MenuItem%"=="12" goto Configuration16
+
+:Configuration18
+set lastConfiguration=:Configuration18
+
+
+set "DisableAdvertisingIDc="
+if "%DisableAdvertisingID%"=="False" (
+    set "DisableAdvertisingIDc=[38;5;203m"
+) else (
+    set "DisableAdvertisingIDc=[38;5;34m"
+)
+
+set "DisableWebInSearchc="
+if "%DisableWebInSearch%"=="False" (
+    set "DisableWebInSearchc=[38;5;203m"
+) else (
+    set "DisableWebInSearchc=[38;5;34m"
+)
+
+set "DisableRemoteAssistancec="
+if "%DisableRemoteAssistance%"=="False" (
+    set "DisableRemoteAssistancec=[38;5;203m"
+) else (
+    set "DisableRemoteAssistancec=[38;5;34m"
+)
+
+set "DisableInventoryCollectorc="
+if "%DisableInventoryCollector%"=="False" (
+    set "DisableInventoryCollectorc=[38;5;203m"
+) else (
+    set "DisableInventoryCollectorc=[38;5;34m"
+)
+
+set "DisableWindowsErrorReportingc="
+if "%DisableWindowsErrorReporting%"=="False" (
+    set "DisableWindowsErrorReportingc=[38;5;203m"
+) else (
+    set "DisableWindowsErrorReportingc=[38;5;34m"
+)
+
+set "DisableCustomerExperienceProgramc="
+if "%DisableCustomerExperienceProgram%"=="False" (
+    set "DisableCustomerExperienceProgramc=[38;5;203m"
+) else (
+    set "DisableCustomerExperienceProgramc=[38;5;34m"
+)
+
+
+
+cls
+echo.                                
+echo     %l%┌─────────────────────────────┐                       
+echo     │ %r%W%l% = %e%Up%l%       %r%D%l% = %e%Right%l%      │           %r% _      _  _____   __    _     _  _____  _%l%    
+echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      %r%▲%e% Pages [%r%18%e%/%ConfigurationsPages%]%l% 
+echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%          %e%Cat. [%r%3%e%/%CategoryWindows_Pages%]%l% 
+echo.    │ It's not that hard is it?   │                                                                                
+echo     └─────────────────────────────┘                                                        
+echo     %l%┌─────────────────────────────┐         %r%▲%e% Configuration: %r%Windows%l% 
+echo     ^│                             ^│   Here you can configure all settings that are going to be applied
+echo     ^│                             ^│
+echo     ^│            Home             ^│ 
+echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  Advertising ID%l%                              %DisableAdvertisingIDc%▼%l%
+echo     ^│                             ^│          Disable Advertising ID
+echo     ^│           Tweaks            ^│      
+echo     ^│                             ^│     %e%[%r% 2 %e%]  %r%•%e%  Web In Search%l%                               %DisableWebInSearchc%▼%l%
+echo     ^│                             ^│          Disable Web In Search
+echo     ^│       Ingame Settings       ^│
+echo     ^│                             ^│     %e%[%r% 3 %e%]  %r%•%e%  Remote Assistance%l%                           %DisableRemoteAssistancec%▼%l%
+echo     ^│                             ^│          Disable Remote Assistance
+echo     ^│      Recording Settings     ^│
+echo     ^│                             ^│     %e%[%r% 4 %e%]  %r%•%e%  Inventory Collector%l%                         %DisableInventoryCollectorc%▼%l%
+echo     ^│                             ^│          Disable Inventory Collector
+echo     ^│           Privacy           ^│
+echo     ^│                             ^│     %e%[%r% 5 %e%]  %r%•%e%  Windows Error Reporting%l%                     %DisableWindowsErrorReportingc%▼%l%
+echo     ^│                             ^│          Disable Windows Error Reporting
+echo     ^│        %r%Configuration%l%        ^│ 
+echo     ^│                             ^│     %e%[%r% 6 %e%]  %r%•%e%  Customer Experience Program%l%                 %DisableCustomerExperienceProgramc%▼%l%
+echo     ^│                             ^│          Disable Customer Experience Program
+echo     ^│           Credits           ^│  
+echo     ^│                             ^│          
+echo     ^│                             ^│         
+echo     └─────────────────────────────┘           %l%┌──────────────────────┐   ┌───────────────────┐     
+echo                                               %l%│ %e%Go to Tweaks Tab [%r%G%e%]%l% │   │ %e%Skip Category [%r%N%e%]%l% │
+echo                                               └──────────────────────┘   └───────────────────┘
+choice /c:WS123456GNDA /n /m " "                                           
+set MenuItem=%errorlevel%
+if "%MenuItem%"=="1" goto Privacy
+if "%MenuItem%"=="2" goto Credits
+
+if "%MenuItem%"=="3" (
+    if "%DisableAdvertisingID%"=="False" (
+        set "DisableAdvertisingID=True"
+    ) else (
+        set "DisableAdvertisingID=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="4" (
+    if "%DisableWebInSearch%"=="False" (
+        set "DisableWebInSearch=True"
+    ) else (
+        set "DisableWebInSearch=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="5" (
+    if "%DisableRemoteAssistance%"=="False" (
+        set "DisableRemoteAssistance=True"
+    ) else (
+        set "DisableRemoteAssistance=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="6" (
+    if "%DisableInventoryCollector%"=="False" (
+        set "DisableInventoryCollector=True"
+    ) else (
+        set "DisableInventoryCollector=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="7" (
+    if "%DisableWindowsErrorReporting%"=="False" (
+        set "DisableWindowsErrorReporting=True"
+    ) else (
+        set "DisableWindowsErrorReporting=False"
+    )
+) && goto %lastConfiguration%
+
+
+if "%MenuItem%"=="8" (
+    if "%DisableCustomerExperienceProgram%"=="False" (
+        set "DisableCustomerExperienceProgram=True"
+    ) else (
+        set "DisableCustomerExperienceProgram=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="9" (
+    if "%lasttweaks1%"=="true" (
+        goto :lasttweaks1
+    ) else (
+        goto :lasttweaks2
+    )
+) 
+if "%MenuItem%"=="10" goto %Configuration23%
+if "%MenuItem%"=="11" goto Configuration19
+if "%MenuItem%"=="12" goto Configuration17
+
+:Configuration19
+set lastConfiguration=:Configuration19
+
+
+set "DisableOneDriveSyncc="
+if "%DisableOneDriveSync%"=="False" (
+    set "DisableOneDriveSyncc=[38;5;203m"
+) else (
+    set "DisableOneDriveSyncc=[38;5;34m"
+)
+
+set "DisableBiometricsc="
+if "%DisableBiometrics%"=="False" (
+    set "DisableBiometricsc=[38;5;203m"
+) else (
+    set "DisableBiometricsc=[38;5;34m"
+)
+
+set "DenyCapabilityForAppsc="
+if "%DenyCapabilityForApps%"=="False" (
+    set "DenyCapabilityForAppsc=[38;5;203m"
+) else (
+    set "DenyCapabilityForAppsc=[38;5;34m"
+)
+
+set "DisableLocationServicesc="
+if "%DisableLocationServices%"=="False" (
+    set "DisableLocationServicesc=[38;5;203m"
+) else (
+    set "DisableLocationServicesc=[38;5;34m"
+)
+
+set "PreventWindowsMarkingFilesc="
+if "%PreventWindowsMarkingFiles%"=="False" (
+    set "PreventWindowsMarkingFilesc=[38;5;203m"
+) else (
+    set "PreventWindowsMarkingFilesc=[38;5;34m"
+)
+
+set "DisableLanguageBarc="
+if "%DisableLanguageBar%"=="False" (
+    set "DisableLanguageBarc=[38;5;203m"
+) else (
+    set "DisableLanguageBarc=[38;5;34m"
+)
+
+
+
+cls
+echo.                                
+echo     %l%┌─────────────────────────────┐                       
+echo     │ %r%W%l% = %e%Up%l%       %r%D%l% = %e%Right%l%      │           %r% _      _  _____   __    _     _  _____  _%l%    
+echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      %r%▲%e% Pages [%r%19%e%/%ConfigurationsPages%]%l% 
+echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%          %e%Cat. [%r%4%e%/%CategoryWindows_Pages%]%l% 
+echo.    │ It's not that hard is it?   │                                                                                
+echo     └─────────────────────────────┘                                                        
+echo     %l%┌─────────────────────────────┐         %r%▲%e% Configuration: %r%Windows%l% 
+echo     ^│                             ^│   Here you can configure all settings that are going to be applied
+echo     ^│                             ^│
+echo     ^│            Home             ^│ 
+echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  OneDrive Synchronization%l%                    %DisableOneDriveSyncc%▼%l%
+echo     ^│                             ^│          Disable OneDrive Synchronization
+echo     ^│           Tweaks            ^│      
+echo     ^│                             ^│     %e%[%r% 2 %e%]  %r%•%e%  Biometrics%l%                                  %DisableBiometricsc%▼%l%
+echo     ^│                             ^│          Disable Biometrics
+echo     ^│       Ingame Settings       ^│
+echo     ^│                             ^│     %e%[%r% 3 %e%]  %r%•%e%  Capability For Apps%l%                         %DenyCapabilityForAppsc%▼%l%
+echo     ^│                             ^│          Deny Capability For Apps
+echo     ^│      Recording Settings     ^│
+echo     ^│                             ^│     %e%[%r% 4 %e%]  %r%•%e%  Location Services%l%                           %DisableLocationServicesc%▼%l%
+echo     ^│                             ^│          Disable Location Services
+echo     ^│           Privacy           ^│
+echo     ^│                             ^│     %e%[%r% 5 %e%]  %r%•%e%  Marking Files%l%                               %PreventWindowsMarkingFilesc%▼%l%
+echo     ^│                             ^│          Prevent Windows Marking Files
+echo     ^│        %r%Configuration%l%        ^│ 
+echo     ^│                             ^│     %e%[%r% 6 %e%]  %r%•%e%  Language Bar%l%                                %DisableLanguageBarc%▼%l%
+echo     ^│                             ^│          Disable Language Bar
+echo     ^│           Credits           ^│  
+echo     ^│                             ^│          
+echo     ^│                             ^│         
+echo     └─────────────────────────────┘           %l%┌──────────────────────┐   ┌───────────────────┐     
+echo                                               %l%│ %e%Go to Tweaks Tab [%r%G%e%]%l% │   │ %e%Skip Category [%r%N%e%]%l% │
+echo                                               └──────────────────────┘   └───────────────────┘
+choice /c:WS123456GNDA /n /m " "                                           
+set MenuItem=%errorlevel%
+if "%MenuItem%"=="1" goto Privacy
+if "%MenuItem%"=="2" goto Credits
+
+if "%MenuItem%"=="3" (
+    if "%DisableOneDriveSync%"=="False" (
+        set "DisableOneDriveSync=True"
+    ) else (
+        set "DisableOneDriveSync=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="4" (
+    if "%DisableBiometrics%"=="False" (
+        set "DisableBiometrics=True"
+    ) else (
+        set "DisableBiometrics=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="5" (
+    if "%DenyCapabilityForApps%"=="False" (
+        set "DenyCapabilityForApps=True"
+    ) else (
+        set "DenyCapabilityForApps=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="6" (
+    if "%DisableLocationServices%"=="False" (
+        set "DisableLocationServices=True"
+    ) else (
+        set "DisableLocationServices=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="7" (
+    if "%PreventWindowsMarkingFiles%"=="False" (
+        set "PreventWindowsMarkingFiles=True"
+    ) else (
+        set "PreventWindowsMarkingFiles=False"
+    )
+) && goto %lastConfiguration%
+
+
+if "%MenuItem%"=="8" (
+    if "%DisableLanguageBar%"=="False" (
+        set "DisableLanguageBar=True"
+    ) else (
+        set "DisableLanguageBar=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="9" (
+    if "%lasttweaks1%"=="true" (
+        goto :lasttweaks1
+    ) else (
+        goto :lasttweaks2
+    )
+) 
+if "%MenuItem%"=="10" goto %Configuration23%
+if "%MenuItem%"=="11" goto Configuration20
+if "%MenuItem%"=="12" goto Configuration18
+
+:Configuration20
+set lastConfiguration=:Configuration20
+
+
+set "DisableStickyKeysc="
+if "%DisableStickyKeys%"=="False" (
+    set "DisableStickyKeysc=[38;5;203m"
+) else (
+    set "DisableStickyKeysc=[38;5;34m"
+)
+
+set "DisableProgramCompatibilityAssistantc="
+if "%DisableProgramCompatibilityAssistant%"=="False" (
+    set "DisableProgramCompatibilityAssistantc=[38;5;203m"
+) else (
+    set "DisableProgramCompatibilityAssistantc=[38;5;34m"
+)
+
+set "DisableFaultTolerantHeapc="
+if "%DisableFaultTolerantHeap%"=="False" (
+    set "DisableFaultTolerantHeapc=[38;5;203m"
+) else (
+    set "DisableFaultTolerantHeapc=[38;5;34m"
+)
+
+set "DisablePowerShellTelemtryc="
+if "%DisablePowerShellTelemtry%"=="False" (
+    set "DisablePowerShellTelemtryc=[38;5;203m"
+) else (
+    set "DisablePowerShellTelemtryc=[38;5;34m"
+)
+
+set "DisableWindowsErrorReportingc="
+if "%DisableWindowsErrorReporting%"=="False" (
+    set "DisableWindowsErrorReportingc=[38;5;203m"
+) else (
+    set "DisableWindowsErrorReportingc=[38;5;34m"
+)
+
+set "DisableRemoteAssistancec="
+if "%DisableRemoteAssistance%"=="False" (
+    set "DisableRemoteAssistancec=[38;5;203m"
+) else (
+    set "DisableRemoteAssistancec=[38;5;34m"
+)
+
+
+
+cls
+echo.                                
+echo     %l%┌─────────────────────────────┐                       
+echo     │ %r%W%l% = %e%Up%l%       %r%D%l% = %e%Right%l%      │           %r% _      _  _____   __    _     _  _____  _%l%    
+echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      %r%▲%e% Pages [%r%20%e%/%ConfigurationsPages%]%l% 
+echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%          %e%Cat. [%r%5%e%/%CategoryWindows_Pages%]%l% 
+echo.    │ It's not that hard is it?   │                                                                                
+echo     └─────────────────────────────┘                                                        
+echo     %l%┌─────────────────────────────┐         %r%▲%e% Configuration: %r%Windows%l% 
+echo     ^│                             ^│   Here you can configure all settings that are going to be applied
+echo     ^│                             ^│
+echo     ^│            Home             ^│ 
+echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  Sticky Keys%l%                                 %DisableStickyKeysc%▼%l%
+echo     ^│                             ^│          Disable Sticky Keys
+echo     ^│           Tweaks            ^│      
+echo     ^│                             ^│     %e%[%r% 2 %e%]  %r%•%e%  Program Compatibility%l%                       %DisableProgramCompatibilityAssistantc%▼%l%
+echo     ^│                             ^│          Disable Program Compatibility Assistant
+echo     ^│       Ingame Settings       ^│
+echo     ^│                             ^│     %e%[%r% 3 %e%]  %r%•%e%  Fault Tolerant Heap%l%                         %DisableFaultTolerantHeapc%▼%l%
+echo     ^│                             ^│          Disable Fault Tolerant Heap
+echo     ^│      Recording Settings     ^│
+echo     ^│                             ^│     %e%[%r% 4 %e%]  %r%•%e%  Power Shell Telemtry%l%                        %DisablePowerShellTelemtryc%▼%l%
+echo     ^│                             ^│          Disable PowerShell Telemtry
+echo     ^│           Privacy           ^│
+echo     ^│                             ^│     %e%[%r% 5 %e%]  %r%•%e%  Windows Error Reporting%l%                     %DisableWindowsErrorReportingc%▼%l%
+echo     ^│                             ^│          Prevent Windows Error Reporting
+echo     ^│        %r%Configuration%l%        ^│ 
+echo     ^│                             ^│     %e%[%r% 6 %e%]  %r%•%e%  Remote Assistance%l%                           %DisableRemoteAssistancec%▼%l%
+echo     ^│                             ^│          Disable Remote Assistance
+echo     ^│           Credits           ^│  
+echo     ^│                             ^│          
+echo     ^│                             ^│         
+echo     └─────────────────────────────┘           %l%┌──────────────────────┐   ┌───────────────────┐     
+echo                                               %l%│ %e%Go to Tweaks Tab [%r%G%e%]%l% │   │ %e%Skip Category [%r%N%e%]%l% │
+echo                                               └──────────────────────┘   └───────────────────┘
+choice /c:WS123456GNDA /n /m " "                                           
+set MenuItem=%errorlevel%
+if "%MenuItem%"=="1" goto Privacy
+if "%MenuItem%"=="2" goto Credits
+
+if "%MenuItem%"=="3" (
+    if "%DisableStickyKeys%"=="False" (
+        set "DisableStickyKeys=True"
+    ) else (
+        set "DisableStickyKeys=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="4" (
+    if "%DisableProgramCompatibilityAssistant%"=="False" (
+        set "DisableProgramCompatibilityAssistant=True"
+    ) else (
+        set "DisableProgramCompatibilityAssistant=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="5" (
+    if "%DisableFaultTolerantHeap%"=="False" (
+        set "DisableFaultTolerantHeap=True"
+    ) else (
+        set "DisableFaultTolerantHeap=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="6" (
+    if "%DisablePowerShellTelemtry%"=="False" (
+        set "DisablePowerShellTelemtry=True"
+    ) else (
+        set "DisablePowerShellTelemtry=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="7" (
+    if "%DisableWindowsErrorReporting%"=="False" (
+        set "DisableWindowsErrorReporting=True"
+    ) else (
+        set "DisableWindowsErrorReporting=False"
+    )
+) && goto %lastConfiguration%
+
+
+if "%MenuItem%"=="8" (
+    if "%DisableRemoteAssistance%"=="False" (
+        set "DisableRemoteAssistance=True"
+    ) else (
+        set "DisableRemoteAssistance=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="9" (
+    if "%lasttweaks1%"=="true" (
+        goto :lasttweaks1
+    ) else (
+        goto :lasttweaks2
+    )
+) 
+if "%MenuItem%"=="10" goto %Configuration23%
+if "%MenuItem%"=="11" goto Configuration21
+if "%MenuItem%"=="12" goto Configuration19
+
+:Configuration21
+set lastConfiguration=:Configuration21
+
+
+set "Remove3DObjectsFromExplorerc="
+if "%Remove3DObjectsFromExplorer%"=="False" (
+    set "Remove3DObjectsFromExplorerc=[38;5;203m"
+) else (
+    set "Remove3DObjectsFromExplorerc=[38;5;34m"
+)
+
+set "DisableSignInAndLockLastUserc="
+if "%DisableSignInAndLockLastUser%"=="False" (
+    set "DisableSignInAndLockLastUserc=[38;5;203m"
+) else (
+    set "DisableSignInAndLockLastUserc=[38;5;34m"
+)
+
+set "DisableOnlineTipsc="
+if "%DisableOnlineTips%"=="False" (
+    set "DisableOnlineTipsc=[38;5;203m"
+) else (
+    set "DisableOnlineTipsc=[38;5;34m"
+)
+
+set "DisableTypingInsightsc="
+if "%DisableTypingInsights%"=="False" (
+    set "DisableTypingInsightsc=[38;5;203m"
+) else (
+    set "DisableTypingInsightsc=[38;5;34m"
+)
+
+set "DisableSuggestionsInTheSearchBoxc="
+if "%DisableSuggestionsInTheSearchBox%"=="False" (
+    set "DisableSuggestionsInTheSearchBoxc=[38;5;203m"
+) else (
+    set "DisableSuggestionsInTheSearchBoxc=[38;5;34m"
+)
+
+set "RestoreOldContextMenuc="
+if "%RestoreOldContextMenu%"=="False" (
+    set "RestoreOldContextMenuc=[38;5;203m"
+) else (
+    set "RestoreOldContextMenuc=[38;5;34m"
+)
+
+
+
+cls
+echo.                                
+echo     %l%┌─────────────────────────────┐                       
+echo     │ %r%W%l% = %e%Up%l%       %r%D%l% = %e%Right%l%      │           %r% _      _  _____   __    _     _  _____  _%l%    
+echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      %r%▲%e% Pages [%r%21%e%/%ConfigurationsPages%]%l% 
+echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%          %e%Cat. [%r%6%e%/%CategoryWindows_Pages%]%l% 
+echo.    │ It's not that hard is it?   │                                                                                
+echo     └─────────────────────────────┘                                                        
+echo     %l%┌─────────────────────────────┐         %r%▲%e% Configuration: %r%Windows%l% 
+echo     ^│                             ^│   Here you can configure all settings that are going to be applied
+echo     ^│                             ^│
+echo     ^│            Home             ^│ 
+echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  3D Objects From Explorer%l%                    %Remove3DObjectsFromExplorerc%▼%l%
+echo     ^│                             ^│          Remove 3D Objects From Explorer
+echo     ^│           Tweaks            ^│      
+echo     ^│                             ^│     %e%[%r% 2 %e%]  %r%•%e%  Sing In And Lock Last User%l%                  %DisableSignInAndLockLastUserc%▼%l%
+echo     ^│                             ^│          Disable Sing In And Lock Last User
+echo     ^│       Ingame Settings       ^│
+echo     ^│                             ^│     %e%[%r% 3 %e%]  %r%•%e%  Online Tips%l%                                 %DisableOnlineTipsc%▼%l%
+echo     ^│                             ^│          Disable Online Tips
+echo     ^│      Recording Settings     ^│
+echo     ^│                             ^│     %e%[%r% 4 %e%]  %r%•%e%  Typing Insights%l%                             %DisableTypingInsightsc%▼%l%
+echo     ^│                             ^│          Disable Typing Insights
+echo     ^│           Privacy           ^│
+echo     ^│                             ^│     %e%[%r% 5 %e%]  %r%•%e%  Suggestions In The Search Box%l%               %DisableSuggestionsInTheSearchBoxc%▼%l%
+echo     ^│                             ^│          Disable Suggestions In THe Search Box
+echo     ^│        %r%Configuration%l%        ^│ 
+echo     ^│                             ^│     %e%[%r% 6 %e%]  %r%•%e%  Old Context Menu%l%                            %RestoreOldContextMenuc%▼%l%
+echo     ^│                             ^│          Restore Old Context Menu
+echo     ^│           Credits           ^│  
+echo     ^│                             ^│          
+echo     ^│                             ^│         
+echo     └─────────────────────────────┘           %l%┌──────────────────────┐   ┌───────────────────┐     
+echo                                               %l%│ %e%Go to Tweaks Tab [%r%G%e%]%l% │   │ %e%Skip Category [%r%N%e%]%l% │
+echo                                               └──────────────────────┘   └───────────────────┘
+choice /c:WS123456GNDA /n /m " "                                           
+set MenuItem=%errorlevel%
+if "%MenuItem%"=="1" goto Privacy
+if "%MenuItem%"=="2" goto Credits
+
+if "%MenuItem%"=="3" (
+    if "%Remove3DObjectsFromExplorer%"=="False" (
+        set "Remove3DObjectsFromExplorer=True"
+    ) else (
+        set "Remove3DObjectsFromExplorer=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="4" (
+    if "%DisableSignInAndLockLastUser%"=="False" (
+        set "DisableSignInAndLockLastUser=True"
+    ) else (
+        set "DisableSignInAndLockLastUser=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="5" (
+    if "%DisableOnlineTips%"=="False" (
+        set "DisableOnlineTips=True"
+    ) else (
+        set "DisableOnlineTips=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="6" (
+    if "%DisableTypingInsights%"=="False" (
+        set "DisableTypingInsights=True"
+    ) else (
+        set "DisableTypingInsights=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="7" (
+    if "%DisableSuggestionsInTheSearchBox%"=="False" (
+        set "DisableSuggestionsInTheSearchBox=True"
+    ) else (
+        set "DisableSuggestionsInTheSearchBox=False"
+    )
+) && goto %lastConfiguration%
+
+
+if "%MenuItem%"=="8" (
+    if "%RestoreOldContextMenu%"=="False" (
+        set "RestoreOldContextMenu=True"
+    ) else (
+        set "RestoreOldContextMenu=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="9" (
+    if "%lasttweaks1%"=="true" (
+        goto :lasttweaks1
+    ) else (
+        goto :lasttweaks2
+    )
+) 
+if "%MenuItem%"=="10" goto %Configuration23%
+if "%MenuItem%"=="11" goto Configuration22
+if "%MenuItem%"=="12" goto Configuration20
+
+:Configuration22
+set lastConfiguration=:Configuration22
+
+
+set "RemovePinToQuickAccessc="
+if "%RemovePinToQuickAccess%"=="False" (
+    set "RemovePinToQuickAccessc=[38;5;203m"
+) else (
+    set "RemovePinToQuickAccessc=[38;5;34m"
+)
+
+set "HideFoldersInQuickAccessc="
+if "%HideFoldersInQuickAccess%"=="False" (
+    set "HideFoldersInQuickAccessc=[38;5;203m"
+) else (
+    set "HideFoldersInQuickAccessc=[38;5;34m"
+)
+
+set "HideQuickAccessFromFileExplorerc="
+if "%HideQuickAccessFromFileExplorer%"=="False" (
+    set "HideQuickAccessFromFileExplorerc=[38;5;203m"
+) else (
+    set "HideQuickAccessFromFileExplorerc=[38;5;34m"
+)
+
+set "LaunchFileExplorerToThisPCc="
+if "%LaunchFileExplorerToThisPC%"=="False" (
+    set "LaunchFileExplorerToThisPCc=[38;5;203m"
+) else (
+    set "LaunchFileExplorerToThisPCc=[38;5;34m"
+)
+
+set "TurnOffDisplayOfRecentSearchc="
+if "%TurnOffDisplayOfRecentSearch%"=="False" (
+    set "TurnOffDisplayOfRecentSearchc=[38;5;203m"
+) else (
+    set "TurnOffDisplayOfRecentSearchc=[38;5;34m"
+)
+
+set "ClearHistoryOfRecentlyOpenedDocumentsOnExitc="
+if "%ClearHistoryOfRecentlyOpenedDocumentsOnExit%"=="False" (
+    set "ClearHistoryOfRecentlyOpenedDocumentsOnExitc=[38;5;203m"
+) else (
+    set "ClearHistoryOfRecentlyOpenedDocumentsOnExitc=[38;5;34m"
+)
+
+
+
+cls
+echo.                                
+echo     %l%┌─────────────────────────────┐                       
+echo     │ %r%W%l% = %e%Up%l%       %r%D%l% = %e%Right%l%      │           %r% _      _  _____   __    _     _  _____  _%l%    
+echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      %r%▲%e% Pages [%r%22%e%/%ConfigurationsPages%]%l% 
+echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%          %e%Cat. [%r%7%e%/%CategoryWindows_Pages%]%l% 
+echo.    │ It's not that hard is it?   │                                                                                
+echo     └─────────────────────────────┘                                                        
+echo     %l%┌─────────────────────────────┐         %r%▲%e% Configuration: %r%Windows%l% 
+echo     ^│                             ^│   Here you can configure all settings that are going to be applied
+echo     ^│                             ^│
+echo     ^│            Home             ^│ 
+echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  Pin To Quick Access%l%                         %RemovePinToQuickAccessc%▼%l%
+echo     ^│                             ^│          Remove Pin To Quick Access
+echo     ^│           Tweaks            ^│      
+echo     ^│                             ^│     %e%[%r% 2 %e%]  %r%•%e%  Folders In Quick Access%l%                     %HideFoldersInQuickAccessc%▼%l%
+echo     ^│                             ^│          Hide Folders In Quick Access
+echo     ^│       Ingame Settings       ^│
+echo     ^│                             ^│     %e%[%r% 3 %e%]  %r%•%e%  Quick Access From File Explorer%l%             %HideQuickAccessFromFileExplorerc%▼%l%
+echo     ^│                             ^│         Hide Quick Access From FIle Explorer
+echo     ^│      Recording Settings     ^│
+echo     ^│                             ^│     %e%[%r% 4 %e%]  %r%•%e%  This PC%l%                                     %LaunchFileExplorerToThisPCc%▼%l%
+echo     ^│                             ^│          Launch File Explorer To This PC
+echo     ^│           Privacy           ^│
+echo     ^│                             ^│     %e%[%r% 5 %e%]  %r%•%e%  Recent Search%l%                               %TurnOffDisplayOfRecentSearchc%▼%l%
+echo     ^│                             ^│          Turn Off Recent Search
+echo     ^│        %r%Configuration%l%        ^│ 
+echo     ^│                             ^│     %e%[%r% 6 %e%]  %r%•%e%  History Of Opened Document%l%                  %ClearHistoryOfRecentlyOpenedDocumentsOnExitc%▼%l%
+echo     ^│                             ^│          Clear History Of Recently Opened Document
+echo     ^│           Credits           ^│  
+echo     ^│                             ^│          
+echo     ^│                             ^│         
+echo     └─────────────────────────────┘           %l%┌──────────────────────┐   ┌───────────────────┐     
+echo                                               %l%│ %e%Go to Tweaks Tab [%r%G%e%]%l% │   │ %e%Skip Category [%r%N%e%]%l% │
+echo                                               └──────────────────────┘   └───────────────────┘
+choice /c:WS123456GNDA /n /m " "                                           
+set MenuItem=%errorlevel%
+if "%MenuItem%"=="1" goto Privacy
+if "%MenuItem%"=="2" goto Credits
+
+if "%MenuItem%"=="3" (
+    if "%RemovePinToQuickAccess%"=="False" (
+        set "RemovePinToQuickAccess=True"
+    ) else (
+        set "RemovePinToQuickAccess=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="4" (
+    if "%HideFoldersInQuickAccess%"=="False" (
+        set "HideFoldersInQuickAccess=True"
+    ) else (
+        set "HideFoldersInQuickAccess=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="5" (
+    if "%HideQuickAccessFromFileExplorer%"=="False" (
+        set "HideQuickAccessFromFileExplorer=True"
+    ) else (
+        set "HideQuickAccessFromFileExplorer=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="6" (
+    if "%LaunchFileExplorerToThisPC%"=="False" (
+        set "LaunchFileExplorerToThisPC=True"
+    ) else (
+        set "LaunchFileExplorerToThisPC=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="7" (
+    if "%TurnOffDisplayOfRecentSearch%"=="False" (
+        set "TurnOffDisplayOfRecentSearch=True"
+    ) else (
+        set "TurnOffDisplayOfRecentSearch=False"
+    )
+) && goto %lastConfiguration%
+
+
+if "%MenuItem%"=="8" (
+    if "%ClearHistoryOfRecentlyOpenedDocumentsOnExit%"=="False" (
+        set "ClearHistoryOfRecentlyOpenedDocumentsOnExit=True"
+    ) else (
+        set "ClearHistoryOfRecentlyOpenedDocumentsOnExit=False"
+    )
+) && goto %lastConfiguration%
+
+if "%MenuItem%"=="9" (
+    if "%lasttweaks1%"=="true" (
+        goto :lasttweaks1
+    ) else (
+        goto :lasttweaks2
+    )
+) 
+if "%MenuItem%"=="10" goto %Configuration23%
+if "%MenuItem%"=="11" goto %Configuration23%
+if "%MenuItem%"=="12" goto Configuration21
+
+:Configuration23Intel
+set lastConfiguration=:Configuration23Intel
+
 
 set "IntelCpuVirtualizationc="
 if "%IntelCpuVirtualization%"=="False" (
@@ -2119,7 +4174,6 @@ if "%IntelCoreIsolation%"=="False" (
 ) else (
     set "IntelCoreIsolationc=[38;5;34m"
 )
-
 
 set "IntelCStatesc="
 if "%IntelCStates%"=="False" (
@@ -2154,38 +4208,38 @@ cls
 echo.                                
 echo     %l%┌─────────────────────────────┐                       
 echo     │ %r%W%l% = %e%Up%l%       %r%D%l% = %e%Right%l%      │           %r% _      _  _____   __    _     _  _____  _%l%    
-echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      %r%▲%e% Pages  [%r%8%e%/%ConfigurationsPages%]%l%
-echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%  
-echo.    │ It's not that hard is it?   │
+echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      %r%▲%e% Pages [%r%23%e%/%ConfigurationsPages%]%l% 
+echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%          %e%Cat. [%r%1%e%/%CategoryIntelCPU_Pages%]%l% 
+echo.    │ It's not that hard is it?   │                                                                                
 echo     └─────────────────────────────┘                                                        
-echo     %l%┌─────────────────────────────┐         %r%▲%e% Configuration: %r%Intel CPU%l%
-echo     ^│                             ^│  You Can Manually Set What Tweaks (Not All) Will Be Runned%l%
+echo     %l%┌─────────────────────────────┐         %r%▲%e% Configuration: %r%Intel CPU%l% 
+echo     ^│                             ^│   Here you can configure all settings that are going to be applied
 echo     ^│                             ^│
-echo     ^│            Home             ^│
-echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  CPU Virtualization%l%                          %IntelCpuVirtualizationc%▼%l%
+echo     ^│            Home             ^│ 
+echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  Cpu Virtualization%l%                          %IntelCpuVirtualizationc%▼%l%
 echo     ^│                             ^│          Disable CPU Virtualization
-echo     ^│           Tweaks            ^│
+echo     ^│           Tweaks            ^│      
 echo     ^│                             ^│     %e%[%r% 2 %e%]  %r%•%e%  Core Isolation%l%                              %IntelCoreIsolationc%▼%l%
 echo     ^│                             ^│          Disable Core Isolation
 echo     ^│       Ingame Settings       ^│
 echo     ^│                             ^│     %e%[%r% 3 %e%]  %r%•%e%  C-States%l%                                    %IntelCStatesc%▼%l%
-echo     ^│                             ^│          Configure C-States
-echo     ^│      Recording Settings     ^│ 
+echo     ^│                             ^│         Configure C-States
+echo     ^│      Recording Settings     ^│
 echo     ^│                             ^│     %e%[%r% 4 %e%]  %r%•%e%  Power Throttling%l%                            %IntelPowerThrottlingc%▼%l%
 echo     ^│                             ^│          Disable Power Throttling
 echo     ^│           Privacy           ^│
 echo     ^│                             ^│     %e%[%r% 5 %e%]  %r%•%e%  AMD Services%l%                                %AMDServicesc%▼%l%
 echo     ^│                             ^│          Disable AMD Services
 echo     ^│        %r%Configuration%l%        ^│ 
-echo     ^│                             ^│     %e%[%r% 6 %e%]  %r%•%e%  TSX%l%                                         %IntelTSXc%▼%l%
-echo     ^│                             ^│         Enable TSX
-echo     ^│           Credits           ^│
-echo     ^│                             ^│     
-echo     ^│                             ^│
-echo     └─────────────────────────────┘                                
-echo.
-echo.
-choice /c:WS1234657AD /n /m " "                                           
+echo     ^│                             ^│     %e%[%r% 5 %e%]  %r%•%e%  Intel TSX%l%                                   %IntelTSXc%▼%l%
+echo     ^│                             ^│          Configure TSX
+echo     ^│           Credits           ^│  
+echo     ^│                             ^│          
+echo     ^│                             ^│         
+echo     └─────────────────────────────┘           %l%┌──────────────────────┐   ┌───────────────────┐     
+echo                                               %l%│ %e%Go to Tweaks Tab [%r%G%e%]%l% │   │ %e%Skip Category [%r%N%e%]%l% │
+echo                                               └──────────────────────┘   └───────────────────┘
+choice /c:WS123456GNDA /n /m " "                                           
 set MenuItem=%errorlevel%
 if "%MenuItem%"=="1" goto Privacy
 if "%MenuItem%"=="2" goto Credits
@@ -2196,7 +4250,7 @@ if "%MenuItem%"=="3" (
     ) else (
         set "IntelCpuVirtualization=False"
     )
-) && goto Configuration8
+) && goto %lastConfiguration%
 
 if "%MenuItem%"=="4" (
     if "%IntelCoreIsolation%"=="False" (
@@ -2204,7 +4258,7 @@ if "%MenuItem%"=="4" (
     ) else (
         set "IntelCoreIsolation=False"
     )
-) && goto Configuration8
+) && goto %lastConfiguration%
 
 if "%MenuItem%"=="5" (
     if "%IntelCStates%"=="False" (
@@ -2212,7 +4266,7 @@ if "%MenuItem%"=="5" (
     ) else (
         set "IntelCStates=False"
     )
-) && goto Configuration8
+) && goto %lastConfiguration%
 
 if "%MenuItem%"=="6" (
     if "%IntelPowerThrottling%"=="False" (
@@ -2220,33 +4274,38 @@ if "%MenuItem%"=="6" (
     ) else (
         set "IntelPowerThrottling=False"
     )
-) && goto Configuration8
+) && goto %lastConfiguration%
 
-if "%MenuItem%"=="8" (
+if "%MenuItem%"=="7" (
     if "%AMDServices%"=="False" (
         set "AMDServices=True"
     ) else (
         set "AMDServices=False"
     )
-) && goto Configuration8
+) && goto %lastConfiguration%
 
-if "%MenuItem%"=="7" (
+if "%MenuItem%"=="" (
     if "%IntelTSX%"=="False" (
         set "IntelTSX=True"
     ) else (
         set "IntelTSX=False"
     )
-) && goto Configuration8
+) && goto %lastConfiguration%
 
-if "%MenuItem%"=="10" goto Configuration7
+if "%MenuItem%"=="9" (
+    if "%lasttweaks1%"=="true" (
+        goto :lasttweaks1
+    ) else (
+        goto :lasttweaks2
+    )
+) 
+if "%MenuItem%"=="10" goto Configuration
 if "%MenuItem%"=="11" goto Configuration
+if "%MenuItem%"=="12" goto Configuration22
 
+:Configuration23AMD
+set lastConfiguration=:Configuration23AMD
 
-
-
-
-:ConfigurationAMD
-set lastConfiguration=:ConfigurationAMD
 
 set "AMDCpuVirtualizationc="
 if "%AMDCpuVirtualization%"=="False" (
@@ -2295,96 +4354,100 @@ cls
 echo.                                
 echo     %l%┌─────────────────────────────┐                       
 echo     │ %r%W%l% = %e%Up%l%       %r%D%l% = %e%Right%l%      │           %r% _      _  _____   __    _     _  _____  _%l%    
-echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      %r%▲%e% Pages  [%r%8%e%/8]%l%
-echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%  
-echo.    │ It's not that hard is it?   │
+echo     │ %r%S%l% = %e%Down%l%     %r%A%l% = %e%Left%l%       │          %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%      %r%▲%e% Pages [%r%23%e%/%ConfigurationsPages%]%l% 
+echo     │ %r%X%l% = %e%Apply%l%                   │            %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%          %e%Cat. [%r%1%e%/%CategoryAMDCPU_Pages%]%l% 
+echo.    │ It's not that hard is it?   │                                                                                
 echo     └─────────────────────────────┘                                                        
-echo     %l%┌─────────────────────────────┐         %r%▲%e% Configuration: %r%AMD CPU%l%
-echo     ^│                             ^│  You Can Manually Set What Tweaks (Not All) Will Be Runned%l%
+echo     %l%┌─────────────────────────────┐         %r%▲%e% Configuration: %r%AMD CPU%l% 
+echo     ^│                             ^│   Here you can configure all settings that are going to be applied
 echo     ^│                             ^│
-echo     ^│            Home             ^│
-echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  CPU Virtualization%l%                          %AMDCpuVirtualizationc%▼%l%
+echo     ^│            Home             ^│ 
+echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  Cpu Virtualization%l%                          %AMDCpuVirtualizationc%▼%l%
 echo     ^│                             ^│          Disable CPU Virtualization
-echo     ^│           Tweaks            ^│
+echo     ^│           Tweaks            ^│      
 echo     ^│                             ^│     %e%[%r% 2 %e%]  %r%•%e%  Core Isolation%l%                              %AMDCoreIsolationc%▼%l%
 echo     ^│                             ^│          Disable Core Isolation
 echo     ^│       Ingame Settings       ^│
 echo     ^│                             ^│     %e%[%r% 3 %e%]  %r%•%e%  C-States%l%                                    %AMDCStatesc%▼%l%
-echo     ^│                             ^│          Configure C-States
-echo     ^│      Recording Settings     ^│ 
+echo     ^│                             ^│         Configure C-States
+echo     ^│      Recording Settings     ^│
 echo     ^│                             ^│     %e%[%r% 4 %e%]  %r%•%e%  Power Throttling%l%                            %AMDPowerThrottlingc%▼%l%
 echo     ^│                             ^│          Disable Power Throttling
 echo     ^│           Privacy           ^│
 echo     ^│                             ^│     %e%[%r% 5 %e%]  %r%•%e%  Intel Services%l%                              %IntelServicesc%▼%l%
 echo     ^│                             ^│          Disable Intel Services
 echo     ^│        %r%Configuration%l%        ^│ 
-echo     ^│                             ^│     %e%[%r% 6 %e%]  %r%•%e%  TSX%l%                                         %AMDTSXc%▼%l%
-echo     ^│                             ^│         Disable TSX
-echo     ^│           Credits           ^│
-echo     ^│                             ^│     
-echo     ^│                             ^│
-echo     └─────────────────────────────┘                                
-echo.   
-echo.
-choice /c:WS1234657AD /n /m " "                                           
+echo     ^│                             ^│     %e%[%r% 5 %e%]  %r%•%e%  AMD TSX%l%                                     %AMDTSXc%▼%l%
+echo     ^│                             ^│          Configure TSX
+echo     ^│           Credits           ^│  
+echo     ^│                             ^│          
+echo     ^│                             ^│         
+echo     └─────────────────────────────┘           %l%┌──────────────────────┐   ┌───────────────────┐     
+echo                                               %l%│ %e%Go to Tweaks Tab [%r%G%e%]%l% │   │ %e%Skip Category [%r%N%e%]%l% │
+echo                                               └──────────────────────┘   └───────────────────┘
+choice /c:WS123456GNDA /n /m " "                                           
 set MenuItem=%errorlevel%
 if "%MenuItem%"=="1" goto Privacy
 if "%MenuItem%"=="2" goto Credits
 
 if "%MenuItem%"=="3" (
-    if "%IntelCpuVirtualization%"=="False" (
-        set "IntelCpuVirtualization=True"
+    if "%AMDCpuVirtualization%"=="False" (
+        set "AMDCpuVirtualization=True"
     ) else (
-        set "IntelCpuVirtualization=False"
+        set "AMDCpuVirtualization=False"
     )
-) && goto Configuration9
+) && goto %lastConfiguration%
 
 if "%MenuItem%"=="4" (
-    if "%IntelCoreIsolation%"=="False" (
-        set "IntelCoreIsolation=True"
+    if "%AMDCoreIsolation%"=="False" (
+        set "AMDCoreIsolation=True"
     ) else (
-        set "IntelCoreIsolation=False"
+        set "AMDCoreIsolation=False"
     )
-) && goto Configuration9
+) && goto %lastConfiguration%
 
 if "%MenuItem%"=="5" (
-    if "%IntelCStates%"=="False" (
-        set "IntelCStates=True"
+    if "%AMDCStates%"=="False" (
+        set "AMDCStates=True"
     ) else (
-        set "IntelCStates=False"
+        set "AMDCStates=False"
     )
-) && goto Configuration9
+) && goto %lastConfiguration%
 
 if "%MenuItem%"=="6" (
-    if "%IntelPowerThrottling%"=="False" (
-        set "IntelPowerThrottling=True"
+    if "%AMDPowerThrottling%"=="False" (
+        set "AMDPowerThrottling=True"
     ) else (
-        set "IntelPowerThrottling=False"
+        set "AMDPowerThrottling=False"
     )
-) && goto Configuration9
-
-if "%MenuItem%"=="8" (
-    if "%AMDServices%"=="False" (
-        set "AMDServices=True"
-    ) else (
-        set "AMDServices=False"
-    )
-) && goto Configuration9
+) && goto %lastConfiguration%
 
 if "%MenuItem%"=="7" (
-    if "%IntelTSX%"=="False" (
-        set "IntelTSX=True"
+    if "%IntelServices%"=="False" (
+        set "IntelServices=True"
     ) else (
-        set "IntelTSX=False"
+        set "IntelServices=False"
     )
-) && goto Configuration9
+) && goto %lastConfiguration%
 
-if "%MenuItem%"=="10" goto Configuration7
-if "%MenuItem%"=="11" goto Configuration
+if "%MenuItem%"=="8" (
+    if "%AMDTSX%"=="False" (
+        set "AMDTSX=True"
+    ) else (
+        set "AMDTSX=False"
+    )
+) && goto %lastConfiguration%
 
-
-
-
+if "%MenuItem%"=="9" (
+    if "%lasttweaks1%"=="true" (
+        goto :lasttweaks1
+    ) else (
+        goto :lasttweaks2
+    )
+) 
+if "%MenuItem%"=="10" goto Configuration1
+if "%MenuItem%"=="11" goto Configuration1
+if "%MenuItem%"=="12" goto Configuration22
 
 :Credits
 set lastpage=:Credits
@@ -2427,9 +4490,6 @@ choice /c:WS /n /m " "
 set MenuItem=%errorlevel%
 if "%MenuItem%"=="1" goto %lastConfiguration%
 if "%MenuItem%"=="2" goto Home
-
-
-
 
 
 
@@ -2498,6 +4558,7 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Services\WaaSMedicSvc" /v "Start" /t REG_
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\UsoSvc" /v "Start" /t REG_DWORD /d "4" /f >nul 2>&1
 )
 
+if "%WindowsServices%" equ "True" (
 REM Configure Windows Services
 net pause DiagTrack >nul 2>&1
 net pause DialogBlockingService >nul 2>&1
@@ -2558,12 +4619,17 @@ sc config "GpuEnergyDrv" start= disabled  >nul 2>&1
 sc config "GpuEnergyDr" start= disabled  >nul 2>&1
 sc config "Telemetry" start= disabled  >nul 2>&1
 sc config "VerifierExt" start= disabled  >nul 2>&1
+)
 
+if "%Win32PrioritySeparation%" equ "True" (
 REM Configure Win32 Priority Separation (26hex)
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\PriorityControl" /v "Win32PrioritySeparation" /t REG_DWORD /d "38" /f >nul 2>&1
+)
 
+if "%DisableSearchIndexing%" equ "True" (
 REM Disable Search Indexing
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\WSearch" /v "Start" /t REG_DWORD /d "4" /f >nul 2>&1
+)
 
 If "%WindowsDefender%" equ "True" (
 REM Disable Windows Defender
@@ -2582,15 +4648,20 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows Defender\Spynet" /v "SpyNetReporting" /
 reg add "HKLM\SOFTWARE\Microsoft\Windows Defender\Spynet" /v "SubmitSamplesConsent" /t REG_DWORD /d "0" /f >nul 2>&1
 )
 
-
+If "%DisableFastStartup%" equ "True" (
 REM Disable Fast Startup
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Power" /v "HiberbootEnabled" /t REG_DWORD /d "0" /f >nul 2>&1
+)
 
+If "%ReserveCPUResources%" equ "True" (
 REM Reserve 10% of CPU Resources For Low-Priority Tasks
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "SystemResponsiveness" /t REG_DWORD /d "10" /f >nul 2>&1
+)
 
+If "%DisableGamebarpresencewriter%" equ "True" (
 REM Disable Gamebarpresencewriter
 reg add "HKLM\SOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Gaming.GameBar.PresenceServer.Internal.PresenceWriter" /v "ActivationType" /t REG_DWORD /d "0" /f >nul 2>&1
+)
 
 If "%ProcessMitigations%"=="Enabled" (
 REM Disable Process Mitigations
@@ -2697,6 +4768,7 @@ reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\GameDVR" /v "AllowGameDVR" /t 
 reg add "HKLM\SOFTWARE\Microsoft\PolicyManager\default\ApplicationManagement\AllowGameDVR" /v "value" /t  >nul 2>&1
 )
 
+If "%DisableSystemEnergySaving%" equ "True" (
 REM Disable System Energy-Saving Techniques
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Power" /v "CoalescingTimerInterval" /t REG_DWORD /d "0" /f >nul 2>&1
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "CoalescingTimerInterval" /t REG_DWORD /d "0" /f >nul 2>&1
@@ -2706,12 +4778,16 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager" /v "CoalescingTi
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\ModernSleep" /v "CoalescingTimerInterval" /t REG_DWORD /d "0" /f >nul 2>&1
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "CoalescingTimerInterval" /t REG_DWORD /d "0" /f >nul 2>&1
 reg add "HKLM\SYSTEM\CurrentControlSet\Control" /v "CoalescingTimerInterval" /t REG_DWORD /d "0" /f >nul 2>&1
+)
 
+If "%SVCSplitThreshold%" equ "True" (
 REM Set SVCSplitThreshold To User Memory Size
 for /f "tokens=2 delims==" %%i in ('wmic os get TotalVisibleMemorySize /format:value') do set mem=%%i
 set /a ram=%mem% + 1024000
 reg add "HKLM\System\CurrentControlSet\Control" /v "SvcHostSplitThresholdInKB" /t REG_DWORD /d "%ram%" /f >nul 2>&1
+)
 
+If "%DisableUSBPowerSavings%" equ "True" (
 REM Disable USB Power Savings
 for %%a in (
 	EnhancedPowerManagementEnabled
@@ -2728,50 +4804,65 @@ for %%a in (
 	EnableIdlePowerManagement
 	IdleInWorkingState
 ) do for /f "delims=" %%b in ('reg query "HKLM\SYSTEM\CurrentControlSet\Enum" /s /f "%%a" ^| findstr "HKEY"') do reg add "%%b" /v "%%a" /t REG_DWORD /d "0" /f > NUL 2>&1
+)
 
+If "%EnableMSIMode%" equ "True" (
 REM Enabling MSI Mode For All Suported Devices
 for /f "tokens=*" %%i in ('reg query "HKLM\SYSTEM\CurrentControlSet\Enum\PCI"^| findstr "HKEY"') do (
 	for /f "tokens=*" %%a in ('reg query "%%i"^| findstr "HKEY"') do reg add "%%a\Device Parameters\Interrupt Management\MessageSignaledInterruptProperties" /v "MSISupported" /t REG_DWORD /d "1" /f > NUL 2>&1
 )
+)
 
+If "%DevicePriorityUndefined%" equ "True" (
 REM Setting All Device's Priority To Undefined
 for /f "tokens=*" %%i in ('reg query "HKLM\SYSTEM\CurrentControlSet\Enum\PCI"^| findstr "HKEY"') do (
 	for /f "tokens=*" %%a in ('reg query "%%i"^| findstr "HKEY"') do reg delete "%%a\Device Parameters\Interrupt Management\Affinity Policy" /v "DevicePriority" /f > NUL 2>&1
 )
+)
 
+If "%DisableBackgroundApps%" equ "True" (
 REM Disable Background Apps
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications" /v "GlobalUserDisabled" /t REG_DWORD /d "1" /f  >nul 2>&1
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy" /v "LetAppsRunInBackground" /t REG_DWORD /d "2" /f  >nul 2>&1
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Search" /v "BackgroundAppGlobalToggle" /t REG_DWORD /d "0" /f  >nul 2>&1
+)
 
+If "%Winlogon%" equ "True" (
 REM Set Winlogon to Normal Priority
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\winlogon.exe\PerfOptions" /v "CpuPriorityClass" /t REG_DWORD /d "2" /f > NUL 2>&1
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\winlogon.exe\PerfOptions" /v "IoPriority" /t REG_DWORD /d "2" /f > NUL 2>&1
+)
 
-REM Set CSRSS to High Priority
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\csrss.exe\PerfOptions" /v "CpuPriorityClass" /t REG_DWORD /d "3" /f > NUL 2>&1
-reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\csrss.exe\PerfOptions" /v "IoPriority" /t REG_DWORD /d "3" /f > NUL 2>&1
-
+If "%IntelMicroCode%" equ "True" (
 REM Delete Intel Micro Code
 takeown /f "C:\Windows\System32\mcupdate_GenuineIntel.dll" /r /d y  >nul 2>&1
 del "C:\Windows\System32\mcupdate_GenuineIntel.dll" /s /f /q  >nul 2>&1
+)
 
+If "%IntelMicroCode%" equ "True" (
 REM Delete AMD Micro Code
 takeown /f "C:\Windows\System32\mcupdate_AuthenticAMD.dll" /r /d y  >nul 2>&1
 del "C:\Windows\System32\mcupdate_AuthenticAMD.dll" /s /f /q  >nul 2>&1
+)
 
+If "%EnableGPUSheduling%" equ "True" (
 REM Enabling Hardware Accelerated GPU Scheduling
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /F /V "HwSchMode" /T REG_DWORD /d "2" >nul 2>&1
+)
 
+If "%DisableSettingsSynchronization%" equ "True" (
 REM Disable Settings Synchronization
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\SettingSync" /v "DisableSettingSync" /t REG_DWORD /d "2" /f  >nul 2>&1
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\SettingSync" /v "DisableSettingSyncUserOverride" /t REG_DWORD /d "1" /f  >nul 2>&1
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\SettingSync" /v "DisableSyncOnPaidNetwork" /t REG_DWORD /d "1" /f >nul 2>&1
+)
 
+If "%DisableRemoteAssistance%" equ "True" (
 REM Disable Remote Assistance
 reg add "HKLM\System\CurrentControlSet\Control\Remote Assistance" /v "fAllowFullControl" /t REG_DWORD /d "0" /f >nul 2>&1
 reg add "HKLM\System\CurrentControlSet\Control\Remote Assistance" /v "fAllowToGetHelp" /t REG_DWORD /d "0" /f >nul 2>&1
 reg add "HKLM\System\CurrentControlSet\Control\Remote Assistance" /v "fEnableChatControl" /t REG_DWORD /d "0" /f >nul 2>&1
+)
 
 If "%PowerPlan%" equ "True" (
 REM Power Plan
@@ -2937,42 +5028,6 @@ REM Setting Low Process Priority To Processes That Uses Cycles
 	)
 )
 
-REM Setting Latency Tolerance
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\DXGKrnl" /v "MonitorLatencyTolerance" /t REG_DWORD /d "1" /f >nul 2>&1
-reg add "HKLM\SYSTEM\CurrentControlSet\Services\DXGKrnl" /v "MonitorRefreshLatencyTolerance" /t REG_DWORD /d "1" /f >nul 2>&1
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "ExitLatency" /t REG_DWORD /d "1" /f >nul 2>&1
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "ExitLatencyCheckEnabled" /t REG_DWORD /d "1" /f >nul 2>&1
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "Latency" /t REG_DWORD /d "1" /f >nul 2>&1
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "LatencyToleranceDefault" /t REG_DWORD /d "1" /f >nul 2>&1
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "LatencyToleranceFSVP" /t REG_DWORD /d "1" /f >nul 2>&1
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "LatencyTolerancePerfOverride" /t REG_DWORD /d "1" /f >nul 2>&1
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "LatencyToleranceScreenOffIR" /t REG_DWORD /d "1" /f >nul 2>&1
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "LatencyToleranceVSyncEnabled" /t REG_DWORD /d "1" /f >nul 2>&1
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power" /v "RtlCapabilityCheckLatency" /t REG_DWORD /d "1" /f >nul 2>&1
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultD3TransitionLatencyActivelyUsed" /t REG_DWORD /d "1" /f >nul 2>&1
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultD3TransitionLatencyIdleLongTime" /t REG_DWORD /d "1" /f >nul 2>&1
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultD3TransitionLatencyIdleMonitorOff" /t REG_DWORD /d "1" /f >nul 2>&1
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultD3TransitionLatencyIdleNoContext" /t REG_DWORD /d "1" /f >nul 2>&1
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultD3TransitionLatencyIdleShortTime" /t REG_DWORD /d "1" /f >nul 2>&1
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultD3TransitionLatencyIdleVeryLongTime" /t REG_DWORD /d "1" /f >nul 2>&1
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultLatencyToleranceIdle0" /t REG_DWORD /d "1" /f >nul 2>&1
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultLatencyToleranceIdle0MonitorOff" /t REG_DWORD /d "1" /f >nul 2>&1
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultLatencyToleranceIdle1" /t REG_DWORD /d "1" /f >nul 2>&1
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultLatencyToleranceIdle1MonitorOff" /t REG_DWORD /d "1" /f >nul 2>&1
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultLatencyToleranceMemory" /t REG_DWORD /d "1" /f >nul 2>&1
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultLatencyToleranceNoContext" /t REG_DWORD /d "1" /f >nul 2>&1
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultLatencyToleranceNoContextMonitorOff" /t REG_DWORD /d "1" /f >nul 2>&1
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultLatencyToleranceOther" /t REG_DWORD /d "1" /f >nul 2>&1
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultLatencyToleranceTimerPeriod" /t REG_DWORD /d "1" /f >nul 2>&1
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultMemoryRefreshLatencyToleranceActivelyUsed" /t REG_DWORD /d "1" /f >nul 2>&1
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultMemoryRefreshLatencyToleranceMonitorOff" /t REG_DWORD /d "1" /f >nul 2>&1
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "DefaultMemoryRefreshLatencyToleranceNoContext" /t REG_DWORD /d "1" /f >nul 2>&1
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "Latency" /t REG_DWORD /d "1" /f >nul 2>&1
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "MaxIAverageGraphicsLatencyInOneBucket" /t REG_DWORD /d "1" /f >nul 2>&1
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "MiracastPerfTrackGraphicsLatency" /t REG_DWORD /d "1" /f >nul 2>&1
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "MonitorLatencyTolerance" /t REG_DWORD /d "1" /f >nul 2>&1
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "MonitorRefreshLatencyTolerance" /t REG_DWORD /d "1" /f >nul 2>&1
-reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Power" /v "TransitionLatency" /t REG_DWORD /d "1" /f >nul 2>&1
 
 If "%LowAudioLatency%" equ "True" (
 REM Downloading Low Audio Latency (Credits to sppdl)
@@ -3190,13 +5245,19 @@ echo set "ran_optimizations=%ran_optimizations%"> v.bat
 
 if "%KBM%"=="false" goto skippingkbm
 echo                                                     Applying KBM Tweaks
+
+if "%KeyboardDataSize%" equ "True" (
 REM Set KeyboardDataQueueSize To 50 Dec
 reg add "HKLM\SYSTEM\CurrentControlSet\services\kbdclass\Parameters" /v "KeyboardDataQueueSize" /t REG_DWORD /d "50" /f >nul 2>&1
+)
 
+if "%AdjustKeyboardParameters%" equ "True" (
 REM Adjusts keyboard parameters
 reg add "HKCU\Control Panel\Keyboard" /v "KeyboardSpeed" /t REG_SZ /d "31" /f >nul 2>&1
 reg add "HKCU\Control Panel\Keyboard" /v "KeyboardDelay" /t REG_SZ /d "0" /f >nul 2>&1
+)
 
+if "%KeyboardAccessibilitySettings%" equ "True" (
 REM Configures keyboard accessibility settings
 reg add "HKCU\Control Panel\Accessibility\Keyboard Response" /v "BounceTime" /t REG_SZ /d "0" /f >nul 2>&1
 reg add "HKCU\Control Panel\Accessibility\Keyboard Response" /v "Flags" /t REG_SZ /d "0" /f >nul 2>&1
@@ -3204,19 +5265,26 @@ reg add "HKCU\Control Panel\Accessibility\Keyboard Response" /v "Last BounceKey 
 reg add "HKCU\Control Panel\Accessibility\Keyboard Response" /v "Last Valid Delay" /t REG_DWORD /d "0" /f >nul 2>&1
 reg add "HKCU\Control Panel\Accessibility\Keyboard Response" /v "Last Valid Repeat" /t REG_DWORD /d "0" /f >nul 2>&1
 reg add "HKCU\Control Panel\Accessibility\Keyboard Response" /v "Last Valid Wait" /t REG_DWORD /d "1000" /f >nul 2>&1
+)
 
+if "%MouseDataSize%" equ "True" (
 REM Set MouseDataQueueSize To 50 Dec
 reg add "HKLM\SYSTEM\CurrentControlSet\services\mouclass\Parameters" /v "MouseDataQueueSize" /t REG_DWORD /d "50" /f >nul 2>&1
+)
 
+if "%DisablePointerAcceleration%" equ "True" (
 REM Disable Pointer Acceleration
 reg add "HKCU\Control Panel\Mouse" /v "MouseSpeed" /t REG_SZ /d "0" /f >nul 2>&1
 reg add "HKCU\Control Panel\Mouse" /v "MouseThreshold1" /t REG_SZ /d "0" /f >nul 2>&1
 reg add "HKCU\Control Panel\Mouse" /v "MouseThreshold2" /t REG_SZ /d "0" /f >nul 2>&1
+)
 
+if "%MouseAccessibilitySettings%" equ "True" (
 REM Configures mouse accessibility settings
 reg add "HKCU\Control Panel\Accessibility\MouseKeys" /v "Flags" /t REG_SZ /d "0" /f >nul 2>&1
 reg add "HKCU\Control Panel\Accessibility\MouseKeys" /v "MaximumSpeed" /t REG_SZ /d "80" /f >nul 2>&1
 reg add "HKCU\Control Panel\Accessibility\MouseKeys" /v "TimeToMaximumSpeed" /t REG_SZ /d "3000" /f >nul 2>&1
+)
 
 set "file=C:\Vitality\Info\kbm"
 if not exist "%file%" (
@@ -3335,16 +5403,22 @@ del NvTelemetry64.dll /a /s > nul 2>&1
 REM Registry Key For NVIDIA Card
 for /f %%a in ('reg query "HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}" /t REG_SZ /s /e /f "NVIDIA" ^| findstr "HKEY"') do (
 
+if "%DisableTiledDisplay%" equ "True" (
 REM Disalbe Tiled Display
 reg add "%%a" /v "EnableTiledDisplay" /t REG_DWORD /d "0" /f > nul 2>&1
+)
 
+if "%DisableTCC%" equ "True" (
 REM Disable TCC
 reg add "%%a" /v "TCCSupported" /t REG_DWORD /d "0" /f > nul 2>&1
+)
 
+if "%ForceContiguousMemoryAllocation%" equ "True" (
 REM Force contiguous memory allocation
 reg add "%%a" /v "PreferSystemMemoryContiguous" /t REG_DWORD /d "1" /f > nul 2>&1
+)
 
-
+if "%KBoost%" equ "True" (
 REM KBoost
 reg add "%%a" /v "PowerMizerEnable" /t REG_DWORD /d "1" /f > nul 2>&1
 reg add "%%a" /v "PowerMizerLevel" /t REG_DWORD /d "1" /f > nul 2>&1
@@ -3352,8 +5426,11 @@ reg add "%%a" /v "PowerMizerLevelAC" /t REG_DWORD /d "1" /f> nul 2>&1
 reg add "%%a" /v "PerfLevelSrc" /t REG_DWORD /d "8738" /f > nul 2>&1
 )
 
+if "%DisableScaling%" equ "True" (
 REM Disable Scaling
 for /f %%i in ('reg query "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /s /f "Scaling"^| findstr "HKEY"') do reg add "%%i" /v "Scaling" /t REG_DWORD /d "1" /f >nul 2>&1
+)
+
 
 if "%P0States%" equ "True" (
 REM Force P0-State
@@ -3377,13 +5454,17 @@ for /f %%i in ('wmic path Win32_VideoController get PNPDeviceID^| findstr /L "PC
              )
 )
 
+if "%NoECC%" equ "True" (
 REM No ECC
 cd C:\Program Files\NVIDIA Corporation\NVSMI > nul 2>&1
 nvidia-smi.exe -e 0 > nul 2>&1
+)
 
+if "%UnrestrictedClockPolicy%" equ "True" (
 REM Unrestricted Clock Policy
 cd C:\Program Files\NVIDIA Corporation\NVSMI > nul 2>&1
 nvidia-smi.exe -acp 0 > nul 2>&1
+)
 
 if "%Preemption%" equ "True" (
 REM Disable Preemption
@@ -3726,6 +5807,8 @@ goto skippinggpu
 
 if "%RAM%"=="false" goto skippingram
 echo                                                     Applying RAM Tweaks
+
+if "%MemoryManagment%" equ "True" (
 REM Configure Memory Managment 
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "ClearPageFileAtShutdown" /t REG_DWORD /d "0" /f >nul 2>&1
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "DisablePagingExecutive" /t REG_DWORD /d "1" /f >nul 2>&1
@@ -3749,11 +5832,15 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "EnableSuperfetch" /t REG_DWORD /d "0" /f >nul 2>&1
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters" /v "EnablePrefetcher" /t REG_DWORD /d "0" /f >nul 2>&1
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters" /v "EnableSuperfetch" /t REG_DWORD /d "0" /f >nul 2>&1
+)
 
+if "%LargePageDrivers%" equ "True" (
 REM LargePageDrivers
 set WHITELIST=ACPI AcpiDev AcpiPmi AFD AMDPCIDev amdgpio2 amdgpio3 AmdPPM amdpsp amdsata amdsbs amdxata asmtxhci atikmdag BasicDisplay BasicRender dc1-controll Disk DXGKrnl e1iexpress e1rexpress genericusbfn hwpolicy IntcAzAudAdd kbdclass kbdhid MMCSS monitor mouclass mouhid mountmgr mt7612US MTConfig NDIS nvdimm nvlddmkm pci PktMon Psched rt640x64 RTCore64 RzCommon RzDev_0244 Tcpip usbehci usbhub USBHUB3 USBXHCI Wdf01000 xboxgip xinputhid
 for /f %%i in ('driverquery ^| findstr "!WHITELIST!"') do set "DRIVERLIST=!DRIVERLIST!%%i\0"
 reg add "HKLM\SYSTEM\currentcontrolset\control\session manager\Memory Management" /v "LargePageDrivers" /t REG_MULTI_SZ /d "!DRIVERLIST!" /f >nul 2>&1
+)
+
 :skippingram
 
 set "file=C:\Vitality\Info\ram"
@@ -3770,6 +5857,7 @@ echo set "ran_optimizations=%ran_optimizations%"> v.bat
 
 if "%DISK%"=="false" goto skippingdisk
 echo                                                     Applying DISK Tweaks
+
 if "%FileSystemOptimization%" equ "True" (
 REM File System Optimization
 fsutil behavior set allowextchar 0 > NUL 2>&1
@@ -3826,63 +5914,85 @@ echo set "ran_optimizations=%ran_optimizations%"> v.bat
 
 if "%Windows%"=="false" goto skippingwindows
 echo                                                   Applying Windows Tweaks
+
+if "%DisablePushNotifications%" equ "True" (
 REM Disable push notifications for applications
 reg add "HKCU\Software\Policies\Microsoft\Windows\CurrentVersion\PushNotifications" /v "NoToastApplicationNotification" /t REG_DWORD /d "1" /f >nul 2>&1
 reg add "HKCU\Software\Policies\Microsoft\Windows\CurrentVersion\PushNotifications" /v "NoToastApplicationNotificationOnLockScreen" /t REG_DWORD /d "1" /f >nul 2>&1
+)
 
+if "%DisableDriverSearching%" equ "True" (
 REM Disable driver searching for Windows Update
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DriverSearching" /v "SearchOrderConfig" /t REG_DWORD /d "0" /f >nul 2>&1
+)
 
 If "%DisableHibernation%" equ "True" (
 REM Disable Hibernation
 powercfg /h off >nul 2>&1
 )
 
-
+If "%DisableWindowsNotifications%" equ "True" (
 REM Disable Windows Notifications Center
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Explorer" /v "DisableNotificationCenter" /t REG_DWORD /d "1" /f >nul 2>&1
+)
 
+If "%DisableTransparency%" equ "True" (
 REM Disable transparency in themes
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize" /v "EnableTransparency" /t REG_DWORD /d "0" /f >nul 2>&1
+)
 
 If "%DisableAutomaticMaintenance%" equ "True" (
 REM Disable automatic maintenance
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance" /v "MaintenanceDisabled" /t REG_DWORD /d "1" /f >nul 2>&1
 )
 
+If "%PauseMapsUpdates%" equ "True" (
 REM Pause Maps Updates/Downloads
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Maps" /v "AutoDownloadAndUpdateMapData" /t REG_DWORD /d "0" /f >nul 2>&1
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Maps" /v "AllowUntriggeredNetworkTrafficOnSettingsPage" /t REG_DWORD /d "0" /f >nul 2>&1
+)
 
+If "%DisableSettingsSync%" equ "True" (
 REM Disable Settings Sync
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\SettingSync" /v "DisableSettingSync" /t REG_DWORD /d "2" /f >nul 2>&1
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\SettingSync" /v "DisableSettingSyncUserOverride" /t REG_DWORD /d "1" /f >nul 2>&1
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\SettingSync" /v "DisableSyncOnPaidNetwork" /t REG_DWORD /d "1" /f >nul 2>&1
+)
 
+If "%DisableAdvertisingID%" equ "True" (
 REM Disable Advertising ID
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo" /v "DisabledByGroupPolicy" /t REG_DWORD /d "1" /f >nul 2>&1
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo" /v "Enabled" /t REG_DWORD /d "0" /f >nul 2>&1
+)
 
 If "%DisableLocationTracking%" equ "True" (
 REM Location Tracking
 reg add "HKLM\SOFTWARE\Policies\Microsoft\FindMyDevice" /v "AllowFindMyDevice" /t REG_DWORD /d "0" /F >nul 2>&1
 )
 
+If "%DisableWebInSearch%" equ "True" (
 REM Disable Web in Search
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "ConnectedSearchUseWeb" /t REG_DWORD /d "0" /f >nul 2>&1
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "DisableWebSearch" /t REG_DWORD /d "1" /f >nul 2>&1
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" /v "BingSearchEnabled" /t REG_DWORD /d "0" /f >nul 2>&1
+)
 
+If "%DisableRemoteAssistance%" equ "True" (
 REM Disable Remote Assistance
 reg add "HKLM\System\CurrentControlSet\Control\Remote Assistance" /v "fAllowFullControl" /t REG_DWORD /d "0" /f >nul 2>&1
 reg add "HKLM\System\CurrentControlSet\Control\Remote Assistance" /v "fAllowToGetHelp" /t REG_DWORD /d "0" /f >nul 2>&1
 reg add "HKLM\System\CurrentControlSet\Control\Remote Assistance" /v "fEnableChatControl" /t REG_DWORD /d "0" /f >nul 2>&1
+)
 
+If "%DisableInventoryCollector%" equ "True" (
 REM Turn off Inventory Collector
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "DisableInventory" /t REG_DWORD /d "1" /f >nul 2>&1
+)
 
+If "%DisableWindowsErrorReporting%" equ "True" (
 REM Turn off Windows Error Reporting
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting" /v "Disabled" /t REG_DWORD /d "1" /f >nul 2>&1
+)
 
 If "%DisableTelemetry%" equ "True" (
 REM Disable Application Telemetry
@@ -3906,13 +6016,6 @@ reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /F /V "Disable
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /F /V "EnableConfigFlighting" /T REG_DWORD /d 0  >nul 2>&1
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /F /V "DoNotShowFeedbackNotifications" /T REG_DWORD /d 1  >nul 2>&1
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /F /V "LimitEnhancedDiagnosticDataWindowsAnalytics" /T REG_DWORD /d 0  >nul 2>&1
-)
-
-REM Disable the Customer Experience Improvement program 
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Internet Explorer\SQM" /v "DisableCustomerImprovementProgram" /t REG_DWORD /d 1 /f >nul 2>&1
-reg add "HKLM\SOFTWARE\Policies\Microsoft\SQMClient\Windows" /v "CEIPEnable" /t REG_DWORD /d "0" /f >nul 2>&1
-reg add "HKLM\SOFTWARE\Policies\Microsoft\AppV\CEIP" /v "CEIPEnable" /t REG_DWORD /d "0" /f >nul 2>&1
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Messenger\Client" /v "CEIP" /t REG_DWORD /d "2" /f >nul 2>&1
 
 REM Disable Text/Ink/Handwriting Telemetry
 reg add "HKCU\Software\Microsoft\Input\TIPC" /v Enabled /t REG_DWORD /d 0 /f >nul 2>&1
@@ -3921,13 +6024,27 @@ reg add "HKLM\SOFTWARE\Policies\Microsoft\InputPersonalization" /v "RestrictImpl
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\TabletPC" /v "PreventHandwritingDataSharing" /t REG_DWORD /d "1" /f >nul 2>&1
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\HandwritingErrorReports" /v "PreventHandwritingErrorReports" /t REG_DWORD /d "1" /f >nul 2>&1
 reg add "HKCU\Software\Microsoft\Personalization\Settings" /v AcceptedPrivacyPolicy /t REG_DWORD /d 0 /f >nul 2>&1
+)
 
+If "%DisableCustomerExperienceProgram%" equ "True" (
+REM Disable the Customer Experience Improvement program 
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Internet Explorer\SQM" /v "DisableCustomerImprovementProgram" /t REG_DWORD /d 1 /f >nul 2>&1
+reg add "HKLM\SOFTWARE\Policies\Microsoft\SQMClient\Windows" /v "CEIPEnable" /t REG_DWORD /d "0" /f >nul 2>&1
+reg add "HKLM\SOFTWARE\Policies\Microsoft\AppV\CEIP" /v "CEIPEnable" /t REG_DWORD /d "0" /f >nul 2>&1
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Messenger\Client" /v "CEIP" /t REG_DWORD /d "2" /f >nul 2>&1
+)
+
+If "%DisableOneDriveSync%" equ "True" (
 REM Disable OneDrive Sync
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\OneDrive" /v "DisableFileSyncNGSC" /t REG_DWORD /d "1" /f >nul 2>&1
+)
 
+If "%DisableBiometrics%" equ "True" (
 REM Disable Biometrics
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Biometrics" /v "Enabled" /t REG_DWORD /d "0" /f >nul 2>&1
+)
 
+If "%DenyCapabilityForApps%" equ "True" (
 REM Deny capability access for specific apps.
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\appDiagnostics" /F /V "Value" /T REG_SZ /d "Deny"  >nul 2>&1
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\appointments" /F /V "Value" /T REG_SZ /d "Deny"  >nul 2>&1
@@ -3936,12 +6053,15 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\userDataTasks" /F /V "Value" /T REG_SZ /d "Deny"  >nul 2>&1
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\chat" /F /V "Value" /T REG_SZ /d "Deny"  >nul 2>&1
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\contacts" /F /V "Value" /T REG_SZ /d "Deny"  >nul 2>&1
+)
 
+If "%DisableLocationServices%" equ "True" (
 REM Disable location services
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors" /v "DisableLocation" /t REG_DWORD /d 1 /f >nul 2>&1      
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors" /v "DisableLocationScripting" /t REG_DWORD /d 1 /f >nul 2>&1   
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors" /v "DisableSensors" /t REG_DWORD /d 1 /f >nul 2>&1      
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors" /v "DisableWindowsLocationProvider" /t REG_DWORD /d 1 /f >nul 2>&1
+)
 
 
 If "%BootOptions%" equ "True" (
@@ -3999,85 +6119,119 @@ REM Require a password on wakeup: OFF
 powercfg -setacvalueindex scheme_current sub_none CONSOLELOCK 0 >nul
 )
 
+If "%PreventWindowsMarkingFiles%" equ "True" (
 REM Prevent Windows Marking File Attachments With Informations About Their Zone Of Origin
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Attachments" /v "SaveZoneInformation" /t REG_DWORD /d "1" /f >nul 2>&1
+)
 
+If "%DisableLanguageBar%" equ "True" (
 REM Disable Language Bar
 reg add "HKCU\Keyboard Layout\Toggle" /v "Layout Hotkey" /t REG_SZ /d "3" /f >nul 2>&1
 reg add "HKCU\Keyboard Layout\Toggle" /v "Language Hotkey" /t REG_SZ /d "3" /f >nul 2>&1
 reg add "HKCU\Keyboard Layout\Toggle" /v "Hotkey" /t REG_SZ /d "3" /f >nul 2>&1
+)
 
+If "%DisableStickyKeys%" equ "True" (
 REM Disable Sticky Keys
 reg add "HKCU\Control Panel\Accessibility\StickyKeys" /v "Flags" /t REG_SZ /d "506" /f >nul 2>&1
+)
 
+If "%DisableProgramCompatibilityAssistant%" equ "True" (
 REM Disable Program Compatibility Assistant
 reg add "HKCU\Software\Policies\Microsoft\Windows\AppCompat" /v "DisablePCA" /t REG_DWORD /d "1" /f >nul 2>&1
+)
 
-REM Disable Custumer Experience Improvement Program
-reg add "HKLM\SOFTWARE\Microsoft\SQMClient\Windows" /v "CEIPEnable" /t REG_DWORD /d "0" /f >nul 2>&1
-reg add "HKLM\SOFTWARE\Policies\Microsoft\SQMClient\Windows" /v "CEIPEnable" /t REG_DWORD /d "0" /f >nul 2>&1
-reg add "HKLM\SOFTWARE\Wow6432Node\Microsoft\VSCommon\15.0\SQM" /v "OptIn" /t REG_DWORD /d "0" /f >nul 2>&1
-
+If "%DisableFaultTolerantHeap%" equ "True" (
 REM Disable Fault Tolerant Heap
 reg add "HKLM\SOFTWARE\Microsoft\FTH" /v "Enabled" /t REG_DWORD /d "0" /f >nul 2>&1
+)
 
+If "%DisablePowerShellTelemtry%" equ "True" (
 REM Disable PowerShell Telemetry
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" /v "POWERSHELL_TELEMETRY_OPTOUT" /t REG_SZ /d "1" /f >nul 2>&1
+)
 
+If "%DisableWindowsErrorReporting%" equ "True" (
 REM Disable Windows Error Reporting
 reg add "HKLM\SOFTWARE\Policies\Microsoft\PCHealth\ErrorReporting" /v "DoReport" /t REG_DWORD /d "0" /f >nul 2>&1
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting" /v "Disabled" /t REG_DWORD /d "1" /f >nul 2>&1
+)
 
+If "%DisableRemoteAssistance%" equ "True" (
 REM Disable Remote Assistance
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Remote Assistance" /v "fAllowToGetHelp" /t REG_DWORD /d "0" /f >nul 2>&1
+)
 
 If "%ShowFileExtension%" equ "True" (
 REM Show File Extensions
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "HideFileExt" /t REG_DWORD /d "0" /f >nul 2>&1
 )
 
+If "%Remove3DObjectsFromExplorer%" equ "True" (
 REM Remove 3D Objects From Explorer Pane
 reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}" /f >nul 2>&1
 reg delete "HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}" /f >nul 2>&1
+)
 
+If "%DisableSignInAndLockLastUser%" equ "True" (
 REM Disable Sing-In And Lock Last Interactive User 
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v "DisableAutomaticRestartSignOn" /t REG_DWORD /d "1" /f >nul 2>&1
+)
 
+If "%DisableOnlineTips%" equ "True" (
 REM Disable Disable Online Tips
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "AllowOnlineTips" /t REG_DWORD /d "0" /f >nul 2>&1
+)
 
+If "%DisableTypingInsights%" equ "True" (
 REM Disable Typing Insights
 reg add "HKCU\Software\Microsoft\input\Settings" /v "InsightsEnabled" /t REG_DWORD /d "0" /f >nul 2>&1
+)
 
+If "%DisableSuggestionsInTheSearchBox%" equ "True" (
 REM Disable Suggestions In The Search Box And In Search Home
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\SearchSettings" /v "IsDynamicSearchBoxEnabled" /t REG_DWORD /d "0" /f >nul 2>&1
+)
 
+If "%RestoreOldContextMenu%" equ "True" (
 REM Resotre Old Context Menu
 reg add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}" /ve /t REG_SZ /d "" /f >nul 2>&1
 reg add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /ve /t REG_SZ /d "" /f >nul 2>&1
+)
 
+If "%RemovePinToQuickAccess%" equ "True" (
 REM Remove Pin TO Quick Access In Context Menu
 reg delete "HKCR\Folder\shell\pintohome" /f >nul 2>&1
 reg delete "HKLM\SOFTWARE\Classes\Folder\shell\pintohome" /f >nul 2>&1
+)
 
+If "%HideFoldersInQuickAccess%" equ "True" (
 REM Hide Folders In Quick Access
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer" /v "ShowFrequent" /t REG_DWORD /d "0" /f >nul 2>&1
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer" /v "ShowRecent" /t REG_DWORD /d "0" /f >nul 2>&1
+)
 
+If "%HideQuickAccessFromFileExplorer%" equ "True" (
 REM Hide Quick Access From File Explorer
 reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" /v "HubMode" /t REG_DWORD /d "1" /f >nul 2>&1
+)
 
-REM Launch FIle Explorer To This PC
+If "%LaunchFileExplorerToThisPC%" equ "True" (
+REM Launch File Explorer To This PC
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "LaunchTo" /t REG_DWORD /d "1" /f >nul 2>&1
+)
 
+If "%TurnOffDisplayOfRecentSearch%" equ "True" (
 REM Turn Off Display Of Recent Search Entries In The File Explorer Search Box
 reg add "HKCU\Software\Policies\Microsoft\Windows\Explorer" /v "DisableSearchBoxSuggestions" /t REG_DWORD /d "1" /f >nul 2>&1
+)
 
+If "%ClearHistoryOfRecentlyOpenedDocumentsOnExit%" equ "True" (
 REM Clear History Of Recently Opened Documents On Exit
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "ClearRecentDocsOnExit" /t REG_DWORD /d "1" /f >nul 2>&1
+)
 
-REM Disable Recent Items And Frequent Places In File Explorer and Quick Access
-reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "Start_TrackDocs" /t REG_DWORD /d "0" /f >nul 2>&1
+
 set "file=C:\Vitality\Info\windows"
 if not exist "%file%" (
     echo Vitality > "%file%"
@@ -4098,30 +6252,44 @@ if %cpu%==Intel (
 
 :intel
 echo                                                   Applying Intel CPU Tweaks
+
+If "%DisableCPUVirtualizationIntel%" equ "True" (
 REM Disable CPU Virtualization
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard" /v "EnableVirtualizationBasedSecurity" /t REG_DWORD /d "0" /f > NUL 2>&1 
+)
 
+If "%DisableCoreIsolationIntel%" equ "True" (
 REM Disable Core Isolation
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity" /v "Enabled" /t REG_DWORD /d "0" /f > NUL 2>&1
+)
 
+If "%ConfigureCStatesIntel%" equ "True" (
 REM Configure C-States
 powercfg -setacvalueindex scheme_current sub_processor IDLEPROMOTE 100 > NUL 2>&1
 powercfg -setacvalueindex scheme_current sub_processor IDLEDEMOTE 100 > NUL 2>&1
 powercfg -setacvalueindex scheme_current sub_processor IDLECHECK 100000 > NUL 2>&1
 powercfg -setacvalueindex scheme_current sub_processor IDLESCALING 0 > NUL 2>&1
+)
 
+If "%DisableThrottlingIntel%" equ "True" (
 REM Disable Throttling
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling" /v "PowerThrottlingOff" /t REG_DWORD /d "1" /f > NUL 2>&1
+)
 
+If "%DisableAMDServices%" equ "True" (
 REM Disable AMD Services
 reg add "HKLM\System\CurrentControlSet\Services\AmdK8" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1
 reg add "HKLM\System\CurrentControlSet\Services\amdsata" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1
 reg add "HKLM\System\CurrentControlSet\Services\amdsbs" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1
 reg add "HKLM\System\CurrentControlSet\Services\amdxata" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1
+)
 
+If "%DisableTSXIntel%" equ "True" (
 REM Disable TSX
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel" /v "DisableTsx" /t REG_DWORD /d "0" /f > NUL 2>&1
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel" /v "EnableTsx" /t REG_DWORD /d "1" /f > NUL 2>&1
+)
+
 set "file=C:\Vitality\Info\cpu"
 if not exist "%file%" (
     echo Vitality > "%file%"
@@ -4136,21 +6304,31 @@ goto skippingcpu
 
 :amd
 echo                                                   Applying AMD CPU Tweaks
+
+If "%DisableCPUVirtualizationAMD%" equ "True" (
 REM Disable CPU Virtualization
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard" /v "EnableVirtualizationBasedSecurity" /t REG_DWORD /d "0" /f > NUL 2>&1
+)
 
+If "%DisableCoreIsolationAMD%" equ "True" (
 REM Disable Core Isolation
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity" /v "Enabled" /t REG_DWORD /d "0" /f > NUL 2>&1
+)
 
+If "%ConfigureCStatesAMD%" equ "True" (
 REM Configure C-States
 powercfg -setacvalueindex scheme_current sub_processor IDLEPROMOTE 100 > NUL 2>&1
 powercfg -setacvalueindex scheme_current sub_processor IDLEDEMOTE 100 > NUL 2>&1
 powercfg -setacvalueindex scheme_current sub_processor IDLECHECK 100000 > NUL 2>&1
 powercfg -setacvalueindex scheme_current sub_processor IDLESCALING 0 > NUL 2>&1
+)
 
+If "%DisableThrottlingAMD%" equ "True" (
 REM Disable Throttling
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling" /v "PowerThrottlingOff" /t REG_DWORD /d "1" /f
+)
 
+If "%DisableIntelServices%" equ "True" (
 REM Disable Intel Services
 reg add "HKLM\System\CurrentControlSet\Services\iagpio" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1
 reg add "HKLM\System\CurrentControlSet\Services\iai2c" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1
@@ -4162,10 +6340,14 @@ reg add "HKLM\System\CurrentControlSet\Services\iaStorAVC" /v "Start" /t REG_DWO
 reg add "HKLM\System\CurrentControlSet\Services\iaStorV" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1
 reg add "HKLM\System\CurrentControlSet\Services\intelide" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1
 reg add "HKLM\System\CurrentControlSet\Services\intelpep" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1
+)
 
+If "%DisableTSXAMD%" equ "True" (
 REM Disable TSX
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel" /v "DisableTsx" /t REG_DWORD /d "1" /f > NUL 2>&1
 reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel" /v "EnableTsx" /t REG_DWORD /d "0" /f > NUL 2>&1
+)
+
 
 set "file=C:\Vitality\Info\cpu"
 if not exist "%file%" (
@@ -6071,86 +8253,10 @@ echo key_of.key.zoom:46          >> "%appdata%\.minecraft\optionsof.txt"
 
 
 
-if "%Valorant%"=="false" goto skippingvalorant
-:: Initialize the root directory for search
-set "rootDir=C:\Users\voj\AppData\Local\VALORANT\Saved\Config"
-
-:: Initialize the target file name
-set "targetFile=GameUserSettings.ini"
-
-:: Initialize a flag variable to indicate whether the file was found
-set "fileFound=false"
-
-:: Check if the root directory exists
-if not exist "%rootDir%\" (
-    REM echo Root directory does not exist or cannot be accessed.
-    goto EndScript
-)  >nul 2>&1
-
-:: Recursive search for the file
-for /r "%rootDir%" %%a in (%targetFile%) do (
-    if exist "%%~fa" (
-        REM echo File found at: %%~fa
-        set "fileFound=true"
-        
-        :: Define a temporary file name
-        set "tempFile=%%~dpaTempGameUserSettings.ini"
-
-        :: Create a new GameUserSettings.ini file with the specified content
-        > "!tempFile!" (
-            echo [/Script/ShooterGame.ShooterGameUserSettings]
-            echo bShouldLetterbox=False
-            echo bLastConfirmedShouldLetterbox=False
-            echo bUseVSync=False
-            echo bUseDynamicResolution=False
-            echo ResolutionSizeX=1920
-            echo ResolutionSizeY=1080
-            echo LastUserConfirmedResolutionSizeX=1920
-            echo LastUserConfirmedResolutionSizeY=1080
-            echo WindowPosX=0
-            echo WindowPosY=0
-            echo LastConfirmedFullscreenMode=0
-            echo PreferredFullscreenMode=0
-            echo AudioQualityLevel=0
-            echo LastConfirmedAudioQualityLevel=0
-            echo FrameRateLimit=0.000000
-            echo DesiredScreenWidth=1920
-            echo DesiredScreenHeight=1080
-            echo LastUserConfirmedDesiredScreenWidth=1920
-            echo LastUserConfirmedDesiredScreenHeight=1080
-            echo.
-            echo [/Script/Engine.GameUserSettings]
-            echo bUseDesiredScreenHeight=False
-            echo.
-            echo [ScalabilityGroups]
-            echo sg.ResolutionQuality=100.000000
-            echo sg.ViewDistanceQuality=2
-            echo sg.AntiAliasingQuality=2
-            echo sg.ShadowQuality=2
-            echo sg.PostProcessQuality=2
-            echo sg.TextureQuality=2
-            echo sg.EffectsQuality=2
-            echo sg.FoliageQuality=2
-            echo sg.ShadingQuality=2
-            echo.
-            echo [ShaderPipelineCache.CacheFile]
-            echo LastOpened=ShooterGame
-        ) 
-
-        :: Rename the original file and replace with the new file
-        move /y "%%~fa" "%%~dpaGameUserSettings.ini.old"  >nul 2>&1
-        move /y "!tempFile!" "%%~fa"  >nul 2>&1
-    ) >nul 2>&1
-) >nul 2>&1
-
-:: Check if the file was not found
-if "%fileFound%"=="false" (
-    REM echo File not found.
-) 
-
-:: End of script
-:EndScript
-:skippingvalorant
+if "%Valorant%"=="true" (
+REM set Valorant Priority to high
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\VALORANT-Win64-Shipping.exe\PerfOptions" /v "CpuPriorityClass" /t REG_DWORD /d "3" /f
+)
 
 
 
