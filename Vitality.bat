@@ -8236,7 +8236,7 @@ echo ofTranslucentBlocks:1       >> "%appdata%\.minecraft\optionsof.txt"
 echo key_of.key.zoom:46          >> "%appdata%\.minecraft\optionsof.txt"
 :skippingminecraft
 
-if "%Minecraft%"=="false" goto skippingvalorant
+if "%Valorant%"=="false" goto skippingvalorant
 echo                                          Applying Valorant Tweaks
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\VALORANT-Win64-Shipping.exe\PerfOptions" /v "CpuPriorityClass" /t REG_DWORD /d "3" /f
 :skippingvalorant
