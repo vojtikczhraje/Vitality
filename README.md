@@ -5,7 +5,7 @@
  • Vitality is a free and open source batch optimizer, which aims to improve performance, decrease latency, enhance your game settings, and bring your recording settings to the next level.
   
   
-<h2> ~ About
+<h2> ~ About </h2>
   
 
  • Founders: vojtikczhraje, Pigeonlonion
@@ -15,7 +15,7 @@
 <br>
 <img src="https://github.com/vojtikczhraje/Vitality/blob/main/Resources/Images/Vitality.png" align="center" >
 
-<h2> ~ How To Use
+<h2> ~ How To Use </h2>
   
  • Download Vitality
  • Run as Administrator
@@ -23,7 +23,7 @@
 
 <br>
 
-<h2> ~ Disclaimers
+<h2> ~ Disclaimers </h2>
   
  • Use at Your Own Risk.
  • Not guaranteed to be compatible with all configurations.
