@@ -4890,55 +4890,55 @@ REM Power Plan
     powercfg -setacvalueindex scheme_current SUB_PCIEXPRESS ASPM 0 >nul 2>&1
 
     REM AHCI Link Power Management - HIPM/DIPM: OFF
-    powercfg -setacvalueindex scheme_current SUB_DISK 0b2d69d7-a2a1-449c-9680-f91c70521c60 0 >nul
+    powercfg -setacvalueindex scheme_current SUB_DISK 0b2d69d7-a2a1-449c-9680-f91c70521c60 0 >nul 2>&1
 
     REM NVMe Power State Transition Latency Tolerance
-    powercfg -setacvalueindex scheme_current SUB_DISK dbc9e238-6de9-49e3-92cd-8c2b4946b472 1 >nul
-    powercfg -setacvalueindex scheme_current SUB_DISK fc95af4d-40e7-4b6d-835a-56d131dbc80e 1 >nul
+    powercfg -setacvalueindex scheme_current SUB_DISK dbc9e238-6de9-49e3-92cd-8c2b4946b472 1 >nul 2>&1
+    powercfg -setacvalueindex scheme_current SUB_DISK fc95af4d-40e7-4b6d-835a-56d131dbc80e 1 >nul 2>&1
 
     REM Interrupt Steering
-    echo %PROCESSOR_IDENTIFIER% | find /I "Intel" >nul && powercfg -setacvalueindex scheme_current SUB_INTSTEER MODE 6 >nul
+    echo %PROCESSOR_IDENTIFIER% | find /I "Intel" >nul && powercfg -setacvalueindex scheme_current SUB_INTSTEER MODE 6 >nul 2>&1
 
     REM Enable Hardware P-States
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\4d2b0152-7d5c-498b-88e2-34345392a2c5" /v "ValueMax" /t REG_DWORD /d "20000" /f
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\4d2b0152-7d5c-498b-88e2-34345392a2c5" /v "ValueMax" /t REG_DWORD /d "20000" /f >nul 2>&1
 
     REM Dont restrict core boost
-    powercfg -setacvalueindex scheme_current sub_processor PERFEPP 0 >nul
+    powercfg -setacvalueindex scheme_current sub_processor PERFEPP 0 >nul 2>&1
 
 
     REM Enable Turbo Boost
-    powercfg -setacvalueindex scheme_current sub_processor PERFBOOSTMODE 1 >nul
-    powercfg -setacvalueindex scheme_current sub_processor PERFBOOSTPOL 100 >nul
+    powercfg -setacvalueindex scheme_current sub_processor PERFBOOSTMODE 1 >nul 2>&1
+    powercfg -setacvalueindex scheme_current sub_processor PERFBOOSTPOL 100 >nul 2>&1
 
 
     REM Disable Sleep States
-    powercfg -setacvalueindex scheme_current SUB_SLEEP AWAYMODE 0 >nul
-    powercfg -setacvalueindex scheme_current SUB_SLEEP ALLOWSTANDBY 0 >nul
-    powercfg -setacvalueindex scheme_current SUB_SLEEP HYBRIDSLEEP 0 >nul
+    powercfg -setacvalueindex scheme_current SUB_SLEEP AWAYMODE 0 >nul 2>&1
+    powercfg -setacvalueindex scheme_current SUB_SLEEP ALLOWSTANDBY 0 >nul 2>&1
+    powercfg -setacvalueindex scheme_current SUB_SLEEP HYBRIDSLEEP 0 >nul 2>&1
 
 
     REM Disable Core Parking
     echo %PROCESSOR_IDENTIFIER% | find /I "Intel" >nul && (
-    call :ControlSet "Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\0cc5b647-c1df-4637-891a-dec35c318583" "ValueMax" "100"
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\0cc5b647-c1df-4637-891a-dec35c318583" /v "ValueMax" /tREG_DWORD /d "100" /f >nul 2>&1
     powercfg -setacvalueindex scheme_current sub_processor CPMINCORES 100 >nul 2>&1
     ) || (
-    powercfg -setacvalueindex scheme_current SUB_INTSTEER UNPARKTIME 0
-    powercfg -setacvalueindex scheme_current SUB_INTSTEER PERPROCLOAD 10000
+    powercfg -setacvalueindex scheme_current SUB_INTSTEER UNPARKTIME 0 >nul 2>&1
+    powercfg -setacvalueindex scheme_current SUB_INTSTEER PERPROCLOAD 10000 >nul 2>&1
     )
 
 
     REM Disable Frequency Scaling
-    powercfg -setacvalueindex scheme_current sub_processor PROCTHROTTLEMIN 100 >nul
+    powercfg -setacvalueindex scheme_current sub_processor PROCTHROTTLEMIN 100 >nul 2>&1
 
 
     REM Don't turn off display when plugged in
-    powercfg /change standby-timeout-ac 0
-    powercfg /change monitor-timeout-ac 0
-    powercfg /change hibernate-timeout-ac 0
+    powercfg /change standby-timeout-ac 0 >nul 2>&1
+    powercfg /change monitor-timeout-ac 0 >nul 2>&1
+    powercfg /change hibernate-timeout-ac 0 >nul 2>&1
 
 
     REM Apply Changes
-    powercfg -setactive scheme_current >nul
+    powercfg -setactive scheme_current >nul 2>&1
 )
 
 set "file=C:\Vitality\Info\fpsandinput"
@@ -5430,7 +5430,7 @@ if "%DisableScaling%" equ "True" (
 REM Disable Scaling
 for /f %%i in ('reg query "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /s /f "Scaling"^| findstr "HKEY"') do reg add "%%i" /v "Scaling" /t REG_DWORD /d "1" /f >nul 2>&1
 )
-
+)
 
 if "%P0States%" equ "True" (
 REM Force P0-State
