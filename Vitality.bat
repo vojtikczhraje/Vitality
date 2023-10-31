@@ -4958,6 +4958,8 @@ echo                                                  Applying Latency Tweaks
 REM Download Timer Resolution (Credits to Amitxv)
 if exist "%SYSTEMDRIVE%\SetTimerResolution.exe" del "%SYSTEMDRIVE%\SetTimerResolution.exe" >nul 2>&1
 curl -g -k -L -# -o "%SYSTEMDRIVE%\SetTimerResolution.exe" "https://github.com/amitxv/TimerResolution/releases/download/SetTimerResolution-v0.1.3/SetTimerResolution.exe" >nul 2>&1
+curl -g -k -L -# -o "%SYSTEMDRIVE%\Vitality\Resources\VisualCppRedist_AIO_x86_x64.exe" "https://github.com/abbodi1406/vcredist/releases/download/v0.76.0/VisualCppRedist_AIO_x86_x64.exe" >nul 2>&1
+
 REM Set TimerResolution Variables
     set "targetPath=C:\SetTimerResolution.exe"
     set "args=--resolution 5000 --no-console"
@@ -5043,7 +5045,9 @@ If "%TimerResolution%" equ "True" (
     set "args=--resolution 5000 --no-console"
     set "shortcutName=TimerResolutionShortcut.lnk"
     powershell -Command "$WshShell = New-Object -ComObject WScript.Shell; $Shortcut = $WshShell.CreateShortcut('%shortcutName%'); $Shortcut.TargetPath = '%targetPath%'; $Shortcut.Arguments = '%args%'; $Shortcut.Save()" >nul 2>&1
-    cd "%SYSTEMDRIVE%\Vitality" >nul 2>&1
+    cd "%SYSTEMDRIVE%\Vitality\Resources" >nul 2>&1
+    VisualCppRedist_AIO_x86_x64.exe /y >nul 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel" /v "GlobalTimerResolutionRequests" /t REG_DWORD /d "1" /f >nul 2>&1
 ) else (
     del "%SYSTEMDRIVE%\SetTimerResolution.exe" >nul 2>&1
 )
