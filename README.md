@@ -1,4 +1,4 @@
-![Header image](https://github.com/vojtikczhraje/Vitality/blob/main/Resources/Images/Vitality-Github.jpg)
+![Header image](https://github.com/vojtikczhraje/Vitality/blob/main/img/Vitality-Github.jpg)
 
 ---
 
@@ -10,7 +10,7 @@ Vitality is a free and open source batch optimizer designed to improve performan
 - **Made in**: `Batch`, `Powershell`
 - **Requirements**: Windows 10/11, Administrator Permissions, Internet Connection
 
-![Vitality](https://github.com/vojtikczhraje/Vitality/blob/main/Resources/Images/Vitality.png)
+![Vitality](https://github.com/vojtikczhraje/Vitality/blob/main/img/Vitality.png)
 
 ### Usage
 - Download Vitality
