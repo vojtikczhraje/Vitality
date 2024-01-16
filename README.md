@@ -1,4 +1,4 @@
-![Header image](https://github.com/vojtikczhraje/Vitality/blob/main/img/Vitality-Github.jpg)
+![Header image](https://github.com/vojtikczhraje/Vitality/blob/main/img/Vitality-Github.png)
 
 ---
 
