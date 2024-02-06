@@ -329,11 +329,7 @@ set "DevicePriorityUndefined=True"
 
 REM Configuration Page 6 / Category [Latency Tweaks] Page 1
 set "SpectreMeltdown=True"
-if %SystemType%==Desktop (
-	set "DisableIDLE=True"
-) else (
-	set "DisableIDLE=False"
-)
+set "DisableIDLE=False"
 set "MMCSS=True"
 set "CSRSS=True"
 set "LowProcessPriority=True"
@@ -1953,7 +1949,7 @@ echo     ^│                             ^│     %e%[%r% 1 %e%]  %r%•%e%  Sp
 echo     ^│                             ^│          Disable Spectre and Meltdown
 echo     ^│           Tweaks            ^│      
 echo     ^│                             ^│     %e%[%r% 2 %e%]  %r%•%e%  IDLE%l%                                        %DisableIDLEc%▼%l%
-echo     ^│                             ^│          Disable IDLE in powercfg
+echo     ^│                             ^│          Disable IDLE in Power Plan
 echo     ^│       Ingame Settings       ^│
 echo     ^│                             ^│     %e%[%r% 3 %e%]  %r%•%e%  MMCSS%l%                                       %MMCSSc%▼%l%
 echo     ^│                             ^│          Configure MMCSS
