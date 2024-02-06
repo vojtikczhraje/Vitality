@@ -6,6 +6,9 @@ mode 120, 36
 chcp 65001 >nul
 TITLE Vitality
 
+REM Version
+set "Version=0.1.1"
+
 REM Set Colors
 set p=[38;5;99m
 set l=[38;5;240m
