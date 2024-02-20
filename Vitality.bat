@@ -8284,3 +8284,1544 @@ exit
 
 
 
+
+:Revert
+cls
+echo.
+echo.
+echo.
+echo.
+echo.
+echo.
+echo.
+echo.
+echo.
+echo.
+echo.
+echo.
+echo.
+echo.
+echo                                       %r% _      _  _____   __    _     _  _____  _%l%
+echo                                      %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%
+echo                                        %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%
+echo.
+
+if "%FPS%"=="false" goto skippingfps
+echo                                            Reverting FPS and Input Delay Tweaks
+if "%Visuals%" equ "True" (
+REM Revert Windows Visuals
+reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects" /v "VisualFXSetting" /f
+reg delete "HKCU\Control Panel\Desktop" /v "UserPreferencesMask" /f
+reg delete "HKCU\Control Panel\Desktop" /v "DragFullWindows" /f
+reg delete "HKCU\Control Panel\Desktop" /v "FontSmoothing" /f
+reg delete "HKCU\Control Panel\Desktop\WindowMetrics" /v "MinAnimate" /f
+reg delete "HKCU\Software\Microsoft\Windows\DWM" /v "EnableAeroPeek" /f
+reg delete "HKCU\Software\Microsoft\Windows\DWM" /v "AlwaysHibernateThumbnails" /f
+reg delete "HKCU\Software\Microsoft\Windows\DWM" /v "ListviewShadow" /f
+reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "IconsOnly" /f
+reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "ListviewAlphaSelect" /f
+reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "TaskbarAnimations" /f
+reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "ListviewShadow" /f
+
+)
+
+if "%WindowsUpdate%" equ "True" (
+REM Reverting Windows Update
+reg delete "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate" /f
+reg delete "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" /f
+reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\DriverSearching" /f
+reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Device Metadata" /f
+reg delete "HKLM\SOFTWARE\Policies\Microsoft\Windows\DriverSearching" /f
+reg delete "HKLM\SYSTEM\CurrentControlSet\Services\wuauserv" /f
+reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update" /f
+reg delete "HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings" /f
+)
+
+REM Can't be reverted since i didn't save original state
+:: if "%WindowsServices%" equ "True" (
+:: REM Configure Windows Services
+:: net pause DiagTrack >nul 2>&1
+:: net pause DialogBlockingService >nul 2>&1
+:: net pause MsKeyboardFilter >nul 2>&1
+:: net pause NetMsmqActivator  >nul 2>&1
+:: net pause PcaSvc  >nul 2>&1
+:: net pause SEMgrSvc  >nul 2>&1
+:: net pause ShellHWDetection >nul 2>&1
+:: net pause shpamsvc  >nul 2>&1
+:: net pause SysMain >nul 2>&1
+:: net pause Themes >nul 2>&1
+:: net pause TrkWks  >nul 2>&1
+:: net pause tzautoupdate >nul 2>&1
+:: net pause uhssvc >nul 2>&1
+:: net pause W3SVC >nul 2>&1
+:: net pause OneSyncSvc >nul 2>&1
+:: net pause WdiSystemHost  >nul 2>&1
+:: net pause WdiServiceHost  >nul 2>&1
+:: net pause SCardSvr  >nul 2>&1
+:: net pause ScDeviceEnum  >nul 2>&1
+:: net pause SCPolicySvc >nul 2>&1
+:: net pause SensorDataService  >nul 2>&1
+:: net pause SensrSvc  >nul 2>&1
+:: net pause Beep >nul 2>&1
+:: net pause cdfs  >nul 2>&1
+:: net pause cdrom  >nul 2>&1
+:: net pause cnghwassist  >nul 2>&1
+:: net pause GpuEnergyDrv  >nul 2>&1
+:: net pause GpuEnergyDr  >nul 2>&1
+:: net pause Telemetry  >nul 2>&1
+:: net pause VerifierExt >nul 2>&1
+:: sc config "DiagTrack" start= disabled  >nul 2>&1
+:: sc config "DialogBlockingService" start= disabled  >nul 2>&1
+:: sc config "MsKeyboardFilter" start= disabled  >nul 2>&1
+:: sc config "NetMsmqActivator" start= disabled  >nul 2>&1
+:: sc config "PcaSvc" start= disabled >nul 2>&1
+:: sc config "SEMgrSvc" start= disabled  >nul 2>&1
+:: sc config "ShellHWDetection" start= disabled  >nul 2>&1
+:: sc config "shpamsvc" start= disabled >nul 2>&1
+:: sc config "SysMain" start= disabled  >nul 2>&1
+:: sc config "Themes" start= disabled  >nul 2>&1
+:: sc config "TrkWks" start= disabled  >nul 2>&1
+:: sc config "tzautoupdate" start= disabled  >nul 2>&1
+:: sc config "uhssvc" start= disabled >nul 2>&1
+:: sc config "W3SVC" start= disabled >nul 2>&1
+:: sc config "OneSyncSvc" start= disabled  >nul 2>&1
+:: sc config "WdiSystemHost" start= disabled  >nul 2>&1
+:: sc config "WdiServiceHost" start= disabled  >nul 2>&1
+:: sc config "SCardSvr" start= disabled  >nul 2>&1
+:: sc config "ScDeviceEnum" start= disabled  >nul 2>&1
+:: sc config "SensorDataService" start= disabled  >nul 2>&1
+:: sc config "SensrSvc" start= disabled  >nul 2>&1
+:: sc config "Beep" start= disabled  >nul 2>&1
+:: sc config "cdfs" start= disabled  >nul 2>&1
+:: sc config "cdrom" start= disabled  >nul 2>&1
+:: sc config "cnghwassist" start= disabled >nul 2>&1
+:: sc config "GpuEnergyDrv" start= disabled  >nul 2>&1
+:: sc config "GpuEnergyDr" start= disabled  >nul 2>&1
+:: sc config "Telemetry" start= disabled  >nul 2>&1
+:: sc config "VerifierExt" start= disabled  >nul 2>&1
+:: )
+
+if "%Win32PrioritySeparation%" equ "True" (
+REM Revert Win32 Priority Separation (26hex)
+reg delete "HKLM\SYSTEM\CurrentControlSet\Control\PriorityControl" /v "Win32PrioritySeparation" /f
+)
+
+if "%DisableSearchIndexing%" equ "True" (
+REM Enable Search Indexing
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\WSearch" /v "Start" /t REG_DWORD /d "2" /f
+)
+
+If "%WindowsDefender%" equ "True" (
+REM Enable Windows Defender
+reg delete "HKLM\SOFTWARE\Policies\Microsoft\Windows Defender" /f
+reg delete "HKLM\SOFTWARE\Policies\Microsoft\Microsoft Antimalware\Real-Time Protection" /f
+reg delete "HKLM\SYSTEM\CurrentControlSet\Services\WinDefend" /f
+reg delete "HKLM\SYSTEM\CurrentControlSet\Services\wscsvc" /f
+reg delete "HKLM\SYSTEM\CurrentControlSet\Services\SecurityHealthService" /f
+reg delete "HKLM\SYSTEM\CurrentControlSet\Services\Sense" /f
+)
+
+If "%DisableFastStartup%" equ "True" (
+REM Enable Fast Startup
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Power" /v "HiberbootEnabled" /t REG_DWORD /d "1" /f
+)
+
+If "%ReserveCPUResources%" equ "True" (
+REM Remove reserving 10% of CPU Resources For Low-Priority Tasks
+reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "SystemResponsiveness" /f
+)
+
+If "%DisableGamebarpresencewriter%" equ "True" (
+REM Revert Gamebarpresencewriter
+reg delete "HKLM\SOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Gaming.GameBar.PresenceServer.Internal.PresenceWriter" /f
+)
+
+If "%ProcessMitigations%"=="Enabled" (
+REM Disable Process Mitigations
+    Rem Initialize Mask To Get Mask Length
+    PowerShell Set-ProcessMitigation -System -Disable CFG >nul 2>&1
+
+    REM Get Current Mask
+    for /f "tokens=3 skip=2" %%a in ('reg query "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel" /v "MitigationAuditOptions"') do (
+    set "mitigation_mask=%%a"
+    ) 
+
+    REM Set All Values In Current Mask To 2
+    for /L %%a in (0,1,9) do (
+    set "mitigation_mask=!mitigation_mask:%%a=2!"
+    ) 
+
+    REM Apply Mask To Kernel
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel" /v "MitigationOptions" /t REG_BINARY /d "%mitigation_mask%" /f > nul 2>&1
+    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel" /v "MitigationAuditOptions" /t REG_BINARY /d "%mitigation_mask%" /f > nul 2>&1
+
+)
+
+If "%FSE%" equ "True" (
+REM Revert FSO
+reg delete "HKCU\System\GameConfigStore" /v "GameDVR_DSEBehavior" /f
+reg delete "HKCU\System\GameConfigStore" /v "GameDVR_DXGIHonorFSEWindowsCompatible" /f
+reg delete "HKCU\System\GameConfigStore" /v "GameDVR_EFSEFeatureFlags" /f
+reg delete "HKCU\System\GameConfigStore" /v "GameDVR_Enabled" /f
+reg delete "HKCU\System\GameConfigStore" /v "GameDVR_FSEBehavior" /f
+reg delete "HKCU\System\GameConfigStore" /v "GameDVR_FSEBehaviorMode" /f
+reg delete "HKCU\System\GameConfigStore" /v "GameDVR_HonorUserFSEBehaviorMode" /f
+reg delete "HKLM\SOFTWARE\Policies\Microsoft\Windows\GameDVR" /f
+)
+
+If "%DisableSystemEnergySaving%" equ "True" (
+REM Revert System Energy-Saving Techniques
+reg delete "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Power" /v "CoalescingTimerInterval" /f
+)
+
+If "%SVCSplitThreshold%" equ "True" (
+REM Set SVCSplitThreshold To User Memory Size
+reg delete "HKLM\System\CurrentControlSet\Control" /v "SvcHostSplitThresholdInKB" /f
+)
+
+If "%DisableUSBPowerSavings%" equ "True" (
+REM Disable USB Power Savings
+for %%a in (
+	EnhancedPowerManagementEnabled
+	AllowIdleIrpInD3
+	EnableSelectiveSuspend
+	DeviceSelectiveSuspended
+	SelectiveSuspendEnabled
+	SelectiveSuspendOn
+	EnumerationRetryCount
+	ExtPropDescSemaphore
+	WaitWakeEnabled
+	D3ColdSupported
+	WdfDirectedPowerTransitionEnable
+	EnableIdlePowerManagement
+	IdleInWorkingState
+) do for /f "delims=" %%b in ('reg query "HKLM\SYSTEM\CurrentControlSet\Enum" /s /f "%%a" ^| findstr "HKEY"') do reg add "%%b" /v "%%a" /t REG_DWORD /d "0" /f > NUL 2>&1
+)
+
+If "%EnableMSIMode%" equ "True" (
+REM Enabling MSI Mode For All Suported Devices
+for /f "tokens=*" %%i in ('reg query "HKLM\SYSTEM\CurrentControlSet\Enum\PCI"^| findstr "HKEY"') do (
+	for /f "tokens=*" %%a in ('reg query "%%i"^| findstr "HKEY"') do reg add "%%a\Device Parameters\Interrupt Management\MessageSignaledInterruptProperties" /v "MSISupported" /t REG_DWORD /d "1" /f > NUL 2>&1
+)
+)
+
+If "%DevicePriorityUndefined%" equ "True" (
+REM Setting All Device's Priority To Undefined
+for /f "tokens=*" %%i in ('reg query "HKLM\SYSTEM\CurrentControlSet\Enum\PCI"^| findstr "HKEY"') do (
+	for /f "tokens=*" %%a in ('reg query "%%i"^| findstr "HKEY"') do reg delete "%%a\Device Parameters\Interrupt Management\Affinity Policy" /v "DevicePriority" /f > NUL 2>&1
+)
+)
+
+If "%DisableBackgroundApps%" equ "True" (
+REM Revert Background Apps
+reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications" /v "GlobalUserDisabled" /f
+reg delete "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppPrivacy" /v "LetAppsRunInBackground" /f
+reg delete "HKCU\Software\Microsoft\Windows\CurrentVersion\Search" /v "BackgroundAppGlobalToggle" /f
+
+)
+
+If "%Winlogon%" equ "True" (
+REM Set Winlogon to Normal Priority
+reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\winlogon.exe\PerfOptions" /f
+)
+
+
+If "%EnableGPUSheduling%" equ "True" (
+REM Revert Hardware Accelerated GPU Scheduling
+reg delete "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /v "HwSchMode" /f
+)
+
+If "%DisableSettingsSynchronization%" equ "True" (
+REM Revert Settings Synchronization
+reg delete "HKLM\SOFTWARE\Policies\Microsoft\Windows\SettingSync" /f
+)
+
+If "%DisableRemoteAssistance%" equ "True" (
+REM Disable Remote Assistance
+reg add "HKLM\System\CurrentControlSet\Control\Remote Assistance" /v "fAllowFullControl" /t REG_DWORD /d "0" /f >nul 2>&1
+reg add "HKLM\System\CurrentControlSet\Control\Remote Assistance" /v "fAllowToGetHelp" /t REG_DWORD /d "0" /f >nul 2>&1
+reg add "HKLM\System\CurrentControlSet\Control\Remote Assistance" /v "fEnableChatControl" /t REG_DWORD /d "0" /f >nul 2>&1
+)
+
+If "%PowerPlan%" equ "True" (
+REM Revert Power Plan
+powercfg /setactive a1841308-3541-4fab-bc81-f71556f20b4a
+)
+
+set "file=C:\Vitality\Info\fpsandinput"
+if not exist "%file%" (
+    echo Vitality > "%file%"
+    set /a "ran_optimizations+=1"
+)
+cd C:\Vitality
+set "formatted_optimizations=%ran_optimizations%"
+if %formatted_optimizations% LSS 10 set "formatted_optimizations= %formatted_optimizations%"
+echo set "ran_optimizations=%ran_optimizations%"> v.bat
+:skippingfps
+
+
+if "%Latency%"=="false" goto skippinglatency
+echo                                                  Applying Latency Tweaks
+REM Remove Downloaded Stuff
+del "%SYSTEMDRIVE%\SetTimerResolution.exe" >nul 2>&1
+del "%SYSTEMDRIVE%\Vitality\Resources\VisualCppRedist_AIO_x86_x64.exe" >nul 2>&1
+del "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup\low_audio_latency_no_console.exe" >nul 2>&1
+
+
+if "%SpectreMeltdown%" equ "True" (
+REM Spectre and Meltdown
+reg delete "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "FeatureSettings" /f
+reg delete "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "FeatureSettingsOverride" /f
+reg delete "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "FeatureSettingsOverrideMask" /f
+)
+
+REM Revert BCD Settings
+bcdedit /set disabledynamictick no
+bcdedit /set useplatformclock true
+bcdedit /deletevalue useplatformtick
+
+if "%DisableIDLE%" equ "True" (
+REM ONLY FOR DESKTOP (ADD SCRIPT THAT WILL AUTOMATICALLY TELL IF USER IS USING LAPTOP OR DESKTOP)
+    REM Disable Idle
+    powercfg -setacvalueindex scheme_current sub_processor 5d76a2ca-e8c0-402f-a133-2158492d58ad 1 >nul 2>&1
+
+    REM Apply The Changes
+    powercfg -setactive scheme_current >nul 2>&1
+)
+
+REM Revert Network Throttling
+reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "NetworkThrottlingIndex" /f
+
+if "%MMCSS%" equ "True" (
+REM Revert MMCSS Configuration
+reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "NoLazyMode" /f
+reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile" /v "AlwaysOn" /f
+reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile\Tasks\Games" /f
+
+)
+
+if "%CSRSS%" equ "True" (
+REM Revert CSRSS
+reg delete "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\csrss.exe\PerfOptions" /f
+)
+
+
+If "%TimerResolution%" equ "True" (
+    del "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup\TimerResolutionShortcut.lnk" >nul 2>&1
+    reg delete "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel" /v "GlobalTimerResolutionRequests" /f
+
+
+
+
+set "file=C:\Vitality\Info\latency"
+if not exist "%file%" (
+    echo Vitality > "%file%"
+    set /a "ran_optimizations+=1"
+)
+cd C:\Vitality
+set "formatted_optimizations=%ran_optimizations%"
+if %formatted_optimizations% LSS 10 set "formatted_optimizations= %formatted_optimizations%"
+echo set "ran_optimizations=%ran_optimizations%"> v.bat
+:skippinglatency
+
+if "%Network%"=="false" goto skippingnetwork
+echo                                                  Applying Network Tweaks
+if "%DisableNaglesAlgorithm%" equ "True" (
+REM Revert Nagle's Algorithm
+reg delete "HKLM\SOFTWARE\Microsoft\MSMQ\Parameters" /v "TCPNoDelay" /f
+for /f "tokens=3*" %%i in ('reg query "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\NetworkCards" /f "ServiceName" /s ^|findstr /i /l "ServiceName"') do (
+    reg delete "HKLM\System\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\%%i" /v "TCPNoDelay" /f
+    reg delete "HKLM\System\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\%%i" /v "TcpAckFrequency" /f
+    reg delete "HKLM\System\CurrentControlSet\Services\Tcpip\Parameters\Interfaces\%%i" /v "TcpDelAckTicks" /f
+) >nul 2>&1
+)
+
+if "%DNS%" equ "True" (
+REM Revert DNS
+netsh interface ip set dns name="Ethernet" source=dhcp
+)
+
+if "%WindowsNetworkSettigns%" equ "True" (
+REM Revert Network Task Offloading
+Netsh int ip set global taskoffload=enabled
+reg delete HKLM\SYSTEM\CurrentControlSet\Services\TCPIP\Parameters /v DisableTaskOffload /f
+
+REM Disable source routing
+netsh int ip set global sourceroutingbehavior=drop >nul 2>&1
+
+REM Disable DHCP Media Sense
+netsh int ip set global dhcpmediasense=disabled >nul 2>&1
+
+REM Disable Media Sense event logging
+netsh int ip set global mediasenseeventlog=disabled >nul 2>&1
+
+REM Disable MLD for IPv6
+netsh int ip set global mldlevel=none >nul 2>&1
+
+REM Set global TCP settings
+netsh int tcp set global chimney=enabled congestionprovider=ctcp dca=enabled netdma=disabled >nul 2>&1
+
+REM Disable Teredo tunneling
+netsh interface teredo set state disabled >nul 2>&1
+
+REM Disable ISATAP state
+netsh int isatap set state disable >nul 2>&1
+
+REM Find network interface number
+for /f "tokens=1" %%i in ('netsh int ip show interfaces ^| findstr [0-9]') do set INTERFACE=%%i >nul 2>&1
+
+REM Set interface parameters
+netsh int ip set interface %INTERFACE% basereachable=3600000 dadtransmits=0 otherstateful=disabled routerdiscovery=disabled store=persistent >nul 2>&1
+
+REM Disable RSC (Receive Segment Coalescing)
+netsh int tcp set global rsc=disabled >nul 2>&1
+
+REM Setting Initial Retransmission Timeout
+netsh int tcp set global initialRto=2000 >nul 2>&1
+
+REM Disable TCP heuristics
+netsh int tcp set heuristics disabled >nul 2>&1
+
+REM Disable window scaling heuristics
+netsh int tcp set heuristics wsh=disabled >nul 2>&1
+
+REM Disable Multipath TCP
+netsh int tcp set security mpp=disabled >nul 2>&1
+
+REM Disable TCP security profiles
+netsh int tcp set security profiles=disabled >nul 2>&1
+
+REM Setting TCP dynamic port range
+netsh int ipv4 set dynamicport tcp start=1025 num=64511 >nul 2>&1
+
+REM Setting UDP dynamic port range
+netsh int ipv4 set dynamicport udp start=1025 num=64511 >nul 2>&1
+
+REM Disable Windows Scaling heuristics in PowerShell
+powershell Set-NetTCPSetting -SettingName "*" -ForceWS Disabled >nul 2>&1
+)
+
+if "%Autotunning%" equ "True" (
+REM Enable Autotunning
+netsh int tcp set global autotuninglevel=normal
+)
+
+set "file=C:\Vitality\Info\network"
+if not exist "%file%" (
+    echo Vitality > "%file%"
+    set /a "ran_optimizations+=1"
+)
+cd C:\Vitality
+set "formatted_optimizations=%ran_optimizations%"
+if %formatted_optimizations% LSS 10 set "formatted_optimizations= %formatted_optimizations%"
+echo set "ran_optimizations=%ran_optimizations%"> v.bat
+
+:skippingnetwork
+
+
+if "%KBM%"=="false" goto skippingkbm
+echo                                                     Applying KBM Tweaks
+
+if "%KeyboardDataSize%" equ "True" (
+REM Set KeyboardDataQueueSize To 50 Dec
+reg add "HKLM\SYSTEM\CurrentControlSet\services\kbdclass\Parameters" /v "KeyboardDataQueueSize" /t REG_DWORD /d "50" /f >nul 2>&1
+)
+
+if "%AdjustKeyboardParameters%" equ "True" (
+REM Adjusts keyboard parameters
+reg add "HKCU\Control Panel\Keyboard" /v "KeyboardSpeed" /t REG_SZ /d "31" /f >nul 2>&1
+reg add "HKCU\Control Panel\Keyboard" /v "KeyboardDelay" /t REG_SZ /d "0" /f >nul 2>&1
+)
+
+if "%KeyboardAccessibilitySettings%" equ "True" (
+REM Configures keyboard accessibility settings
+reg add "HKCU\Control Panel\Accessibility\Keyboard Response" /v "BounceTime" /t REG_SZ /d "0" /f >nul 2>&1
+reg add "HKCU\Control Panel\Accessibility\Keyboard Response" /v "Flags" /t REG_SZ /d "0" /f >nul 2>&1
+reg add "HKCU\Control Panel\Accessibility\Keyboard Response" /v "Last BounceKey Setting" /t REG_DWORD /d "0" /f >nul 2>&1
+reg add "HKCU\Control Panel\Accessibility\Keyboard Response" /v "Last Valid Delay" /t REG_DWORD /d "0" /f >nul 2>&1
+reg add "HKCU\Control Panel\Accessibility\Keyboard Response" /v "Last Valid Repeat" /t REG_DWORD /d "0" /f >nul 2>&1
+reg add "HKCU\Control Panel\Accessibility\Keyboard Response" /v "Last Valid Wait" /t REG_DWORD /d "1000" /f >nul 2>&1
+)
+
+if "%MouseDataSize%" equ "True" (
+REM Set MouseDataQueueSize To 50 Dec
+reg add "HKLM\SYSTEM\CurrentControlSet\services\mouclass\Parameters" /v "MouseDataQueueSize" /t REG_DWORD /d "50" /f >nul 2>&1
+)
+
+if "%DisablePointerAcceleration%" equ "True" (
+REM Disable Pointer Acceleration
+reg add "HKCU\Control Panel\Mouse" /v "MouseSpeed" /t REG_SZ /d "0" /f >nul 2>&1
+reg add "HKCU\Control Panel\Mouse" /v "MouseThreshold1" /t REG_SZ /d "0" /f >nul 2>&1
+reg add "HKCU\Control Panel\Mouse" /v "MouseThreshold2" /t REG_SZ /d "0" /f >nul 2>&1
+)
+
+if "%MouseAccessibilitySettings%" equ "True" (
+REM Configures mouse accessibility settings
+reg add "HKCU\Control Panel\Accessibility\MouseKeys" /v "Flags" /t REG_SZ /d "0" /f >nul 2>&1
+reg add "HKCU\Control Panel\Accessibility\MouseKeys" /v "MaximumSpeed" /t REG_SZ /d "80" /f >nul 2>&1
+reg add "HKCU\Control Panel\Accessibility\MouseKeys" /v "TimeToMaximumSpeed" /t REG_SZ /d "3000" /f >nul 2>&1
+)
+
+set "file=C:\Vitality\Info\kbm"
+if not exist "%file%" (
+    echo Vitality > "%file%"
+    set /a "ran_optimizations+=1"
+)
+cd C:\Vitality
+set "formatted_optimizations=%ran_optimizations%"
+if %formatted_optimizations% LSS 10 set "formatted_optimizations= %formatted_optimizations%"
+echo set "ran_optimizations=%ran_optimizations%"> v.bat
+
+
+
+
+
+
+:skippingkbm
+if "%Task%"=="false" goto skippingtask
+echo                                               Applying Task Scheduler Tweaks
+REM Disable Not Used Scheduler Tasks
+schtasks /Change /TN "Microsoft\Windows\AppID\SmartScreenSpecific" /Disable >nul 2>&1
+schtasks /Change /TN "Microsoft\Windows\Application Experience\Microsoft Compatibility Appraiser" /Disable >nul 2>&1
+schtasks /Change /TN "Microsoft\Windows\Application Experience\ProgramDataUpdater" /Disable >nul 2>&1
+schtasks /Change /TN "Microsoft\Windows\Application Experience\StartupAppTask" /Disable >nul 2>&1
+schtasks /Change /TN "Microsoft\Windows\Customer Experience Improvement Program\Consolidator" /Disable >nul 2>&1
+schtasks /Change /TN "Microsoft\Windows\Customer Experience Improvement Program\KernelCeipTask" /Disable >nul 2>&1
+schtasks /Change /TN "Microsoft\Windows\Customer Experience Improvement Program\UsbCeip" /Disable >nul 2>&1
+schtasks /Change /TN "Microsoft\Windows\DiskDiagnostic\Microsoft-Windows-DiskDiagnosticDataCollector" /Disable >nul 2>&1
+schtasks /Change /TN "Microsoft\Windows\MemoryDiagnostic\ProcessMemoryDiagnosticEvent" /Disable >nul 2>&1
+schtasks /Change /TN "Microsoft\Windows\Power Efficiency Diagnostics\AnalyzeSystem" /Disable >nul 2>&1
+schtasks /Change /TN "Microsoft\Windows\Customer Experience Improvement Program\Uploader" /Disable >nul 2>&1
+schtasks /Change /TN "Microsoft\Windows\Shell\FamilySafetyUpload" /Disable >nul 2>&1
+schtasks /Change /TN "Microsoft\Office\OfficeTelemetryAgentLogOn" /Disable >nul 2>&1
+schtasks /Change /TN "Microsoft\Office\OfficeTelemetryAgentFallBack" /Disable >nul 2>&1
+schtasks /Change /TN "\Microsoft\Office\OfficeTelemetryAgentFallBack2016" /Disable >nul 2>&1
+schtasks /Change /TN "\Microsoft\Office\OfficeTelemetryAgentLogOn2016" /Disable >nul 2>&1
+schtasks /Change /TN "Microsoft\Office\Office 15 Subscription Heartbeat" /Disable >nul 2>&1
+schtasks /Change /TN "Microsoft\Office\Office 16 Subscription Heartbeat" /Disable >nul 2>&1
+schtasks /Change /TN "Microsoft\Windows\Windows Error Reporting\QueueReporting" /Disable >nul 2>&1
+schtasks /Change /TN "Microsoft\Windows\WindowsUpdate\Automatic App Update" /Disable >nul 2>&1
+schtasks /Change /TN "NIUpdateServiceStartupTask" /Disable >nul 2>&1
+schtasks /Change /TN "CCleaner Update" /Disable >nul 2>&1
+schtasks /Change /TN "CCleanerSkipUAC - %username%" /Disable >nul 2>&1
+schtasks /Change /TN "Adobe Acrobat Update Task" /Disable >nul 2>&1
+schtasks /Change /TN "AMDLinkUpdate" /Disable >nul 2>&1
+schtasks /Change /TN "Microsoft\Office\Office Automatic Updates 2.0" /Disable >nul 2>&1
+schtasks /Change /TN "Microsoft\Office\Office Feature Updates" /Disable >nul 2>&1
+schtasks /Change /TN "Microsoft\Office\Office Feature Updates Logon" /Disable >nul 2>&1
+schtasks /Change /TN "GoogleUpdateTaskMachineCore" /Disable >nul 2>&1
+schtasks /Change /TN "GoogleUpdateTaskMachineUA" /Disable >nul 2>&1
+schtasks /DELETE /TN "AMDInstallLauncher" /f >nul 2>&1
+schtasks /DELETE /TN "AMDLinkUpdate" /f >nul 2>&1
+schtasks /DELETE /TN "AMDRyzenMasterSDKTask" /f >nul 2>&1
+schtasks /DELETE /TN "DUpdaterTask" /f >nul 2>&1
+schtasks /DELETE /TN "ModifyLinkUpdate" /f >nul 2>&1
+
+set "file=C:\Vitality\Info\task"
+if not exist "%file%" (
+    echo Vitality > "%file%"
+    set /a "ran_optimizations+=1"
+)
+cd C:\Vitality
+set "formatted_optimizations=%ran_optimizations%"
+if %formatted_optimizations% LSS 10 set "formatted_optimizations= %formatted_optimizations%"
+echo set "ran_optimizations=%ran_optimizations%"> v.bat
+
+:skippingtask 
+
+
+
+if "%GPU%"=="false" goto skippinggpu
+
+If %gpu1%==Nvidia (
+    goto nvidia
+) else (
+    goto checkforradeon
+)
+
+:checkforradeon
+If %gpu1%==AMD (
+    goto radeon
+) else (
+    goto nullgpu
+)
+
+:nullgpu
+echo                                            Your GPU is not supported by Vitality.
+goto skippinggpu
+
+:nvidia
+if "%GameMode%" equ "True" (
+echo                                                   Applying Nvidia Tweaks
+REM Enable Game Mode
+reg add "HKCU\Software\Microsoft\GameBar" /v "AllowAutoGameMode" /t REG_DWORD /d "1" /f > nul 2>&1
+reg add "HKCU\Software\Microsoft\GameBar" /v "AutoGameModeEnabled" /t REG_DWORD /d "1" /f > nul 2>&1
+)
+
+if "%NvidiaTelemetry%" equ "True" (
+REM Remove Nvidia Telemetry
+reg add "HKLM\SOFTWARE\NVIDIA Corporation\NvControlPanel2\Client" /v "OptInOrOutPreference" /t REG_DWORD /d 0 /f > nul 2>&1
+reg add "HKLM\SOFTWARE\NVIDIA Corporation\Global\FTS" /v "EnableRID44231" /t REG_DWORD /d 0 /f > nul 2>&1
+reg add "HKLM\SOFTWARE\NVIDIA Corporation\Global\FTS" /v "EnableRID64640" /t REG_DWORD /d 0 /f > nul 2>&1
+reg add "HKLM\SOFTWARE\NVIDIA Corporation\Global\FTS" /v "EnableRID66610" /t REG_DWORD /d 0 /f > nul 2>&1
+reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" /v "NvBackend" /f > nul 2>&1
+schtasks /change /disable /tn "NvTmRep_CrashReport1_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" > nul 2>&1
+schtasks /change /disable /tn "NvTmRep_CrashReport2_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" > nul 2>&1
+schtasks /change /disable /tn "NvTmRep_CrashReport3_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" > nul 2>&1
+schtasks /change /disable /tn "NvTmRep_CrashReport4_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8}" > nul 2>&1
+rmdir /s /q "C:\Windows\System32\drivers\NVIDIA Corporation" > nul 2>&1
+cd /d "C:\Windows\System32\DriverStore\FileRepository\" > nul 2>&1
+dir NvTelemetry64.dll /a /b /s > nul 2>&1
+del NvTelemetry64.dll /a /s > nul 2>&1
+)
+
+
+REM Registry Key For NVIDIA Card
+for /f %%a in ('reg query "HKLM\System\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}" /t REG_SZ /s /e /f "NVIDIA" ^| findstr "HKEY"') do (
+
+if "%DisableTiledDisplay%" equ "True" (
+REM Disalbe Tiled Display
+reg add "%%a" /v "EnableTiledDisplay" /t REG_DWORD /d "0" /f > nul 2>&1
+)
+
+if "%DisableTCC%" equ "True" (
+REM Disable TCC
+reg add "%%a" /v "TCCSupported" /t REG_DWORD /d "0" /f > nul 2>&1
+)
+
+if "%ForceContiguousMemoryAllocation%" equ "True" (
+REM Force contiguous memory allocation
+reg add "%%a" /v "PreferSystemMemoryContiguous" /t REG_DWORD /d "1" /f > nul 2>&1
+)
+
+if "%KBoost%" equ "True" (
+REM KBoost
+reg add "%%a" /v "PowerMizerEnable" /t REG_DWORD /d "1" /f > nul 2>&1
+reg add "%%a" /v "PowerMizerLevel" /t REG_DWORD /d "1" /f > nul 2>&1
+reg add "%%a" /v "PowerMizerLevelAC" /t REG_DWORD /d "1" /f> nul 2>&1
+reg add "%%a" /v "PerfLevelSrc" /t REG_DWORD /d "8738" /f > nul 2>&1
+)
+
+if "%DisableScaling%" equ "True" (
+REM Disable Scaling
+for /f %%i in ('reg query "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers" /s /f "Scaling"^| findstr "HKEY"') do reg add "%%i" /v "Scaling" /t REG_DWORD /d "1" /f >nul 2>&1
+)
+)
+
+if "%P0States%" equ "True" (
+REM Force P0-State
+for /f %%i in ('wmic path Win32_VideoController get PNPDeviceID^| findstr /L "PCI\VEN_"') do (
+	for /f "tokens=3" %%a in ('reg query "HKLM\SYSTEM\CurrentControlSet\Enum\%%i" /v "Driver"') do (
+		for /f %%i in ('echo %%a ^| findstr "{"') do (
+		     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\%%i" /v "DisableDynamicPstate" /t REG_DWORD /d "1" /f > nul 2>&1
+                   )
+                )
+             )
+)
+
+if "%HDCP%" equ "True" (
+REM Disable HDCP
+for /f %%i in ('wmic path Win32_VideoController get PNPDeviceID^| findstr /L "PCI\VEN_"') do (
+	for /f "tokens=3" %%a in ('reg query "HKLM\SYSTEM\CurrentControlSet\Enum\%%i" /v "Driver"') do (
+		for /f %%i in ('echo %%a ^| findstr "{"') do (
+		     reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\%%i" /v "RMHdcpKeyglobZero" /t REG_DWORD /d "1" /f > nul 2>&1
+                   )
+                )
+             )
+)
+
+if "%NoECC%" equ "True" (
+REM No ECC
+cd C:\Program Files\NVIDIA Corporation\NVSMI > nul 2>&1
+nvidia-smi.exe -e 0 > nul 2>&1
+)
+
+if "%UnrestrictedClockPolicy%" equ "True" (
+REM Unrestricted Clock Policy
+cd C:\Program Files\NVIDIA Corporation\NVSMI > nul 2>&1
+nvidia-smi.exe -acp 0 > nul 2>&1
+)
+
+if "%Preemption%" equ "True" (
+REM Disable Preemption
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm" /v "DisablePreemption" /t REG_DWORD /d "1" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm" /v "DisableCudaContextPreemption" /t REG_DWORD /d "1" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm" /v "EnableCEPreemption" /t REG_DWORD /d "0" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm" /v "DisablePreemptionOnS3S4" /t REG_DWORD /d "1" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm" /v "ComputePreemption" /t REG_DWORD /d "0" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm" /v "EnableMidGfxPreemption" /t REG_DWORD /d "0" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm" /v "EnableMidGfxPreemptionVGPU" /t REG_DWORD /d "0" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm" /v "EnableMidBufferPreemptionForHighTdrTimeout" /t REG_DWORD /d "0" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm" /v "EnableMidBufferPreemption" /t REG_DWORD /d "0" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm" /v "EnableAsyncMidBufferPreemption" /t REG_DWORD /d "0" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm" /v "DisableCudaContextPreemption" /t REG_DWORD /d "1" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm\Global\NVTweak" /v "DisplayPowerSaving" /t REG_DWORD /d "0" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\GraphicsDrivers\Scheduler" /v "EnablePreemption" /t REG_DWORD /d "0" /f > nul 2>&1
+)
+
+if "%Logging%" equ "True" (
+REM Disable Logging
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm" /v "LogWarningEntries" /t REG_DWORD /d "0" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm" /v "LogPagingEntries" /t REG_DWORD /d "0" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm" /v "LogEventEntries" /t REG_DWORD /d "0" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm" /v "LogErrorEntries" /t REG_DWORD /d "0" /f > nul 2>&1
+)
+
+if "%NvidiaProfileInspector%" equ "True" (
+REM Applying Custon Nvidia Profile Inspector Config
+if exist "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector" (
+    rd /s /q "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector"  >nul 2>&1
+) 
+if not exist "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector" md "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector"  >nul 2>&1
+curl -g -L -# -o "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector\nvidiaProfileInspector.zip" "https://github.com/Orbmu2k/nvidiaProfileInspector/releases/latest/download/nvidiaProfileInspector.zip"  >nul 2>&1
+powershell -NoProfile Expand-Archive '%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector\nvidiaProfileInspector.zip' -DestinationPath '%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector' >nul 2>&1
+del /F /Q "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector\nvidiaProfileInspector.zip"  >nul 2>&1
+curl -g -L -# -o "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector\Vitality.nip" "https://cdn.discordapp.com/attachments/1140029335944835152/1155469748755247135/Vitality.nip"  >nul 2>&1
+cd "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector\"  >nul 2>&1
+nvidiaProfileInspector.exe "Vitality.nip" >nul 2>&1
+)
+
+
+
+set "file=C:\Vitality\Info\gpu"
+if not exist "%file%" (
+    echo Vitality > "%file%"
+    set /a "ran_optimizations+=1"
+)
+cd C:\Vitality
+set "formatted_optimizations=%ran_optimizations%"
+if %formatted_optimizations% LSS 10 set "formatted_optimizations= %formatted_optimizations%"
+echo set "ran_optimizations=%ran_optimizations%"> v.bat
+goto skippinggpu
+
+
+
+
+
+
+
+
+
+:radeon
+echo                                                   Applying Radeon Tweaks
+if "%GameModeAMD%" equ "True" (
+REM Disable Gamemode
+reg add "HKCU\Software\Microsoft\GameBar" /v "AllowAutoGameMode" /t REG_DWORD /d "0" /f > nul 2>&1 
+reg add "HKCU\Software\Microsoft\GameBar" /v "AutoGameModeEnabled" /t REG_DWORD /d "0" /f > nul 2>&1 
+)
+
+if "%AMDOptimizedSettings%" equ "True" (
+REM AMD Optimized Settings
+reg add "HKCU\Software\AMD\CN" /v "AutoUpdateTriggered" /t REG_DWORD /d "0" /f > nul 2>&1 
+reg add "HKCU\Software\AMD\CN" /v "PowerSaverAutoEnable_CUR" /t REG_DWORD /d "0" /f > nul 2>&1
+reg add "HKCU\Software\AMD\CN" /v "WindowSize" /t REG_SZ /d "1440,960" /f > nul 2>&1
+reg add "HKCU\Software\AMD\CN" /v "BuildType" /t REG_DWORD /d "0" /f > nul 2>&1
+reg add "HKCU\Software\AMD\CN" /v "WizardProfile" /t REG_SZ /d "PROFILE_CUSTOM" /f > nul 2>&1
+reg add "HKCU\Software\AMD\CN" /v "UserTypeWizardShown" /t REG_DWORD /d "1" /f > nul 2>&1
+reg add "HKCU\Software\AMD\CN" /v "LastPage" /t REG_SZ /d "settings/graphics/0/" /f > nul 2>&1
+reg add "HKCU\Software\AMD\CN" /v "AutoUpdate" /t REG_DWORD /d "0" /f > nul 2>&1
+reg add "HKCU\Software\AMD\CN" /v "RSXBrowserUnavailable" /t REG_SZ /d "true" /f > nul 2>&1
+reg add "HKCU\Software\AMD\CN" /v "SYSTEMTray" /t REG_SZ /d "false" /f > nul 2>&1
+reg add "HKCU\Software\AMD\CN" /v "AllowWebContent" /t REG_SZ /d "false" /f > nul 2>&1
+reg add "HKCU\Software\AMD\CN" /v "CN_Hide_Toast_Notification" /t REG_SZ /d "true" /f > nul 2>&1
+reg add "HKCU\Software\AMD\CN" /v "AnimationEffect" /t REG_SZ /d "false" /f > nul 2>&1
+reg add "HKCU\Software\AMD\CN\OverlayNotification" /v "AlreadyNotified" /t REG_DWORD /d "1" /f > nul 2>&1
+reg add "HKCU\Software\AMD\CN\VirtualSuperResolution" /v "AlreadyNotified" /t REG_DWORD /d "1" /f > nul 2>&1
+reg add "HKCU\Software\AMD\DVR" /v "PerformanceMonitorOpacityWA" /t REG_DWORD /d "0" /f > nul 2>&1
+reg add "HKCU\Software\AMD\DVR" /v "CaptureFileOutput" /t REG_SZ /d "C:\Users\Emre\Videos\Radeon ReLive" /f > nul 2>&1
+reg add "HKCU\Software\AMD\DVR" /v "DvrEnabled" /t REG_DWORD /d "1" /f > nul 2>&1
+reg add "HKCU\Software\AMD\DVR" /v "ActiveSceneId" /t REG_SZ /d "0" /f > nul 2>&1
+reg add "HKCU\Software\AMD\DVR" /v "AVCCaps" /t REG_SZ /d "256,1,4096,4096,100000000,244800,0;" /f > nul 2>&1
+reg add "HKCU\Software\AMD\DVR" /v "HEVCCaps" /t REG_SZ /d "256,1,4096,4096,2147483647,979200,0;" /f > nul 2>&1
+reg add "HKCU\Software\AMD\DVR" /v "AvcEfcSupport" /t REG_SZ /d "0;" /f > nul 2>&1
+reg add "HKCU\Software\AMD\DVR" /v "HevcEfcSupport" /t REG_SZ /d "0;" /f > nul 2>&1
+reg add "HKCU\Software\AMD\DVR" /v "PrevInstantReplayEnable" /t REG_DWORD /d "0" /f > nul 2>&1
+reg add "HKCU\Software\AMD\DVR" /v "PrevInGameReplayEnabled" /t REG_DWORD /d "0" /f > nul 2>&1
+reg add "HKCU\Software\AMD\DVR" /v "PrevInstantGifEnabled" /t REG_DWORD /d "0" /f > nul 2>&1
+reg add "HKCU\Software\AMD\DVR" /v "DvrDesktops" /t REG_SZ /d "\\.\DISPLAY19" /f > nul 2>&1
+reg add "HKCU\Software\AMD\DVR" /v "RemoteServerStatus" /t REG_DWORD /d "0" /f > nul 2>&1
+reg add "HKCU\Software\AMD\DVR" /v "ShowRSOverlay" /t REG_SZ /d "false" /f > nul 2>&1
+reg add "HKCU\Software\AMD\SCENE\0" /v "CameraSize" /t REG_DWORD /d "3" /f > nul 2>&1
+reg add "HKCU\Software\AMD\SCENE\0" /v "CameraEnabled" /t REG_DWORD /d "1" /f > nul 2>&1
+reg add "HKCU\Software\AMD\SCENE\0" /v "CameraOpacity" /t REG_DWORD /d "100" /f > nul 2>&1
+reg add "HKCU\Software\AMD\SCENE\0" /v "CameraAnchor" /t REG_DWORD /d "3" /f > nul 2>&1
+reg add "HKCU\Software\AMD\SCENE\0" /v "CameraShownOnScreen" /t REG_DWORD /d "1" /f > nul 2>&1
+reg add "HKCU\Software\AMD\SCENE\0" /v "IndicatorPosition" /t REG_DWORD /d "0" /f > nul 2>&1
+reg add "HKCU\Software\AMD\SCENE\0" /v "TimerEnabled" /t REG_DWORD /d "1" /f > nul 2>&1
+reg add "HKCU\Software\AMD\SCENE\0" /v "ChatOverlayEnabled" /t REG_DWORD /d "0" /f > nul 2>&1
+reg add "HKCU\Software\AMD\SCENE\0" /v "ChatCustomOffset" /t REG_SZ /d "0.0260,0.0462" /f > nul 2>&1
+reg add "HKCU\Software\AMD\SCENE\0" /v "ChatOverlayAnchor" /t REG_DWORD /d "4" /f > nul 2>&1
+reg add "HKCU\Software\AMD\SCENE\0" /v "ChatBackgroundBlur" /t REG_DWORD /d "0" /f > nul 2>&1
+reg add "HKCU\Software\AMD\SCENE\0" /v "ChatFontSize" /t REG_DWORD /d "1" /f > nul 2>&1
+reg add "HKCU\Software\AMD\SCENE\0" /v "RelativeCoords" /t REG_DWORD /d "1" /f > nul 2>&1
+reg add "HKCU\Software\AMD\SCENE\0" /v "CameraOffset" /t REG_SZ /d "0.0208,0.0370" /f > nul 2>&1
+reg add "HKCU\Software\AMD\SCENE\0" /v "CameraCustomOffset" /t REG_SZ /d "0.0208,0.0370" /f > nul 2>&1
+reg add "HKCU\Software\AMD\SCENE\0" /v "CameraRect" /t REG_SZ /d "0.1667,0.2222" /f > nul 2>&1
+reg add "HKCU\Software\AMD\SCENE\0" /v "CameraCustomRect" /t REG_SZ /d "0.1667,0.2222" /f > nul 2>&1
+reg add "HKCU\Software\AMD\SCENE\0" /v "ChatCustomRect" /t REG_SZ /d "0.1562,0.1562" /f > nul 2>&1
+reg add "HKCU\Software\AMD\SCENE\0" /v "ChatOverlaySize" /t REG_DWORD /d "3" /f > nul 2>&1
+reg add "HKCU\Software\ATI\ACE\Settings\ADL\AppProfiles" /v "AplReloadCounter" /t REG_DWORD /d "0" /f > nul 2>&1
+reg add "HKLM\SOFTWARE\AMD\Install" /v "AUEP" /t REG_DWORD /d "1" /f > nul 2>&1
+reg add "HKLM\SOFTWARE\AUEP" /v "RSX_AUEPStatus" /t REG_DWORD /d "2" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "NotifySubscription" /t REG_BINARY /d "3000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "IsComponentControl" /t REG_BINARY /d "00000000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "KMD_USUEnable" /t REG_DWORD /d "0" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "KMD_RadeonBoostEnabled" /t REG_DWORD /d "0" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "IsAutoDefault" /t REG_BINARY /d "01000000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "KMD_ChillEnabled" /t REG_DWORD /d "0" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "KMD_DeLagEnabled" /t REG_DWORD /d "0" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "ACE" /t REG_BINARY /d "3000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "AnisoDegree_SET" /t REG_BINARY /d "3020322034203820313600" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "Main3D_SET" /t REG_BINARY /d "302031203220332034203500" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "Tessellation_OPTION" /t REG_BINARY /d "3200" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "Tessellation" /t REG_BINARY /d "3100" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "AAF" /t REG_BINARY /d "30000000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "GI" /t REG_BINARY /d "31000000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "CatalystAI" /t REG_BINARY /d "31000000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "TemporalAAMultiplier_NA" /t REG_BINARY /d "3100" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "ForceZBufferDepth" /t REG_BINARY /d "30000000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "EnableTripleBuffering" /t REG_BINARY /d "3000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "ExportCompressedTex" /t REG_BINARY /d "31000000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "PixelCenter" /t REG_BINARY /d "30000000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "ZFormats_NA" /t REG_BINARY /d "3100" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "DitherAlpha_NA" /t REG_BINARY /d "3100" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "SwapEffect_D3D_SET" /t REG_BINARY /d "3020312032203320342038203900" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "TFQ" /t REG_BINARY /d "3200" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "VSyncControl" /t REG_BINARY /d "3100" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "TextureOpt" /t REG_BINARY /d "30000000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "TextureLod" /t REG_BINARY /d "30000000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "ASE" /t REG_BINARY /d "3000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "ASD" /t REG_BINARY /d "3000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "ASTT" /t REG_BINARY /d "3000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "AntiAliasSamples" /t REG_BINARY /d "3000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "AntiAlias" /t REG_BINARY /d "3100" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "AnisoDegree" /t REG_BINARY /d "3000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "AnisoType" /t REG_BINARY /d "30000000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "AntiAliasMapping_SET" /t REG_BINARY /d "3028303A302C313A3029203228303A322C313A3229203428303A342C313A3429203828303A382C313A382900" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "AntiAliasSamples_SET" /t REG_BINARY /d "3020322034203800" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "ForceZBufferDepth_SET" /t REG_BINARY /d "3020313620323400" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "SwapEffect_OGL_SET" /t REG_BINARY /d "3020312032203320342035203620372038203920313120313220313320313420313520313620313700" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "Tessellation_SET" /t REG_BINARY /d "31203220342036203820313620333220363400" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "HighQualityAF" /t REG_BINARY /d "3100" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "DisplayCrossfireLogo" /t REG_BINARY /d "3000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "AppGpuId" /t REG_BINARY /d "300078003000310030003000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "SwapEffect" /t REG_BINARY /d "30000000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "PowerState" /t REG_BINARY /d "3000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "AntiStuttering" /t REG_BINARY /d "3100" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "TurboSync" /t REG_BINARY /d "3000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "SurfaceFormatReplacements" /t REG_BINARY /d "3100" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "EQAA" /t REG_BINARY /d "3000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "ShaderCache" /t REG_BINARY /d "3100" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "MLF" /t REG_BINARY /d "3000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "TruformMode_NA" /t REG_BINARY /d "3100" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD\DXVA" /v "LRTCEnable" /t REG_BINARY /d "30000000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD\DXVA" /v "3to2Pulldown" /t REG_BINARY /d "31000000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD\DXVA" /v "MosquitoNoiseRemoval_ENABLE" /t REG_BINARY /d "30000000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD\DXVA" /v "MosquitoNoiseRemoval" /t REG_BINARY /d "350030000000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD\DXVA" /v "Deblocking_ENABLE" /t REG_BINARY /d "30000000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD\DXVA" /v "Deblocking" /t REG_BINARY /d "350030000000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD\DXVA" /v "DemoMode" /t REG_BINARY /d "30000000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD\DXVA" /v "OverridePA" /t REG_BINARY /d "30000000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD\DXVA" /v "DynamicRange" /t REG_BINARY /d "30000000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD\DXVA" /v "StaticGamma_ENABLE" /t REG_BINARY /d "30000000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD\DXVA" /v "BlueStretch_ENABLE" /t REG_BINARY /d "31000000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD\DXVA" /v "BlueStretch" /t REG_BINARY /d "31000000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD\DXVA" /v "LRTCCoef" /t REG_BINARY /d "3100300030000000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD\DXVA" /v "DynamicContrast_ENABLE" /t REG_BINARY /d "30000000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD\DXVA" /v "WhiteBalanceCorrection" /t REG_BINARY /d "30000000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD\DXVA" /v "Fleshtone_ENABLE" /t REG_BINARY /d "30000000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD\DXVA" /v "Fleshtone" /t REG_BINARY /d "350030000000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD\DXVA" /v "ColorVibrance_ENABLE" /t REG_BINARY /d "31000000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD\DXVA" /v "ColorVibrance" /t REG_BINARY /d "340030000000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD\DXVA" /v "Detail_ENABLE" /t REG_BINARY /d "30000000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD\DXVA" /v "Detail" /t REG_BINARY /d "310030000000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD\DXVA" /v "Denoise_ENABLE" /t REG_BINARY /d "30000000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD\DXVA" /v "Denoise" /t REG_BINARY /d "360034000000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD\DXVA" /v "TrueWhite" /t REG_BINARY /d "30000000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD\DXVA" /v "OvlTheaterMode" /t REG_BINARY /d "30000000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD\DXVA" /v "StaticGamma" /t REG_BINARY /d "3100300030000000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD\DXVA" /v "InternetVideo" /t REG_BINARY /d "30000000" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\amdwddmg" /v "ChillEnabled" /t REG_DWORD /d "0" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "Main3D_DEF" /t REG_SZ /d "1" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD" /v "Main3D" /t REG_BINARY /d "3100" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "DisableDMACopy" /t REG_DWORD /d "1" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "DisableBlockWrite" /t REG_DWORD /d "0" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "PP_ThermalAutoThrottlingEnable" /t REG_DWORD /d "0" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000" /v "DisableDrmdmaPowerGating" /t REG_DWORD /d "1" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\AMD Crash Defender Service" /v "Start" /t REG_DWORD /d "4" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\AMD External Events Utility" /v "Start" /t REG_DWORD /d "4" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\amdfendr" /v "Start" /t REG_DWORD /d "4" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\amdfendrmgr" /v "Start" /t REG_DWORD /d "4" /f > nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Services\amdlog" /v "Start" /t REG_DWORD /d "4" /f > nul 2>&1
+)
+
+if "%AMDDebloat%" equ "True" (
+REM Debloat AMD Drivers
+rmdir /s /q "%PROGRAMFILES%\AMD\CNext\CNext\facebook" > nul 2>&1
+rmdir /s /q "%PROGRAMFILES%\AMD\CNext\CNext\ffmpeg" > nul 2>&1
+rmdir /s /q "%PROGRAMFILES%\AMD\CNext\CNext\Gfycat" > nul 2>&1
+rmdir /s /q "%PROGRAMFILES%\AMD\CNext\CNext\localisation" > nul 2>&1
+rmdir /s /q "%PROGRAMFILES%\AMD\CNext\CNext\mixer" > nul 2>&1
+rmdir /s /q "%PROGRAMFILES%\AMD\CNext\CNext\models" > nul 2>&1
+rmdir /s /q "%PROGRAMFILES%\AMD\CNext\CNext\QtCharts" > nul 2>&1
+rmdir /s /q "%PROGRAMFILES%\AMD\CNext\CNext\QtMultimedia" > nul 2>&1
+rmdir /s /q "%PROGRAMFILES%\AMD\CNext\CNext\QtQml" > nul 2>&1
+rmdir /s /q "%PROGRAMFILES%\AMD\CNext\CNext\QtTest" > nul 2>&1
+rmdir /s /q "%PROGRAMFILES%\AMD\CNext\CNext\QtWebEngine" > nul 2>&1
+rmdir /s /q "%PROGRAMFILES%\AMD\CNext\CNext\QtWinExtras" > nul 2>&1
+rmdir /s /q "%PROGRAMFILES%\AMD\CNext\CNext\quanminTV" > nul 2>&1
+rmdir /s /q "%PROGRAMFILES%\AMD\CNext\CNext\resources" > nul 2>&1
+rmdir /s /q "%PROGRAMFILES%\AMD\CNext\CNext\restream" > nul 2>&1
+rmdir /s /q "%PROGRAMFILES%\AMD\CNext\CNext\sinaWeibo" > nul 2>&1
+rmdir /s /q "%PROGRAMFILES%\AMD\CNext\CNext\streamable" > nul 2>&1
+rmdir /s /q "%PROGRAMFILES%\AMD\CNext\CNext\translations" > nul 2>&1
+rmdir /s /q "%PROGRAMFILES%\AMD\CNext\CNext\twitch" > nul 2>&1
+rmdir /s /q "%PROGRAMFILES%\AMD\CNext\CNext\twitter" > nul 2>&1
+rmdir /s /q "%PROGRAMFILES%\AMD\CNext\CNext\youku" > nul 2>&1
+rmdir /s /q "%PROGRAMFILES%\AMD\CNext\CNext\youtube" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\RadeonML-DirectML.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\swresample-3.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\swscale-5.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\WirelessVR-windesktop64.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\xerces-c_2_6.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\branding.bmp" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\brandingRSX.bmp" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\brandingWS_RSX.bmp" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\atiacmLocalisation.ini" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\radeonimagefilters64.dl_" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\radeonml-directml.dl_" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\ModularMonet.dtd" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\branding_pro_rsx.ico" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\branding_rsx.ico" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\CNVersions.json" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\workstation.rcc" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\amddvr.reg" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\EyefinityPro.reg" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\license.txt" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\ModularMonet.xml" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\StartCN.xml" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\StartCNBM.xml" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\StartDVR.xml" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\wProfile.xsd" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\7z.exe" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\amddmlfilters.exe" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\amdow.exe" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\AMDRSServ.exe" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\AMDRSSrcExt.exe" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\ATISetup.exe" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\AutoOverClockGFXCLK.exe" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\CompressionUtility.exe" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\DuplicateDesktop.exe" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\EyefinityPro.exe" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\gpuup.exe" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\installShell64.exe" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\MMLoadDrv.exe" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\MMLoadDrvPXDiscrete.exe" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\QtWebEngineProcess.exe" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\RSServCmd.exe" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\videotrim.exe" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\ZipUtility.exe" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\7z.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\amf-component-ffmpeg64.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\amf-component-ring-buffer64.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\avcodec-58.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\avdevice-58.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\avfilter-7.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\avformat-58.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\avresample-4.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\avutil-56.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\D3Dcompiler_47.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\dvrres_cs.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\dvrres_da_DK.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\dvrres_de.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\dvrres_el_GR.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\dvrres_en_US.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\dvrres_es_ES.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\dvrres_fi_FI.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\dvrres_fr_FR.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\dvrres_hu_HU.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\dvrres_it_IT.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\dvrres_ja.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\dvrres_ko_KR.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\dvrres_nl_NL.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\dvrres_no.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\dvrres_pl.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\dvrres_pt_BR.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\dvrres_ru_RU.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\dvrres_sv_SE.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\dvrres_th.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\dvrres_tr_TR.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\dvrres_zh_CN.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\dvrres_zh_TW.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\freeglut.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\glew32.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\MediaInfo.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\Qt5Multimedia.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\Qt5MultimediaQuick.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\Qt5QuickTest.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\Qt5SerialPort.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\Qt5Test.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\Qt5WebEngineWidgets.dll" > nul 2>&1
+del /q "%PROGRAMFILES%\AMD\CNext\CNext\RadeonImageFilters64.dll" > nul 2>&1
+)
+set "file=C:\Vitality\Info\gpu"
+if not exist "%file%" (
+    echo Vitality > "%file%"
+    set /a "ran_optimizations+=1"
+)
+cd C:\Vitality
+set "formatted_optimizations=%ran_optimizations%"
+if %formatted_optimizations% LSS 10 set "formatted_optimizations= %formatted_optimizations%"
+echo set "ran_optimizations=%ran_optimizations%"> v.bat
+
+goto skippinggpu
+
+
+:skippinggpu
+
+
+
+if "%RAM%"=="false" goto skippingram
+echo                                                     Applying RAM Tweaks
+
+if "%MemoryManagment%" equ "True" (
+REM Configure Memory Managment 
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "ClearPageFileAtShutdown" /t REG_DWORD /d "0" /f >nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "DisablePagingExecutive" /t REG_DWORD /d "1" /f >nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "DisablePageCombining" /t REG_DWORD /d "1" /f >nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "LargeSystemCache" /t REG_DWORD /d "0" /f >nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "NonPagedPoolQuota" /t REG_DWORD /d "0" /f >nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "NonPagedPoolSize" /t REG_DWORD /d "0" /f >nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "PagedPoolQuota" /t REG_DWORD /d "0" /f >nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "PagedPoolSize" /t REG_DWORD /d "192" /f >nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "SecondLevelDataCache" /t REG_DWORD /d "1024" /f >nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "SessionPoolSize" /t REG_DWORD /d "192" /f >nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "SessionViewSize" /t REG_DWORD /d "192" /f >nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "SystemPages" /t REG_DWORD /d "4294967295" /f >nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "PhysicalAddressExtension" /t REG_DWORD /d "1" /f >nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "FeatureSettings" /t REG_DWORD /d "1" /f >nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "FeatureSettingsOverride" /t REG_DWORD /d "3" /f >nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "FeatureSettingsOverrideMask" /t REG_DWORD /d "3" /f >nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "IoPageLockLimit" /t REG_DWORD /d "16710656" /f >nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "PoolUsageMaximum" /t REG_DWORD /d "96" /f >nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "EnablePrefetcher" /t REG_DWORD /d "0" /f >nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management" /v "EnableSuperfetch" /t REG_DWORD /d "0" /f >nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters" /v "EnablePrefetcher" /t REG_DWORD /d "0" /f >nul 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters" /v "EnableSuperfetch" /t REG_DWORD /d "0" /f >nul 2>&1
+)
+
+if "%LargePageDrivers%" equ "True" (
+REM LargePageDrivers
+set WHITELIST=ACPI AcpiDev AcpiPmi AFD AMDPCIDev amdgpio2 amdgpio3 AmdPPM amdpsp amdsata amdsbs amdxata asmtxhci atikmdag BasicDisplay BasicRender dc1-controll Disk DXGKrnl e1iexpress e1rexpress genericusbfn hwpolicy IntcAzAudAdd kbdclass kbdhid MMCSS monitor mouclass mouhid mountmgr mt7612US MTConfig NDIS nvdimm nvlddmkm pci PktMon Psched rt640x64 RTCore64 RzCommon RzDev_0244 Tcpip usbehci usbhub USBHUB3 USBXHCI Wdf01000 xboxgip xinputhid
+for /f %%i in ('driverquery ^| findstr "!WHITELIST!"') do set "DRIVERLIST=!DRIVERLIST!%%i\0"
+reg add "HKLM\SYSTEM\currentcontrolset\control\session manager\Memory Management" /v "LargePageDrivers" /t REG_MULTI_SZ /d "!DRIVERLIST!" /f >nul 2>&1
+)
+
+:skippingram
+
+
+set "file=C:\Vitality\Info\ram"
+if not exist "%file%" (
+    echo Vitality > "%file%"
+    set /a "ran_optimizations+=1"
+)
+cd C:\Vitality
+set "formatted_optimizations=%ran_optimizations%"
+if %formatted_optimizations% LSS 10 set "formatted_optimizations= %formatted_optimizations%"
+echo set "ran_optimizations=%ran_optimizations%"> v.bat
+
+:skippingram
+
+if "%DISK%"=="false" goto skippingdisk
+echo                                                     Applying DISK Tweaks
+
+if "%FileSystemOptimization%" equ "True" (
+REM File System Optimization
+fsutil behavior set allowextchar 0 > NUL 2>&1
+fsutil behavior set Bugcheckoncorrupt 0 > NUL 2>&1
+fsutil repair set C: 0 > NUL 2>&1
+fsutil behavior set disable8dot3 1 > NUL 2>&1
+fsutil behavior set disablecompression 1 > NUL 2>&1
+fsutil behavior set disableencryption 1 > NUL 2>&1
+fsutil behavior set disablelastaccess 1 > NUL 2>&1
+fsutil behavior set disablespotcorruptionhandling 1 > NUL 2>&1
+fsutil behavior set encryptpagingfile 0 > NUL 2>&1
+fsutil behavior set quotanotify 86400 > NUL 2>&1
+fsutil behavior set symlinkevaluation L2L:1 > NUL 2>&1
+fsutil behavior set disabledeletenotify 0 > NUL 2>&1
+)
+
+if "%Cleaner%" equ "True" (
+REM Cleaner
+del /s /f /q c:\windows\temp\*.* > NUL 2>&1
+rd /s /q c:\windows\temp  > NUL 2>&1
+md c:\windows\temp > NUL 2>&1
+del /s /f /q C:\WINDOWS\Prefetch > NUL 2>&1
+del /s /f /q %temp%\*.* > NUL 2>&1
+rd /s /q %temp% > NUL 2>&1
+md %temp% > NUL 2>&1
+deltree /y c:\windows\tempor~1 > NUL 2>&1
+deltree /y c:\windows\temp > NUL 2>&1
+deltree /y c:\windows\tmp > NUL 2>&1
+deltree /y c:\windows\ff*.tmp > NUL 2>&1
+deltree /y c:\windows\history > NUL 2>&1
+deltree /y c:\windows\cookies > NUL 2>&1
+deltree /y c:\windows\recent > NUL 2>&1
+deltree /y c:\windows\spool\printers > NUL 2>&1
+del c:\WIN386.SWP > NUL 2>&1
+)
+
+if "%Startupcleaner%" equ "True" (
+REM Startup Cleaner (shell:startup)
+if exist "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup\Vitality-Cleaner.bat" del "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup\Vitality-Cleaner.bat"
+curl -g -L -# -o "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup\Vitality-Cleaner.bat" "https://cdn.discordapp.com/attachments/1140029335944835152/1140255553873006742/Vitality-Cleaner.bat" >nul 2>&1
+)
+
+set "file=C:\Vitality\Info\disk"
+if not exist "%file%" (
+    echo Vitality > "%file%"
+    set /a "ran_optimizations+=1"
+)
+cd C:\Vitality
+set "formatted_optimizations=%ran_optimizations%"
+if %formatted_optimizations% LSS 10 set "formatted_optimizations= %formatted_optimizations%"
+echo set "ran_optimizations=%ran_optimizations%"> v.bat
+
+:skippingdisk
+
+
+
+if "%Windows%"=="false" goto skippingwindows
+echo                                                   Applying Windows Tweaks
+
+if "%DisablePushNotifications%" equ "True" (
+REM Disable push notifications for applications
+reg add "HKCU\Software\Policies\Microsoft\Windows\CurrentVersion\PushNotifications" /v "NoToastApplicationNotification" /t REG_DWORD /d "1" /f >nul 2>&1
+reg add "HKCU\Software\Policies\Microsoft\Windows\CurrentVersion\PushNotifications" /v "NoToastApplicationNotificationOnLockScreen" /t REG_DWORD /d "1" /f >nul 2>&1
+)
+
+if "%DisableDriverSearching%" equ "True" (
+REM Disable driver searching for Windows Update
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DriverSearching" /v "SearchOrderConfig" /t REG_DWORD /d "0" /f >nul 2>&1
+)
+
+If "%DisableHibernation%" equ "True" (
+REM Disable Hibernation
+powercfg /h off >nul 2>&1
+)
+
+If "%DisableWindowsNotifications%" equ "True" (
+REM Disable Windows Notifications Center
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Explorer" /v "DisableNotificationCenter" /t REG_DWORD /d "1" /f >nul 2>&1
+)
+
+If "%DisableTransparency%" equ "True" (
+REM Disable transparency in themes
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize" /v "EnableTransparency" /t REG_DWORD /d "0" /f >nul 2>&1
+)
+
+If "%DisableAutomaticMaintenance%" equ "True" (
+REM Disable automatic maintenance
+reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\Maintenance" /v "MaintenanceDisabled" /t REG_DWORD /d "1" /f >nul 2>&1
+)
+
+If "%PauseMapsUpdates%" equ "True" (
+REM Pause Maps Updates/Downloads
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Maps" /v "AutoDownloadAndUpdateMapData" /t REG_DWORD /d "0" /f >nul 2>&1
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Maps" /v "AllowUntriggeredNetworkTrafficOnSettingsPage" /t REG_DWORD /d "0" /f >nul 2>&1
+)
+
+If "%DisableSettingsSync%" equ "True" (
+REM Disable Settings Sync
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\SettingSync" /v "DisableSettingSync" /t REG_DWORD /d "2" /f >nul 2>&1
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\SettingSync" /v "DisableSettingSyncUserOverride" /t REG_DWORD /d "1" /f >nul 2>&1
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\SettingSync" /v "DisableSyncOnPaidNetwork" /t REG_DWORD /d "1" /f >nul 2>&1
+)
+
+If "%DisableAdvertisingID%" equ "True" (
+REM Disable Advertising ID
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AdvertisingInfo" /v "DisabledByGroupPolicy" /t REG_DWORD /d "1" /f >nul 2>&1
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\AdvertisingInfo" /v "Enabled" /t REG_DWORD /d "0" /f >nul 2>&1
+)
+
+If "%DisableLocationTracking%" equ "True" (
+REM Location Tracking
+reg add "HKLM\SOFTWARE\Policies\Microsoft\FindMyDevice" /v "AllowFindMyDevice" /t REG_DWORD /d "0" /F >nul 2>&1
+)
+
+If "%DisableWebInSearch%" equ "True" (
+REM Disable Web in Search
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "ConnectedSearchUseWeb" /t REG_DWORD /d "0" /f >nul 2>&1
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search" /v "DisableWebSearch" /t REG_DWORD /d "1" /f >nul 2>&1
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Search" /v "BingSearchEnabled" /t REG_DWORD /d "0" /f >nul 2>&1
+)
+
+If "%DisableRemoteAssistance%" equ "True" (
+REM Disable Remote Assistance
+reg add "HKLM\System\CurrentControlSet\Control\Remote Assistance" /v "fAllowFullControl" /t REG_DWORD /d "0" /f >nul 2>&1
+reg add "HKLM\System\CurrentControlSet\Control\Remote Assistance" /v "fAllowToGetHelp" /t REG_DWORD /d "0" /f >nul 2>&1
+reg add "HKLM\System\CurrentControlSet\Control\Remote Assistance" /v "fEnableChatControl" /t REG_DWORD /d "0" /f >nul 2>&1
+)
+
+If "%DisableInventoryCollector%" equ "True" (
+REM Turn off Inventory Collector
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "DisableInventory" /t REG_DWORD /d "1" /f >nul 2>&1
+)
+
+If "%DisableWindowsErrorReporting%" equ "True" (
+REM Turn off Windows Error Reporting
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting" /v "Disabled" /t REG_DWORD /d "1" /f >nul 2>&1
+)
+
+If "%DisableTelemetry%" equ "True" (
+REM Disable Application Telemetry
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\AppCompat" /v "AITEnable" /t REG_DWORD /d "0" /f >nul 2>&1
+
+REM Disable Telemetry
+reg add "HKLM\SOFTWARE\Policies\Microsoft\MSDeploy\3" /v "EnableTelemetry" /t REG_DWORD /d "0" /f >nul 2>&1
+
+REM Configure Data Collection
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /F /V "AllowCommercialDataPipeline" /T REG_DWORD /d 0  >nul 2>&1
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /F /V "AllowDesktopAnalyticsProcessing" /T REG_DWORD /d 0  >nul 2>&1
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /F /V "AllowDeviceNameInTelemetry" /T REG_DWORD /d 0  >nul 2>&1
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /F /V "AllowTelemetry" /T REG_DWORD /d 0  >nul 2>&1
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /F /V "AllowUpdateComplianceProcessing" /T REG_DWORD /d 0  >nul 2>&1
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /F /V "AllowWUfBCloudProcessing" /T REG_DWORD /d 0  >nul 2>&1
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /F /V "DisableEnterpriseAuthProxy" /T REG_DWORD /d 1  >nul 2>&1
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /F /V "MicrosoftEdgeDataOptIn" /T REG_DWORD /d 0  >nul 2>&1
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /F /V "DisableTelemetryOptInChangeNotification" /T REG_DWORD /d 1  >nul 2>&1
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /F /V "DisableTelemetryOptInSettingsUx" /T REG_DWORD /d 1  >nul 2>&1
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /F /V "DisableDiagnosticDataViewer" /T REG_DWORD /d 1  >nul 2>&1
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /F /V "EnableConfigFlighting" /T REG_DWORD /d 0  >nul 2>&1
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /F /V "DoNotShowFeedbackNotifications" /T REG_DWORD /d 1  >nul 2>&1
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DataCollection" /F /V "LimitEnhancedDiagnosticDataWindowsAnalytics" /T REG_DWORD /d 0  >nul 2>&1
+
+REM Disable Text/Ink/Handwriting Telemetry
+reg add "HKCU\Software\Microsoft\Input\TIPC" /v Enabled /t REG_DWORD /d 0 /f >nul 2>&1
+reg add "HKLM\SOFTWARE\Policies\Microsoft\InputPersonalization" /v "RestrictImplicitTextCollection" /t REG_DWORD /d "1" /f >nul 2>&1
+reg add "HKLM\SOFTWARE\Policies\Microsoft\InputPersonalization" /v "RestrictImplicitInkCollection" /t REG_DWORD /d "1" /f >nul 2>&1
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\TabletPC" /v "PreventHandwritingDataSharing" /t REG_DWORD /d "1" /f >nul 2>&1
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\HandwritingErrorReports" /v "PreventHandwritingErrorReports" /t REG_DWORD /d "1" /f >nul 2>&1
+reg add "HKCU\Software\Microsoft\Personalization\Settings" /v AcceptedPrivacyPolicy /t REG_DWORD /d 0 /f >nul 2>&1
+)
+
+If "%DisableCustomerExperienceProgram%" equ "True" (
+REM Disable the Customer Experience Improvement program 
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Internet Explorer\SQM" /v "DisableCustomerImprovementProgram" /t REG_DWORD /d 1 /f >nul 2>&1
+reg add "HKLM\SOFTWARE\Policies\Microsoft\SQMClient\Windows" /v "CEIPEnable" /t REG_DWORD /d "0" /f >nul 2>&1
+reg add "HKLM\SOFTWARE\Policies\Microsoft\AppV\CEIP" /v "CEIPEnable" /t REG_DWORD /d "0" /f >nul 2>&1
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Messenger\Client" /v "CEIP" /t REG_DWORD /d "2" /f >nul 2>&1
+)
+
+If "%DisableOneDriveSync%" equ "True" (
+REM Disable OneDrive Sync
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\OneDrive" /v "DisableFileSyncNGSC" /t REG_DWORD /d "1" /f >nul 2>&1
+)
+
+If "%DisableBiometrics%" equ "True" (
+REM Disable Biometrics
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Biometrics" /v "Enabled" /t REG_DWORD /d "0" /f >nul 2>&1
+)
+
+If "%DenyCapabilityForApps%" equ "True" (
+REM Deny capability access for specific apps.
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\appDiagnostics" /F /V "Value" /T REG_SZ /d "Deny"  >nul 2>&1
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\appointments" /F /V "Value" /T REG_SZ /d "Deny"  >nul 2>&1
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\email" /F /V "Value" /T REG_SZ /d "Deny"  >nul 2>&1
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\phoneCall" /F /V "Value" /T REG_SZ /d "Deny"  >nul 2>&1
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\userDataTasks" /F /V "Value" /T REG_SZ /d "Deny"  >nul 2>&1
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\chat" /F /V "Value" /T REG_SZ /d "Deny"  >nul 2>&1
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\CapabilityAccessManager\ConsentStore\contacts" /F /V "Value" /T REG_SZ /d "Deny"  >nul 2>&1
+)
+
+If "%DisableLocationServices%" equ "True" (
+REM Disable location services
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors" /v "DisableLocation" /t REG_DWORD /d 1 /f >nul 2>&1      
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors" /v "DisableLocationScripting" /t REG_DWORD /d 1 /f >nul 2>&1   
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors" /v "DisableSensors" /t REG_DWORD /d 1 /f >nul 2>&1      
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\LocationAndSensors" /v "DisableWindowsLocationProvider" /t REG_DWORD /d 1 /f >nul 2>&1
+)
+
+
+If "%BootOptions%" equ "True" (
+REM Configure Boot Options
+    REM  Disables boot graphics.
+    bcdedit /set bootux disabled > NUL 2>&1
+
+    REM Set Boot Menu to Standard Instead Of Legacy
+    bcdedit /set bootmenupolicy standard > NUL 2>&1
+
+    REM Disable Hyper-V
+    bcdedit /set hypervisorlaunchtype off > NUL 2>&1
+
+    REM Disable TPM
+    bcdedit /set tpmbootentropy ForceDisable > NUL 2>&1
+    
+    REM Enable Quietboot
+    bcdedit /set quietboot yes > NUL 2>&1
+
+    REM Disable Boot Logo
+    bcdedit /set {globalsettings} custom:16000067 true > NUL 2>&13
+
+    REM Disable Spinning Animation
+    bcdedit /set {globalsettings} custom:16000069 true > NUL 2>&1
+
+    REM Disable Boot Message
+    bcdedit /set {globalsettings} custom:16000068 true > NUL 2>&1
+
+    REM Disable Automatic Repair
+    bcdedit /set {current} recoveryenabled no > NUL 2>&1
+
+    REM Avoid the use of uncontiguous portions of low-memory from the OS
+    bcdedit /set firstmegabytepolicy UseAll >nul 2>&1
+    bcdedit /set avoidlowmemory 0x8000000 >nul 2>&1
+    bcdedit /set nolowmem Yes >nul 2>&1
+
+    REM Disable Some Kernel Memory Mitigations
+    bcdedit /set allowedinmemorysettings 0x0 >nul 2>&1
+    bcdedit /set isolatedcontext No >nul 2>&1
+ 
+    REM Disable DMA Memory Protection And Cores Isolation
+    bcdedit /set vsmlaunchtype Off >nul 2>&1
+    bcdedit /set vm No >nul 2>&1
+
+    REM Enable X2Apic And Enable Memory Mapping
+    bcdedit /set x2apicpolicy Enable >nul 2>&1
+    bcdedit /set configaccesspolicy Default >nul 2>&1
+    bcdedit /set MSI Default >nul 2>&1
+    bcdedit /set usephysicaldestination No >nul 2>&1
+    bcdedit /set usefirmwarepcisettings No >nul 2>&1
+)
+
+If "%PasswordOnWakeUp%" equ "True" (
+REM Require a password on wakeup: OFF
+powercfg -setacvalueindex scheme_current sub_none CONSOLELOCK 0 >nul
+)
+
+If "%PreventWindowsMarkingFiles%" equ "True" (
+REM Prevent Windows Marking File Attachments With Informations About Their Zone Of Origin
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Attachments" /v "SaveZoneInformation" /t REG_DWORD /d "1" /f >nul 2>&1
+)
+
+If "%DisableLanguageBar%" equ "True" (
+REM Disable Language Bar
+reg add "HKCU\Keyboard Layout\Toggle" /v "Layout Hotkey" /t REG_SZ /d "3" /f >nul 2>&1
+reg add "HKCU\Keyboard Layout\Toggle" /v "Language Hotkey" /t REG_SZ /d "3" /f >nul 2>&1
+reg add "HKCU\Keyboard Layout\Toggle" /v "Hotkey" /t REG_SZ /d "3" /f >nul 2>&1
+)
+
+If "%DisableStickyKeys%" equ "True" (
+REM Disable Sticky Keys
+reg add "HKCU\Control Panel\Accessibility\StickyKeys" /v "Flags" /t REG_SZ /d "506" /f >nul 2>&1
+)
+
+If "%DisableProgramCompatibilityAssistant%" equ "True" (
+REM Disable Program Compatibility Assistant
+reg add "HKCU\Software\Policies\Microsoft\Windows\AppCompat" /v "DisablePCA" /t REG_DWORD /d "1" /f >nul 2>&1
+)
+
+If "%DisableFaultTolerantHeap%" equ "True" (
+REM Disable Fault Tolerant Heap
+reg add "HKLM\SOFTWARE\Microsoft\FTH" /v "Enabled" /t REG_DWORD /d "0" /f >nul 2>&1
+)
+
+If "%DisablePowerShellTelemtry%" equ "True" (
+REM Disable PowerShell Telemetry
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment" /v "POWERSHELL_TELEMETRY_OPTOUT" /t REG_SZ /d "1" /f >nul 2>&1
+)
+
+If "%DisableWindowsErrorReporting%" equ "True" (
+REM Disable Windows Error Reporting
+reg add "HKLM\SOFTWARE\Policies\Microsoft\PCHealth\ErrorReporting" /v "DoReport" /t REG_DWORD /d "0" /f >nul 2>&1
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Error Reporting" /v "Disabled" /t REG_DWORD /d "1" /f >nul 2>&1
+)
+
+If "%DisableRemoteAssistance%" equ "True" (
+REM Disable Remote Assistance
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Remote Assistance" /v "fAllowToGetHelp" /t REG_DWORD /d "0" /f >nul 2>&1
+)
+
+If "%ShowFileExtension%" equ "True" (
+REM Show File Extensions
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "HideFileExt" /t REG_DWORD /d "0" /f >nul 2>&1
+)
+
+If "%Remove3DObjectsFromExplorer%" equ "True" (
+REM Remove 3D Objects From Explorer Pane
+reg delete "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}" /f >nul 2>&1
+reg delete "HKLM\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}" /f >nul 2>&1
+)
+
+If "%DisableSignInAndLockLastUser%" equ "True" (
+REM Disable Sing-In And Lock Last Interactive User 
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" /v "DisableAutomaticRestartSignOn" /t REG_DWORD /d "1" /f >nul 2>&1
+)
+
+If "%DisableOnlineTips%" equ "True" (
+REM Disable Disable Online Tips
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "AllowOnlineTips" /t REG_DWORD /d "0" /f >nul 2>&1
+)
+
+If "%DisableTypingInsights%" equ "True" (
+REM Disable Typing Insights
+reg add "HKCU\Software\Microsoft\input\Settings" /v "InsightsEnabled" /t REG_DWORD /d "0" /f >nul 2>&1
+)
+
+If "%DisableSuggestionsInTheSearchBox%" equ "True" (
+REM Disable Suggestions In The Search Box And In Search Home
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\SearchSettings" /v "IsDynamicSearchBoxEnabled" /t REG_DWORD /d "0" /f >nul 2>&1
+)
+
+If "%RestoreOldContextMenu%" equ "True" (
+REM Resotre Old Context Menu
+reg add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}" /ve /t REG_SZ /d "" /f >nul 2>&1
+reg add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /ve /t REG_SZ /d "" /f >nul 2>&1
+)
+
+If "%RemovePinToQuickAccess%" equ "True" (
+REM Remove Pin TO Quick Access In Context Menu
+reg delete "HKCR\Folder\shell\pintohome" /f >nul 2>&1
+reg delete "HKLM\SOFTWARE\Classes\Folder\shell\pintohome" /f >nul 2>&1
+)
+
+If "%HideFoldersInQuickAccess%" equ "True" (
+REM Hide Folders In Quick Access
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer" /v "ShowFrequent" /t REG_DWORD /d "0" /f >nul 2>&1
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer" /v "ShowRecent" /t REG_DWORD /d "0" /f >nul 2>&1
+)
+
+If "%HideQuickAccessFromFileExplorer%" equ "True" (
+REM Hide Quick Access From File Explorer
+reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer" /v "HubMode" /t REG_DWORD /d "1" /f >nul 2>&1
+)
+
+If "%LaunchFileExplorerToThisPC%" equ "True" (
+REM Launch File Explorer To This PC
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced" /v "LaunchTo" /t REG_DWORD /d "1" /f >nul 2>&1
+)
+
+If "%TurnOffDisplayOfRecentSearch%" equ "True" (
+REM Turn Off Display Of Recent Search Entries In The File Explorer Search Box
+reg add "HKCU\Software\Policies\Microsoft\Windows\Explorer" /v "DisableSearchBoxSuggestions" /t REG_DWORD /d "1" /f >nul 2>&1
+)
+
+If "%ClearHistoryOfRecentlyOpenedDocumentsOnExit%" equ "True" (
+REM Clear History Of Recently Opened Documents On Exit
+reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v "ClearRecentDocsOnExit" /t REG_DWORD /d "1" /f >nul 2>&1
+)
+
+set "file=C:\Vitality\Info\windows"
+if not exist "%file%" (
+    echo Vitality > "%file%"
+    set /a "ran_optimizations+=1"
+)
+cd C:\Vitality
+set "formatted_optimizations=%ran_optimizations%"
+if %formatted_optimizations% LSS 10 set "formatted_optimizations= %formatted_optimizations%"
+echo set "ran_optimizations=%ran_optimizations%"> v.bat
+:skippingwindows
+
+
+if "%CPU%"=="false" goto skippingcpu
+if %cpu1%==Intel (
+    goto intel
+) else (
+    goto amd
+)
+
+:intel
+echo                                                   Applying Intel CPU Tweaks
+
+If "%DisableCPUVirtualizationIntel%" equ "True" (
+REM Disable CPU Virtualization
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard" /v "EnableVirtualizationBasedSecurity" /t REG_DWORD /d "0" /f > NUL 2>&1 
+)
+
+If "%DisableCoreIsolationIntel%" equ "True" (
+REM Disable Core Isolation
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity" /v "Enabled" /t REG_DWORD /d "0" /f > NUL 2>&1
+)
+
+If "%ConfigureCStatesIntel%" equ "True" (
+REM Configure C-States
+powercfg -setacvalueindex scheme_current sub_processor IDLEPROMOTE 100 > NUL 2>&1
+powercfg -setacvalueindex scheme_current sub_processor IDLEDEMOTE 100 > NUL 2>&1
+powercfg -setacvalueindex scheme_current sub_processor IDLECHECK 100000 > NUL 2>&1
+powercfg -setacvalueindex scheme_current sub_processor IDLESCALING 0 > NUL 2>&1
+)
+
+If "%DisableThrottlingIntel%" equ "True" (
+REM Disable Throttling
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling" /v "PowerThrottlingOff" /t REG_DWORD /d "1" /f > NUL 2>&1
+)
+
+If "%DisableAMDServices%" equ "True" (
+REM Disable AMD Services
+reg add "HKLM\System\CurrentControlSet\Services\AmdK8" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1
+reg add "HKLM\System\CurrentControlSet\Services\amdsata" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1
+reg add "HKLM\System\CurrentControlSet\Services\amdsbs" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1
+reg add "HKLM\System\CurrentControlSet\Services\amdxata" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1
+)
+
+If "%DisableTSXIntel%" equ "True" (
+REM Disable TSX
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel" /v "DisableTsx" /t REG_DWORD /d "0" /f > NUL 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel" /v "EnableTsx" /t REG_DWORD /d "1" /f > NUL 2>&1
+)
+
+set "file=C:\Vitality\Info\cpu"
+if not exist "%file%" (
+    echo Vitality > "%file%"
+    set /a "ran_optimizations+=1"
+)
+cd C:\Vitality
+set "formatted_optimizations=%ran_optimizations%"
+if %formatted_optimizations% LSS 10 set "formatted_optimizations= %formatted_optimizations%"
+echo set "ran_optimizations=%ran_optimizations%"> v.bat
+goto skippingcpu
+
+:amd
+echo                                                   Applying AMD CPU Tweaks
+
+If "%DisableCPUVirtualizationAMD%" equ "True" (
+REM Disable CPU Virtualization
+reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\DeviceGuard" /v "EnableVirtualizationBasedSecurity" /t REG_DWORD /d "0" /f > NUL 2>&1
+)
+
+If "%DisableCoreIsolationAMD%" equ "True" (
+REM Disable Core Isolation
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\DeviceGuard\Scenarios\HypervisorEnforcedCodeIntegrity" /v "Enabled" /t REG_DWORD /d "0" /f > NUL 2>&1
+)
+
+If "%ConfigureCStatesAMD%" equ "True" (
+REM Configure C-States
+powercfg -setacvalueindex scheme_current sub_processor IDLEPROMOTE 100 > NUL 2>&1
+powercfg -setacvalueindex scheme_current sub_processor IDLEDEMOTE 100 > NUL 2>&1
+powercfg -setacvalueindex scheme_current sub_processor IDLECHECK 100000 > NUL 2>&1
+powercfg -setacvalueindex scheme_current sub_processor IDLESCALING 0 > NUL 2>&1
+)
+
+If "%DisableThrottlingAMD%" equ "True" (
+REM Disable Throttling
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerThrottling" /v "PowerThrottlingOff" /t REG_DWORD /d "1" /f
+)
+
+If "%DisableIntelServices%" equ "True" (
+REM Disable Intel Services
+reg add "HKLM\System\CurrentControlSet\Services\iagpio" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1
+reg add "HKLM\System\CurrentControlSet\Services\iai2c" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1
+reg add "HKLM\System\CurrentControlSet\Services\iaLPSS2i_GPIO2" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1
+reg add "HKLM\System\CurrentControlSet\Services\iaLPSS2i_GPIO2_BXT_P" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1
+reg add "HKLM\System\CurrentControlSet\Services\iaLPSS2i_I2C" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1	 
+reg add "HKLM\System\CurrentControlSet\Services\iaLPSSi_GPIO" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1	 
+reg add "HKLM\System\CurrentControlSet\Services\iaStorAVC" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1
+reg add "HKLM\System\CurrentControlSet\Services\iaStorV" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1
+reg add "HKLM\System\CurrentControlSet\Services\intelide" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1
+reg add "HKLM\System\CurrentControlSet\Services\intelpep" /v "Start" /t REG_DWORD /d "4" /f > NUL 2>&1
+)
+
+If "%DisableTSXAMD%" equ "True" (
+REM Disable TSX
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel" /v "DisableTsx" /t REG_DWORD /d "1" /f > NUL 2>&1
+reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel" /v "EnableTsx" /t REG_DWORD /d "0" /f > NUL 2>&1
+)
