@@ -5902,8 +5902,28 @@ del c:\WIN386.SWP > NUL 2>&1
 
 if "%Startupcleaner%" equ "True" (
 REM Startup Cleaner (shell:startup)
-if exist "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup\Vitality-Cleaner.bat" del "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup\Vitality-Cleaner.bat"
-curl -g -L -# -o "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup\Vitality-Cleaner.bat" "https://cdn.discordapp.com/attachments/1140029335944835152/1140255553873006742/Vitality-Cleaner.bat" >nul 2>&1
+(
+echo @echo off
+
+title Cleaning...
+
+echo del /s /f /q c:\windows\temp\*.* ^> NUL 2^>^&1
+echo rd /s /q c:\windows\temp  ^> NUL 2^>^&1
+echo md c:\windows\temp ^> NUL 2^>^&1
+echo del /s /f /q C:\WINDOWS\Prefetch ^> NUL 2^>^&1
+echo del /s /f /q %%temp%%\*.* ^> NUL 2^>^&1
+echo rd /s /q %%temp%% ^> NUL 2^>^&1
+echo md %%temp%% ^> NUL 2^>^&1
+echo deltree /y c:\windows\tempor~1 ^> NUL 2^>^&1
+echo deltree /y c:\windows\temp ^> NUL 2^>^&1
+echo deltree /y c:\windows\tmp ^> NUL 2^>^&1
+echo deltree /y c:\windows\ff*.tmp ^> NUL 2^>^&1
+echo deltree /y c:\windows\history ^> NUL 2^>^&1
+echo deltree /y c:\windows\cookies ^> NUL 2^>^&1
+echo deltree /y c:\windows\recent ^> NUL 2^>^&1
+echo deltree /y c:\windows\spool\printers ^> NUL 2^>^&1
+echo del c:\WIN386.SWP ^> NUL 2^>^&1
+) > "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup\StartupCleaner.bat"
 )
 
 set "file=C:\Vitality\Info\disk"
@@ -6918,10 +6938,6 @@ REM Remove adware, spyware, PUPs
 if not exist "%SYSTEMDRIVE%\Vitality\Resources\AdwCleaner" mkdir "%SYSTEMDRIVE%\Vitality\Resources\AdwCleaner"
 del /F /Q "%SYSTEMDRIVE%\Vitality\Resources\AdwCleaner\AdwCleaner.exe" >nul 2>&1
 curl -g -L -# -o "%SYSTEMDRIVE%\Vitality\Resources\AdwCleaner\AdwCleaner.exe" "https://adwcleaner.malwarebytes.com/adwcleaner?channel=release" >nul 2>&1
-
-REM Startup Cleaner (shell:startup)
-if exist "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup\Vitality-Cleaner.bat" del "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup\Vitality-Cleaner.bat"
-curl -g -L -# -o "%appdata%\Microsoft\Windows\Start Menu\Programs\Startup\Vitality-Cleaner.bat" "https://cdn.discordapp.com/attachments/1140029335944835152/1140255553873006742/Vitality-Cleaner.bat" >nul 2>&1
 
 REM Delete Listary user data
 del /f /s /q %appdata%\Listary\UserData > NUL 2>&1
