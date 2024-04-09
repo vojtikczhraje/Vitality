@@ -18,7 +18,7 @@ irm "https://raw.githubusercontent.com/vojtikczhraje/Vitality/main/Vitality.bat"
 
 ## ⚙ Configure settings
 ### We have now included new way of configuring settings.
-- Build in app configurator
+- Built in app configurator
 
 - Out side the file configurator (.ini)
   - Open PowerShell as administrator and enter the command below.
