@@ -16,6 +16,20 @@ irm "https://raw.githubusercontent.com/vojtikczhraje/Vitality/main/Vitality.bat"
 ```
 - Use `W, S, A, D, X` and `Numbers` to interact with the program
 
+## ⚙ Configure settings
+### We have now included new way of configuring settings.
+- Build in app configurator
+
+- Out side the file configurator (.ini)
+  - Open PowerShell as administrator and enter the command below.
+
+    ```powershell
+    New-Item -Path "C:\Vitality" -ItemType Directory -Force | Out-Null; Invoke-WebRequest -Uri "https://        raw.githubusercontent.com/vojtikczhraje/Vitality/main/config.ini" -OutFile "C:\Vitality\config.ini"; C:\Vitality\config.ini
+    ```
+  - Change options to `True` for enabling options or `False` for disabling options
+  - Run the script with [command ^](https://github.com/vojtikczhraje/Vitality#-usage) . Now settings are changed and you do not need to configure it with actual script.
+
+
 
 ## ❓ About
 - Vitality is being developed by vojtikczhraje and Pigeon 
