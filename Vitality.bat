@@ -96,13 +96,29 @@ if %SystemType%==Laptop set "SystemType=Laptop             "
 
 
 REM Create Required Directories 
-    REM Create Main Directory
-    mkdir C:\Vitality
-    mkdir C:\Vitality\Info
-    mkdir C:\Vitality\Backup 
-    mkdir C:\Vitality\Resources 
-    cd C:\Vitality 
-    cls
+REM Check and Create Main Directory
+if not exist "C:\Vitality\" (
+    mkdir "C:\Vitality"
+)
+
+REM Check and Create Info Directory
+if not exist "C:\Vitality\Info\" (
+    mkdir "C:\Vitality\Info"
+)
+
+REM Check and Create Backup Directory
+if not exist "C:\Vitality\Backup\" (
+    mkdir "C:\Vitality\Backup"
+)
+
+REM Check and Create Resources Directory
+if not exist "C:\Vitality\Resources\" (
+    mkdir "C:\Vitality\Resources"
+)
+
+cd C:\Vitality
+cls
+
 
 
 REM Optimization Counter
@@ -187,7 +203,7 @@ if not exist "C:\Vitality\Backup\RestorePoint.bat" (
 )
 
 
-Ping www.google.nl -n 1 -w 1000 >nul
+Ping www.google.com -n 1 -w 1000 >nul
 if %errorlevel% neq 0 (
 echo %e%                                   No %r%Internet Connection%e%, press C to continue anyway
 echo %l%                                              [ %r%C%l% ] Continue  [ %r%Q%l% ] Quit 
@@ -299,7 +315,7 @@ set "DebloatWindows=True"
 set "FSE=True"
 
 REM Configuration Page 2 / Category [FPS and Input Tweaks] Page 2
-if %SystemType%==Desktop (
+if "%SystemType%"=="Desktop" (
 	set "PowerPlan=True"
 ) else (
 	set "PowerPlan=False"
@@ -467,6 +483,15 @@ set "AMDCStates=True"
 set "AMDPowerThrottling=True"
 set "IntelServices=True"
 set "AMDTSX=True"
+
+REM Check if config.ini exists
+if exist C:\Vitality\config.ini (
+    for /f "tokens=1,2 delims==" %%a in (C:\Vitality\config.ini) do (
+        set "%%a=%%b"
+    )
+) else (
+    echo the file doesnt exist
+)
 
 
 REM Code for guessing which CPU is user using
