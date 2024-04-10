@@ -11,8 +11,7 @@ Vitality is a free and open source batch optimizer designed to improve performan
 ## 🔧 Usage
 - Open PowerShell as administrator and enter the command below. <br />
 ```powershell
-irm "https://raw.githubusercontent.com/vojtikczhraje/Vitality/main/Vitality.bat" -OutFile "Vitality.bat"
-.\Vitality.bat
+(Invoke-WebRequest -Uri "https://raw.githubusercontent.com/vojtikczhraje/Vitality/main/Vitality.bat" -UseBasicParsing).Content | Out-File -FilePath "Vitality.bat" -Encoding ASCII; Start-Process cmd.exe -ArgumentList '/c .\Vitality.bat'
 ```
 - Use `W, S, A, D, X` and `Numbers` to interact with the program
 - If you would like to configure the settings before running the program [see](#-configure-settings)
