@@ -15,6 +15,7 @@ irm "https://raw.githubusercontent.com/vojtikczhraje/Vitality/main/Vitality.bat"
 .\Vitality.bat
 ```
 - Use `W, S, A, D, X` and `Numbers` to interact with the program
+- If you would like to configure the settings before running the program [see](#-configure-settings)
 
 ## ⚙ Configure settings
 ### We have now included new way of configuring settings.
