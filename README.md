@@ -27,7 +27,7 @@ irm "https://raw.githubusercontent.com/vojtikczhraje/Vitality/main/Vitality.bat"
     New-Item -Path "C:\Vitality" -ItemType Directory -Force | Out-Null; Invoke-WebRequest -Uri "https://raw.githubusercontent.com/vojtikczhraje/Vitality/main/config.ini" -OutFile "C:\Vitality\config.ini"; C:\Vitality\config.ini
     ```
   - Change options to `True` for enabling options or `False` for disabling options
-  - Run the script with [command ^](https://github.com/vojtikczhraje/Vitality#-usage) . Now settings are changed and you do not need to configure it with actual script.
+  - Run the script with [command ^](#-usage) . Now settings are changed and you do not need to configure it with actual script.
 
 
 
