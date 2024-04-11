@@ -8,10 +8,10 @@ Vitality is a free and open source batch optimizer designed to improve performan
 > [!WARNING]  
 > **Use at Your Own Risk:** Compatibility varies. Backup your system first. Disable antivirus to prevent conflicts. Know what each tweak does before applying.
 
-## 🔧 Usage
+## 🔧 Getting started
 - Open PowerShell as administrator and enter the command below. <br />
 ```powershell
-(Invoke-WebRequest -Uri "https://raw.githubusercontent.com/vojtikczhraje/Vitality/main/Vitality.bat" -UseBasicParsing).Content | Out-File -FilePath "Vitality.bat" -Encoding ASCII; Start-Process cmd.exe -ArgumentList '/c .\Vitality.bat'
+$url = "https://raw.githubusercontent.com/vojtikczhraje/Vitality/main/Vitality.bat"; $tempFilePath = "temp_Vitality.bat"; $newFilePath = "Vitality.bat"; Invoke-WebRequest -Uri $url -OutFile $tempFilePath; $content = Get-Content -Path $tempFilePath; $content | Out-File -FilePath $newFilePath -Encoding Default; Start-Process cmd.exe -ArgumentList "/c .\$newFilePath"; Remove-Item -Path $tempFilePath
 ```
 - Use `W, S, A, D, X` and `Numbers` to interact with the program
 - If you would like to configure the settings before running the program [see](#-configure-settings)
