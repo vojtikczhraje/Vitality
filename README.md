@@ -13,8 +13,8 @@ Vitality is a free and open source batch optimizer designed to improve performan
 ```powershell
 $url = "https://raw.githubusercontent.com/vojtikczhraje/Vitality/main/Vitality.bat"; $tempFilePath = "temp_Vitality.bat"; $newFilePath = "Vitality.bat"; Invoke-WebRequest -Uri $url -OutFile $tempFilePath; $content = Get-Content -Path $tempFilePath; $content | Out-File -FilePath $newFilePath -Encoding Default; Start-Process cmd.exe -ArgumentList "/c .\$newFilePath"; Remove-Item -Path $tempFilePath
 ```
-- Use `W, S, A, D, X` and `Numbers` to interact with the program
-- If you would like to configure the settings before running the program [see](#-configure-settings)
+- Use `W, S, A, D, X` and `Numbers` to interact with the script
+- If you would like to configure the settings before running the script [see](#-configure-settings)
 
 ## ⚙ Configure settings
 ### We have now included new way of configuring settings.
@@ -27,7 +27,7 @@ $url = "https://raw.githubusercontent.com/vojtikczhraje/Vitality/main/Vitality.b
     New-Item -Path "C:\Vitality" -ItemType Directory -Force | Out-Null; Invoke-WebRequest -Uri "https://raw.githubusercontent.com/vojtikczhraje/Vitality/main/config.ini" -OutFile "C:\Vitality\config.ini"; C:\Vitality\config.ini
     ```
   - Change options to `True` for enabling options or `False` for disabling options
-  - Run the script with [command ^](#-usage) . Now settings are changed and you do not need to configure it with actual script.
+  - Run the script with [command ^](#-getting-started) . Now settings are changed and you do not need to configure it with actual script.
 
 
 
