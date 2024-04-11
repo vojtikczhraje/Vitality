@@ -91,8 +91,8 @@ start "" "%batch_file%"
 exit
 
 :SkipCheck
-if %SystemType%=="Desktop" set "SystemType=Desktop            " 
-if %SystemType%=="Laptop" set "SystemType=Laptop             "
+if %SystemType%==Desktop set "SystemType=Desktop            " 
+if %SystemType%==Laptop set "SystemType=Laptop             "
 
 
 :: Create Required Directories 
@@ -198,7 +198,7 @@ if not exist "C:\Vitality\Backup\RestorePoint.bat" (
 
 
 Ping www.google.com -n 1 -w 1000 >nul
-if "%errorlevel%" neq 0 (
+if %errorlevel% neq 0 (
 echo %e%                                   No %r%Internet Connection%e%, press C to continue anyway
 echo %l%                                              [ %r%C%l% ] Continue  [ %r%Q%l% ] Quit 
 choice /c:"CQ" /n /m " "
@@ -206,8 +206,8 @@ if !errorlevel! equ 2 exit /b
 echo.
 )
 
-if "%SystemType%"=="Unknown" (
-set "MenuItem=%errorlevel%"
+if %SystemType%==Unknown (
+set MenuItem=%errorlevel%
 echo %e%                                   Unknown %r%System Type%e%, please select your System Type
 echo %l%                                              [ %r%D%l% ] Desktop  [ %r%L%l% ] Laptop
 choice /c:"DL" /n /m " "
