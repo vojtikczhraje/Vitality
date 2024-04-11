@@ -229,16 +229,23 @@ set "lastConfiguration=:Configuration1"
 
 :: OS informations
 set "OSVersion=Unknown         "
-systeminfo > temp.txt 2>nul
-for /f "delims=" %%i in ('findstr /B /C:"OS Name" temp.txt') do set "OSInfo=%%i"
+systeminfo > %temp%\systeminfo.txt 2>nul
+for /f "delims=" %%i in ('findstr /B /C:"OS Name" %temp%\systeminfo') do set "OSInfo=%%i"
 call :checkOS
+goto :eof
+
 :checkOS
-if "%OSInfo%"=="OS Name:                   Microsoft Windows 8.1" set "OSVersion=Windows 8.1     "
+if "%OSInfo%"=="OS Name:                   Microsoft Windows 7 Professional" set "OSVersion=Windows 7       "
+if "%OSInfo%"=="OS Name:                   Microsoft Windows 7 Enterprise" set "OSVersion=Windows 7       "
+if "%OSInfo%"=="OS Name:                   Microsoft Windows 8 Enterprise" set "OSVersion=Windows 8       "
+if "%OSInfo%"=="OS Name:                   Microsoft Windows 8.1 Professional" set "OSVersion=Windows 8.1     "
 if "%OSInfo%"=="OS Name:                   Microsoft Windows 10 Home" set "OSVersion=Windows 10      "
 if "%OSInfo%"=="OS Name:                   Microsoft Windows 10 Pro" set "OSVersion=Windows 10      "
+if "%OSInfo%"=="OS Name:                   Microsoft Windows 10 Enterprise LTSC" set "OSVersion=Windows 10 LTSC "
 if "%OSInfo%"=="OS Name:                   Microsoft Windows 10 Enterprise" set "OSVersion=Windows 10      "
 if "%OSInfo%"=="OS Name:                   Microsoft Windows 11 Home" set "OSVersion=Windows 11      "
 if "%OSInfo%"=="OS Name:                   Microsoft Windows 11 Pro" set "OSVersion=Windows 11      "
+if "%OSInfo%"=="OS Name:                   Microsoft Windows 11 Enterprise LTSC" set "OSVersion=Windows 11 LTSC "
 
 :: Tweaks Page 1 / FPS, Latency, GPU, Task Scheduler, Keboard and Mouse, CPU, Network
 set "FPS=false"
@@ -261,12 +268,8 @@ set "LowQuality=false"
 
 :: Game Settings
 set "Minecraft=false"
-set "CSGO=false"
 set "Valorant=false"
 set "Fortnite=false"
-Set "COD=false"
-set "Apex=false"
-set "Rust=false"
 
 :: Privacy
 set "PrivacyCleanup=false"
@@ -8157,7 +8160,7 @@ if %formatted_optimizations% LSS 10 set "formatted_optimizations= %formatted_opt
 echo set "ran_optimizations=%ran_optimizations%"> v.bat
 :skippinguiforprivacy
 
-if "%Minecraft%"=="false" goto skippingminecraft
+if "%Minecraft%"=="false" (
 echo                                       Applying Minecraft 1.8.9 Settings
 if exist "%appdata%\.minecraft\optionsof.txt-old" del "%appdata%\.minecraft\optionsof.txt-old"
 if exist "%appdata%\.minecraft\optionsof.txt" (
@@ -8235,17 +8238,17 @@ echo ofFastMath:false            >> "%appdata%\.minecraft\optionsof.txt"
 echo ofFastRender:false          >> "%appdata%\.minecraft\optionsof.txt"
 echo ofTranslucentBlocks:1       >> "%appdata%\.minecraft\optionsof.txt"
 echo key_of.key.zoom:46          >> "%appdata%\.minecraft\optionsof.txt"
-:skippingminecraft
+)
 
-if "%Valorant%"=="false" goto skippingvalorant
+if "%Valorant%"=="false" (
 echo                                          Applying Valorant Tweaks
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\VALORANT-Win64-Shipping.exe\PerfOptions" /v "CpuPriorityClass" /t REG_DWORD /d "3" /f
-:skippingvalorant
+)
 
-if "%Fortnite%"=="false" goto skippingfortnite 
+if "%Fortnite%"=="false" (
 echo                                          Applying Fortnite Tweaks
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\FortniteClient-Win64-Shipping.exe\PerfOptions" /v "CpuPriorityClass" /t REG_DWORD /d "3" /f
-:skippingfortnite
+)
 
 :End
 cls
