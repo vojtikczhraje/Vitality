@@ -6,23 +6,11 @@ mode 120, 36
 chcp 65001 >nul
 TITLE Vitality
 
-:: Version
-set "Version=0.1.1"
-
 :: Set Colors
-set p=[38;5;99m
 set l=[38;5;240m
 set r=[38;5;216m
-set g=[38;5;123m
 set e=[0m
 set ar=[38;5;203m
-set do=[38;5;223m
-set o=[38;5;229m
-set lo=[38;5;230m
-set ic=[38;5;231m
-set oc=[38;5;253m
-set g=[38;5;248m
-set mg=[38;5;243m
 
 ::Ask for ADMIN permissions inside batch (https://stackoverflow.com/questions/1894967/how-to-request-administrator-access-inside-a-batch-file)
 ::  Check for permissions
@@ -129,7 +117,7 @@ for /f %%A in ('"prompt $H &echo on &for %%B in (1) do ::"') do set BS=%%A
 
 :: Welcome Message
 if exist "C:\Vitality\Info\Launch-Welcome" (
-    set "Launch-Welcome=Welcome back %r%%username%%e%, have a good time using Vitality.""
+    set "Launch-Welcome=Welcome back %r%%username%%e%, have a good time using Vitality."
 ) else (
     set "Launch-Welcome=Welcome to Vitality %r%%username%%e%. Optimize your PC to %r%MAX%l%"
     echo Vitality > "C:\Vitality\Info\Launch-Welcome"
@@ -158,7 +146,7 @@ if "%errorlevel%"==0 (
 )
 
 :: Go to previous page after applying tweaks
-if defined lastpage goto %lastpage%
+if defined LastPage goto %LastPage%
 
 :Loading
 cls
@@ -210,10 +198,11 @@ if %SystemType%==Unknown (
 set MenuItem=%errorlevel%
 echo %e%                                   Unknown %r%System Type%e%, please select your System Type
 echo %l%                                              [ %r%D%l% ] Desktop  [ %r%L%l% ] Laptop
-choice /c:"DL" /n /m " "
-if "!errorlevel!" equ 1 set "SystemType=Desktop            "
-if "!errorlevel!" equ 2 set "SystemType=Laptop             "
-echo %SystemType% > "%temp%\SystemType.txt"
+choice /c:DL /n /m " "
+if !errorlevel! equ 1 set "SystemType=Desktop            "
+if !errorlevel! equ 2 set "SystemType=Laptop             "
+del /f "%temp%\SystemType.txt"
+echo !SystemType! > "%temp%\SystemType.txt"
 echo.
 )
 
@@ -225,12 +214,12 @@ If exist "%SYSTEMDRIVE%\Vitality\Backup\RestorePoint.bat" (
     set "MStatus=Enabled       "
 ) else set set "MStatus=Disabled      "
 
-set "lastConfiguration=:Configuration1"
+set "LastConfiguration=:Configuration1"
 
 :: OS informations
 set "OSVersion=Unknown         "
-systeminfo > %temp%\systeminfo.txt 2>nul
-for /f "delims=" %%i in ('findstr /B /C:"OS Name" %temp%\systeminfo') do set "OSInfo=%%i"
+systeminfo > "%temp%\SystemInfo.txt" 2>nul
+for /f "delims=" %%i in ('findstr /B /C:"OS Name" "%temp%\SystemInfo.txt"') do set "OSInfo=%%i"
 call :checkOS
 goto :eof
 
@@ -241,45 +230,48 @@ if "%OSInfo%"=="OS Name:                   Microsoft Windows 8 Enterprise" set "
 if "%OSInfo%"=="OS Name:                   Microsoft Windows 8.1 Professional" set "OSVersion=Windows 8.1     "
 if "%OSInfo%"=="OS Name:                   Microsoft Windows 10 Home" set "OSVersion=Windows 10      "
 if "%OSInfo%"=="OS Name:                   Microsoft Windows 10 Pro" set "OSVersion=Windows 10      "
-if "%OSInfo%"=="OS Name:                   Microsoft Windows 10 Enterprise LTSC" set "OSVersion=Windows 10 LTSC "
+if "%OSInfo%"=="OS Name:                   Microsoft Windows 10 IoT Enterprise LTSC" set "OSVersion=Windows 10      "
+if "%OSInfo%"=="OS Name:                   Microsoft Windows 10 Enterprise" set "OSVersion=Windows 10      "
 if "%OSInfo%"=="OS Name:                   Microsoft Windows 10 Enterprise" set "OSVersion=Windows 10      "
 if "%OSInfo%"=="OS Name:                   Microsoft Windows 11 Home" set "OSVersion=Windows 11      "
 if "%OSInfo%"=="OS Name:                   Microsoft Windows 11 Pro" set "OSVersion=Windows 11      "
-if "%OSInfo%"=="OS Name:                   Microsoft Windows 11 Enterprise LTSC" set "OSVersion=Windows 11 LTSC "
+if "%OSInfo%"=="OS Name:                   Microsoft Windows 11 Enterprise LTSC" set "OSVersion=Windows 11      "
+
+OS Name:                   Microsoft Windows 10 IoT Enterprise LTSC
 
 :: Tweaks Page 1 / FPS, Latency, GPU, Task Scheduler, Keboard and Mouse, CPU, Network
-set "FPS=false"
-set "Latency=false"
-set "GPU=false"
-set "Task=false"
-set "KBM=false"
-set "CPU=false"
-set "Network=false"
+set "FPS=False"
+set "Latency=False"
+set "GPU=False"
+set "Task=False"
+set "KBM=False"
+set "CPU=False"
+set "Network=False"
 
 :: Tweaks Page 2 / RAM, Disk, Windows Settings
-set "RAM=false"
-set "DISK=false"
-set "Windows=false"
+set "RAM=False"
+set "DISK=False"
+set "Windows=False"
 
 :: Recording Settings
-set "HighQuality=false"
-set "MediumQuality=false"
-set "LowQuality=false"
+set "HighQuality=False"
+set "MediumQuality=False"
+set "LowQuality=False"
 
 :: Game Settings
-set "Minecraft=false"
-set "Valorant=false"
-set "Fortnite=false"
+set "Minecraft=False"
+set "Valorant=False"
+set "Fortnite=False"
 
 :: Privacy
-set "PrivacyCleanup=false"
-set "DataCol=false"
-set "SecurityImp=false"
-set "ConfigurePro=false"
-set "PrivacyOverSec=false"
-set "UIForPrivacy=false"
+set "PrivacyCleanup=False"
+set "DataCol=False"
+set "SecurityImp=False"
+set "ConfigurePro=False"
+set "PrivacyOverSec=False"
+set "UIForPrivacy=False"
 
-set "lasttweaks1=true"
+set "LastTweaks1=True"
 
 
 :: Set Number Of Configuration Pages
@@ -487,7 +479,7 @@ if exist C:\Vitality\config.ini (
 )
 
 :Home
-set lastpage=:Home
+set LastPage=:Home
 cls
 echo.                                
 echo     %l%┌─────────────────────────────┐                       
@@ -526,72 +518,72 @@ set MenuItem=%errorlevel%
 
 if "%MenuItem%"=="1" goto Credits
 if "%MenuItem%"=="2" (
-    if "%lasttweaks1%"=="true" (
-        goto :lasttweaks1
+    if "%LastTweaks1%"=="True" (
+        goto :LastTweaks1
     ) else (
-        goto :lasttweaks2
+        goto :LastTweaks2
     )
 ) 
 
 
 :Tweaks 
-:lasttweaks1
-set lastpage=:Tweaks
-set lasttweaks1=true
-set lasttweaks2=false
+:LastTweaks1
+set LastPage=:Tweaks
+set LastTweaks1=True
+set LastTweaks2=False
 
 
 set "FPSc="
-if "%FPS%"=="false" (
+if "%FPS%"=="False" (
     set "FPSc=[38;5;203m"
 ) else (
     set "FPSc=[38;5;34m"
 )
 
 set "Latencyc="
-if "%Latency%"=="false" (
+if "%Latency%"=="False" (
     set "Latencyc=[38;5;203m"
 ) else (
     set "Latencyc=[38;5;34m"
 )
 
 set "Networkc="
-if "%Network%"=="false" (
+if "%Network%"=="False" (
     set "Networkc=[38;5;203m"
 ) else (
     set "Networkc=[38;5;34m"
 )
 
 set "KBMc="
-if "%KBM%"=="false" (
+if "%KBM%"=="False" (
     set "KBMc=[38;5;203m"
 ) else (
     set "KBMc=[38;5;34m"
 )
 
 set "Taskc="
-if "%Task%"=="false" (
+if "%Task%"=="False" (
     set "Taskc=[38;5;203m"
 ) else (
     set "Taskc=[38;5;34m"
 )
 
 set "Taskc="
-if "%Task%"=="false" (
+if "%Task%"=="False" (
     set "Taskc=[38;5;203m"
 ) else (
     set "Taskc=[38;5;34m"
 )
 
 set "GPUc="
-if "%GPU%"=="false" (
+if "%GPU%"=="False" (
     set "GPUc=[38;5;203m"
 ) else (
     set "GPUc=[38;5;34m"
 )
 
 set "CPUc="
-if "%CPU%"=="false" (
+if "%CPU%"=="False" (
     set "CPUc=[38;5;203m"
 ) else (
     set "CPUc=[38;5;34m"
@@ -639,50 +631,50 @@ set MenuItem=%errorlevel%
 if "%MenuItem%"=="1" goto Home
 if "%MenuItem%"=="2" goto IngameSettings
 if "%MenuItem%"=="3" (
-    if "%FPS%"=="false" (
-        set "FPS=true"
+    if "%FPS%"=="False" (
+        set "FPS=True"
     ) else (
-        set "FPS=false"
+        set "FPS=False"
     )
 ) && goto Tweaks
 
 if "%MenuItem%"=="4" (
-    if "%Latency%"=="false" (
-        set "Latency=true"
+    if "%Latency%"=="False" (
+        set "Latency=True"
     ) else (
-        set "Latency=false"
+        set "Latency=False"
     )
 ) && goto Tweaks
 
 if "%MenuItem%"=="5" (
-    if "%Network%"=="false" (
-        set "Network=true"
+    if "%Network%"=="False" (
+        set "Network=True"
     ) else (
-        set "Network=false"
+        set "Network=False"
     )
 ) && goto Tweaks
 
 if "%MenuItem%"=="6" (
-    if "%KBM%"=="false" (
-        set "KBM=true"
+    if "%KBM%"=="False" (
+        set "KBM=True"
     ) else (
-        set "KBM=false"
+        set "KBM=False"
     )
 ) && goto Tweaks
 
 if "%MenuItem%"=="7" (
-    if "%Task%"=="false" (
-        set "Task=true"
+    if "%Task%"=="False" (
+        set "Task=True"
     ) else (
-        set "Task=false"
+        set "Task=False"
     )
 ) && goto Tweaks
 
 if "%MenuItem%"=="8" (
-    if "%GPU%"=="false" (
-        set "GPU=true"
+    if "%GPU%"=="False" (
+        set "GPU=True"
     ) else (
-        set "GPU=false"
+        set "GPU=False"
     )
 ) && goto Tweaks
 
@@ -690,7 +682,7 @@ if "%MenuItem%"=="8" (
 if "%MenuItem%"=="9" goto Tweaks2
 if "%MenuItem%"=="10" goto Tweaks2
 if "%MenuItem%"=="11" goto TweaksProceed
-if "%MenuItem%"=="12" goto %lastConfiguration%
+if "%MenuItem%"=="12" goto %LastConfiguration%
 if "%MenuItem%"=="13" goto Revert
 
 
@@ -707,35 +699,35 @@ if "%MenuItem%"=="13" goto Revert
 
 
 :Tweaks2 
-:lasttweaks2
-set lastpage=:Tweaks2
-set lasttweaks1=false
-set lasttweaks2=true
+:LastTweaks2
+set LastPage=:Tweaks2
+set LastTweaks1=False
+set LastTweaks2=True
 
 
 set "RAMc="
-if "%RAM%"=="false" (
+if "%RAM%"=="False" (
     set "RAMc=[38;5;203m"
 ) else (
     set "RAMc=[38;5;34m"
 )
 
 set "DISKc="
-if "%DISK%"=="false" (
+if "%DISK%"=="False" (
     set "DISKc=[38;5;203m"
 ) else (
     set "DISKc=[38;5;34m"
 )
 
 set "Windowsc="
-if "%Windows%"=="false" (
+if "%Windows%"=="False" (
     set "Windowsc=[38;5;203m"
 ) else (
     set "Windowsc=[38;5;34m"
 )
 
 set "CPUc="
-if "%CPU%"=="false" (
+if "%CPU%"=="False" (
     set "CPUc=[38;5;203m"
 ) else (
     set "CPUc=[38;5;34m"
@@ -785,41 +777,41 @@ set MenuItem=%errorlevel%
 if "%MenuItem%"=="1" goto Home
 if "%MenuItem%"=="2" goto IngameSettings
 if "%MenuItem%"=="3" (
-    if "%RAM%"=="false" (
-        set "RAM=true"
+    if "%RAM%"=="False" (
+        set "RAM=True"
     ) else (
-        set "RAM=false"
+        set "RAM=False"
     )
 ) && goto Tweaks2
 
 if "%MenuItem%"=="4" (
-    if "%DISK%"=="false" (
-        set "DISK=true"
+    if "%DISK%"=="False" (
+        set "DISK=True"
     ) else (
-        set "DISK=false"
+        set "DISK=False"
     )
 ) && goto Tweaks2
 
 if "%MenuItem%"=="5" (
-    if "%Windows%"=="false" (
-        set "Windows=true"
+    if "%Windows%"=="False" (
+        set "Windows=True"
     ) else (
-        set "Windows=false"
+        set "Windows=False"
     )
 ) && goto Tweaks2
 
 if "%MenuItem%"=="6" (
-    if "%CPU%"=="false" (
-        set "CPU=true"
+    if "%CPU%"=="False" (
+        set "CPU=True"
     ) else (
-        set "CPU=false"
+        set "CPU=False"
     )
 ) && goto Tweaks2
 
 if "%MenuItem%"=="7" goto Tweaks
 if "%MenuItem%"=="8" goto Tweaks
 if "%MenuItem%"=="9" goto TweaksProceed
-if "%MenuItem%"=="10" goto %lastConfiguration%
+if "%MenuItem%"=="10" goto %LastConfiguration%
 if "%MenuItem%"=="11" goto Revert
 
 
@@ -829,10 +821,10 @@ if "%MenuItem%"=="11" goto Revert
 
 
 
-set lastpage=:IngameSettings
+set LastPage=:IngameSettings
 cls
 set "Minecraftc="
-if "%Minecraft%"=="false" (
+if "%Minecraft%"=="False" (
     set "Minecraftc=[38;5;203m"
 ) else (
     set "Minecraftc=[38;5;34m"
@@ -840,21 +832,21 @@ if "%Minecraft%"=="false" (
 
 
 set "Valorantc="
-if "%Valorant%"=="false" (
+if "%Valorant%"=="False" (
     set "Valorantc=[38;5;203m"
 ) else (
     set "Valorantc=[38;5;34m"
 )
 
 set "Fortnitec="
-if "%Fortnite%"=="false" (
+if "%Fortnite%"=="False" (
     set "Fortnitec=[38;5;203m"
 ) else (
     set "Fortnitec=[38;5;34m"
 )
 
 set "CSGOc="
-if "%CSGO%"=="false" (
+if "%CSGO%"=="False" (
     set "CSGOc=[38;5;203m"
 ) else (
     set "CSGOc=[38;5;34m"
@@ -901,67 +893,67 @@ echo                                                                    └─�
 choice /c:WSX123 /n /m " "                                           
 set MenuItem=%errorlevel%
 if "%MenuItem%"=="1" (
-    if "%lasttweaks1%"=="true" (
-        goto :lasttweaks1
+    if "%LastTweaks1%"=="True" (
+        goto :LastTweaks1
     ) else (
-        goto :lasttweaks2
+        goto :LastTweaks2
     )
 ) 
 
 if "%MenuItem%"=="2" goto RecordingSettings
 if "%MenuItem%"=="3" goto TweaksProceed
 if "%MenuItem%"=="4" (
-    if "%Minecraft%"=="false" (
-        set "Minecraft=true"
+    if "%Minecraft%"=="False" (
+        set "Minecraft=True"
     ) else (
-        set "Minecraft=false"
+        set "Minecraft=False"
     )
 ) && goto IngameSettings
 
 if "%MenuItem%"=="5" (
-    if "%Valorant%"=="false" (
-        set "Valorant=true"
+    if "%Valorant%"=="False" (
+        set "Valorant=True"
     ) else (
-        set "Valorant=false"
+        set "Valorant=False"
     )
 ) && goto IngameSettings
 
 if "%MenuItem%"=="6" (
-    if "%Fortnite%"=="false" (
-        set "Fortnite=true"
+    if "%Fortnite%"=="False" (
+        set "Fortnite=True"
     ) else (
-        set "Fortnite=false"
+        set "Fortnite=False"
     )
 ) && goto IngameSettings
 
 
 :RecordingSettings
-set lastpage=:RecordingSettings
+set LastPage=:RecordingSettings
 
 set "HighQualityc="
-if "%HighQuality%"=="false" (
+if "%HighQuality%"=="False" (
     set "HighQualityc=[38;5;203m"
 ) else (
     set "HighQualityc=[38;5;34m"
 )
 
 set "MediumQualityc="
-if "%MediumQuality%"=="false" (
+if "%MediumQuality%"=="False" (
     set "MediumQualityc=[38;5;203m"
 ) else (
     set "MediumQualityc=[38;5;34m"
 )
 
 set "LowQualityc="
-if "%LowQuality%"=="false" (
+if "%LowQuality%"=="False" (
     set "LowQualityc=[38;5;203m"
 ) else (
     set "LowQualityc=[38;5;34m"
 )
 
-if "%gpuBrand%"=="Nvidia" set encoder=Nvidia
-if "%gpuBrand%"=="AMD" set encoder=AMD
-if "%gpuBrand%"=="NaN" set encoder=CPU
+if "%gpuBrand%"=="Nvidia" set "encoder=Nvidia"
+if "%gpuBrand%"=="AMD" set "encoder=AMD"
+if "%gpuBrand%"=="NaN" set "encoder=CPU"
 
 
 cls
@@ -1004,32 +996,32 @@ set MenuItem=%errorlevel%
 if "%MenuItem%"=="1" goto IngameSettings
 if "%MenuItem%"=="2" goto Privacy
 if "%MenuItem%"=="3" (
-    if "%HighQuality%"=="false" (
-        set "HighQuality=true"
-        set "MediumQuality=false"
-        set "LowQuality=false"
+    if "%HighQuality%"=="False" (
+        set "HighQuality=True"
+        set "MediumQuality=False"
+        set "LowQuality=False"
     ) else (
-        set "HighQuality=false"
+        set "HighQuality=False"
     )
 ) && goto RecordingSettings
 
 if "%MenuItem%"=="4" (
-    if "%MediumQuality%"=="false" (
-        set "HighQuality=false"
-        set "MediumQuality=true"
-        set "LowQuality=false"
+    if "%MediumQuality%"=="False" (
+        set "HighQuality=False"
+        set "MediumQuality=True"
+        set "LowQuality=False"
     ) else (
-        set "MediumQuality=false"
+        set "MediumQuality=False"
     )
 ) && goto RecordingSettings
 
 if "%MenuItem%"=="5" (
-    if "%LowQuality%"=="false" (
-        set "HighQuality=false"
-        set "MediumQuality=false"
+    if "%LowQuality%"=="False" (
+        set "HighQuality=False"
+        set "MediumQuality=False"
         set "LowQuality=True"
     ) else (
-        set "LowQuality=false"
+        set "LowQuality=False"
     )
 ) && goto RecordingSettings
 
@@ -1037,56 +1029,48 @@ if "%MenuItem%"=="6" goto TweaksProceed
 
 
 
-
-
-
-
-
-
-
-
 :Privacy
 cls
-set lastpage=:Privacy
+set LastPage=:Privacy
 
 
 set "PrivacyCleanupc="
-if "%PrivacyCleanup%"=="false" (
+if "%PrivacyCleanup%"=="False" (
     set "PrivacyCleanupc=[38;5;203m"
 ) else (
     set "PrivacyCleanupc=[38;5;34m"
 )
 
 set "DataColc="
-if "%DataCol%"=="false" (
+if "%DataCol%"=="False" (
     set "DataColc=[38;5;203m"
 ) else (
     set "DataColc=[38;5;34m"
 )
 
 set "SecurityImpc="
-if "%SecurityImp%"=="false" (
+if "%SecurityImp%"=="False" (
     set "SecurityImpc=[38;5;203m"
 ) else (
     set "SecurityImpc=[38;5;34m"
 )
 
 set "ConfigureProc="
-if "%ConfigurePro%"=="false" (
+if "%ConfigurePro%"=="False" (
     set "ConfigureProc=[38;5;203m"
 ) else (
     set "ConfigureProc=[38;5;34m"
 )
 
 set "PrivacyOverSecc="
-if "%PrivacyOverSec%"=="false" (
+if "%PrivacyOverSec%"=="False" (
     set "PrivacyOverSecc=[38;5;203m"
 ) else (
     set "PrivacyOverSecc=[38;5;34m"
 )
 
 set "UIForPrivacyc="
-if "%UIForPrivacy%"=="false" (
+if "%UIForPrivacy%"=="False" (
     set "UIForPrivacyc=[38;5;203m"
 ) else (
     set "UIForPrivacyc=[38;5;34m"
@@ -1134,53 +1118,53 @@ echo                                                                    └─�
 choice /c:WS123456X /n /m " "                                           
 set MenuItem=%errorlevel%
 if "%MenuItem%"=="1" goto RecordingSettings
-if "%MenuItem%"=="2" goto %lastConfiguration%
+if "%MenuItem%"=="2" goto %LastConfiguration%
 if "%MenuItem%"=="3" (
-    if "%PrivacyCleanup%"=="false" (
-        set "PrivacyCleanup=true"
+    if "%PrivacyCleanup%"=="False" (
+        set "PrivacyCleanup=True"
     ) else (
-        set "PrivacyCleanup=false"
+        set "PrivacyCleanup=False"
     )
 ) && goto Privacy
 
 if "%MenuItem%"=="4" (
-    if "%DataCol%"=="false" (
-        set "DataCol=true"
+    if "%DataCol%"=="False" (
+        set "DataCol=True"
     ) else (
-        set "DataCol=false"
+        set "DataCol=False"
     )
 ) && goto Privacy
 
 if "%MenuItem%"=="5" (
-    if "%SecurityImp%"=="false" (
-        set "SecurityImp=true"
+    if "%SecurityImp%"=="False" (
+        set "SecurityImp=True"
     ) else (
-        set "SecurityImp=false"
+        set "SecurityImp=False"
     )
 ) && goto Privacy
 
 if "%MenuItem%"=="6" (
-    if "%ConfigurePro%"=="false" (
-        set "ConfigurePro=true"
-         set "goToTweaks=true"
+    if "%ConfigurePro%"=="False" (
+        set "ConfigurePro=True"
+         set "goToTweaks=True"
     ) else (
-        set "ConfigurePro=false"
+        set "ConfigurePro=False"
     )
 ) && goto Privacy
 
 if "%MenuItem%"=="7" (
-    if "%PrivacyOverSec%"=="false" (
-        set "PrivacyOverSec=true"
+    if "%PrivacyOverSec%"=="False" (
+        set "PrivacyOverSec=True"
     ) else (
-        set "PrivacyOverSec=false"
+        set "PrivacyOverSec=False"
     )
 ) && goto Privacy
 
 if "%MenuItem%"=="8" (
-    if "%UIForPrivacy%"=="false" (
-        set "UIForPrivacy=true"
+    if "%UIForPrivacy%"=="False" (
+        set "UIForPrivacy=True"
     ) else (
-        set "UIForPrivacy=false"
+        set "UIForPrivacy=False"
     )
 ) && goto Privacy
 
@@ -1195,7 +1179,7 @@ if "%MenuItem%"=="9" goto TweaksProceed
 
 
 :Configuration1
-set lastConfiguration=:Configuration1
+set LastConfiguration=:Configuration1
 
 
 set "Visualsc="
@@ -1288,7 +1272,7 @@ if "%MenuItem%"=="3" (
     ) else (
         set "Visuals=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="4" (
     if "%WindowsUpdates%"=="False" (
@@ -1296,7 +1280,7 @@ if "%MenuItem%"=="4" (
     ) else (
         set "WindowsUpdates=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="5" (
     if "%WindowsDefender%"=="False" (
@@ -1304,7 +1288,7 @@ if "%MenuItem%"=="5" (
     ) else (
         set "WindowsDefender=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="6" (
     if "%ProcessMitigations%"=="False" (
@@ -1312,7 +1296,7 @@ if "%MenuItem%"=="6" (
     ) else (
         set "ProcessMitigations=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="7" (
     if "%DebloatWindows%"=="False" (
@@ -1320,7 +1304,7 @@ if "%MenuItem%"=="7" (
     ) else (
         set "DebloatWindows=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 
 if "%MenuItem%"=="8" (
@@ -1329,13 +1313,13 @@ if "%MenuItem%"=="8" (
     ) else (
         set "FSE=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="9" (
-    if "%lasttweaks1%"=="true" (
-        goto :lasttweaks1
+    if "%LastTweaks1%"=="True" (
+        goto :LastTweaks1
     ) else (
-        goto :lasttweaks2
+        goto :LastTweaks2
     )
 ) 
 if "%MenuItem%"=="10" goto Configuration6
@@ -1347,7 +1331,7 @@ if "%MenuItem%"=="12" goto %Configuration23%
 
 
 :Configuration2
-set lastConfiguration=:Configuration2
+set LastConfiguration=:Configuration2
 
 
 set "PowerPlanc="
@@ -1440,7 +1424,7 @@ if "%MenuItem%"=="3" (
     ) else (
         set "PowerPlan=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="4" (
     if "%WindowsServices%"=="False" (
@@ -1448,7 +1432,7 @@ if "%MenuItem%"=="4" (
     ) else (
         set "WindowsServices=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="5" (
     if "%Win32PrioritySeparation%"=="False" (
@@ -1456,7 +1440,7 @@ if "%MenuItem%"=="5" (
     ) else (
         set "Win32PrioritySeparation=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="6" (
     if "%DisableSearchIndexing%"=="False" (
@@ -1464,7 +1448,7 @@ if "%MenuItem%"=="6" (
     ) else (
         set "DisableSearchIndexing=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="7" (
     if "%DisableFastStartup%"=="False" (
@@ -1472,7 +1456,7 @@ if "%MenuItem%"=="7" (
     ) else (
         set "DisableFastStartup=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 
 if "%MenuItem%"=="8" (
@@ -1481,13 +1465,13 @@ if "%MenuItem%"=="8" (
     ) else (
         set "ReserveCPUResources=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="9" (
-    if "%lasttweaks1%"=="true" (
-        goto :lasttweaks1
+    if "%LastTweaks1%"=="True" (
+        goto :LastTweaks1
     ) else (
-        goto :lasttweaks2
+        goto :LastTweaks2
     )
 ) 
 if "%MenuItem%"=="10" goto Configuration6
@@ -1499,7 +1483,7 @@ if "%MenuItem%"=="12" goto Configuration1
 
 
 :Configuration3
-set lastConfiguration=:Configuration3
+set LastConfiguration=:Configuration3
 
 
 set "DisableBackgroundAppsc="
@@ -1592,7 +1576,7 @@ if "%MenuItem%"=="3" (
     ) else (
         set "DisableBackgroundApps=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="4" (
     if "%Winlogon%"=="False" (
@@ -1600,7 +1584,7 @@ if "%MenuItem%"=="4" (
     ) else (
         set "Winlogon=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="5" (
     if "%IntelMicroCode%"=="False" (
@@ -1608,7 +1592,7 @@ if "%MenuItem%"=="5" (
     ) else (
         set "IntelMicroCode=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="6" (
     if "%AMDMicroCode%"=="False" (
@@ -1616,7 +1600,7 @@ if "%MenuItem%"=="6" (
     ) else (
         set "AMDMicroCode=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="7" (
     if "%EnableGPUSheduling%"=="False" (
@@ -1624,7 +1608,7 @@ if "%MenuItem%"=="7" (
     ) else (
         set "EnableGPUSheduling=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 
 if "%MenuItem%"=="8" (
@@ -1633,13 +1617,13 @@ if "%MenuItem%"=="8" (
     ) else (
         set "DisableSettingsSynchronization=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="9" (
-    if "%lasttweaks1%"=="true" (
-        goto :lasttweaks1
+    if "%LastTweaks1%"=="True" (
+        goto :LastTweaks1
     ) else (
-        goto :lasttweaks2
+        goto :LastTweaks2
     )
 ) 
 if "%MenuItem%"=="10" goto Configuration6
@@ -1649,7 +1633,7 @@ if "%MenuItem%"=="12" goto Configuration2
 
 
 :Configuration4
-set lastConfiguration=:Configuration4
+set LastConfiguration=:Configuration4
 
 
 set "DisableRemoteAssistancec="
@@ -1742,7 +1726,7 @@ if "%MenuItem%"=="3" (
     ) else (
         set "DisableRemoteAssistance=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="4" (
     if "%DisableGamebarpresencewriter%"=="False" (
@@ -1750,7 +1734,7 @@ if "%MenuItem%"=="4" (
     ) else (
         set "DisableGamebarpresencewriter=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="5" (
     if "%DisableSystemEnergySaving%"=="False" (
@@ -1758,7 +1742,7 @@ if "%MenuItem%"=="5" (
     ) else (
         set "DisableSystemEnergySaving=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="6" (
     if "%SVCSplitThreshold%"=="False" (
@@ -1766,7 +1750,7 @@ if "%MenuItem%"=="6" (
     ) else (
         set "SVCSplitThreshold=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="7" (
     if "%DisableUSBPowerSavings%"=="False" (
@@ -1774,7 +1758,7 @@ if "%MenuItem%"=="7" (
     ) else (
         set "DisableUSBPowerSavings=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 
 if "%MenuItem%"=="8" (
@@ -1783,13 +1767,13 @@ if "%MenuItem%"=="8" (
     ) else (
         set "EnableMSIMode=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="9" (
-    if "%lasttweaks1%"=="true" (
-        goto :lasttweaks1
+    if "%LastTweaks1%"=="True" (
+        goto :LastTweaks1
     ) else (
-        goto :lasttweaks2
+        goto :LastTweaks2
     )
 ) 
 if "%MenuItem%"=="10" goto Configuration6
@@ -1800,7 +1784,7 @@ if "%MenuItem%"=="12" goto Configuration3
 
 
 :Configuration5
-set lastConfiguration=:Configuration5
+set LastConfiguration=:Configuration5
 
 
 set "DevicePriorityUndefinedc="
@@ -1857,14 +1841,14 @@ if "%MenuItem%"=="3" (
     ) else (
         set "DevicePriorityUndefined=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 
 if "%MenuItem%"=="9" (
-    if "%lasttweaks1%"=="true" (
-        goto :lasttweaks1
+    if "%LastTweaks1%"=="True" (
+        goto :LastTweaks1
     ) else (
-        goto :lasttweaks2
+        goto :LastTweaks2
     )
 ) 
 if "%MenuItem%"=="10" goto Configuration6
@@ -1874,7 +1858,7 @@ if "%MenuItem%"=="12" goto Configuration4
 
 
 :Configuration6
-set lastConfiguration=:Configuration6
+set LastConfiguration=:Configuration6
 
 
 set "SpectreMeltdownc="
@@ -1967,7 +1951,7 @@ if "%MenuItem%"=="3" (
     ) else (
         set "SpectreMeltdown=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="4" (
     if "%DisableIDLE%"=="False" (
@@ -1975,7 +1959,7 @@ if "%MenuItem%"=="4" (
     ) else (
         set "DisableIDLE=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="5" (
     if "%MMCSS%"=="False" (
@@ -1983,7 +1967,7 @@ if "%MenuItem%"=="5" (
     ) else (
         set "MMCSS=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="6" (
     if "%CSRSS%"=="False" (
@@ -1991,7 +1975,7 @@ if "%MenuItem%"=="6" (
     ) else (
         set "CSRSS=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="7" (
     if "%LowProcessPriority%"=="False" (
@@ -1999,7 +1983,7 @@ if "%MenuItem%"=="7" (
     ) else (
         set "LowProcessPriority=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 
 if "%MenuItem%"=="8" (
@@ -2008,13 +1992,13 @@ if "%MenuItem%"=="8" (
     ) else (
         set "LowAudioLatency=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="9" (
-    if "%lasttweaks1%"=="true" (
-        goto :lasttweaks1
+    if "%LastTweaks1%"=="True" (
+        goto :LastTweaks1
     ) else (
-        goto :lasttweaks2
+        goto :LastTweaks2
     )
 ) 
 if "%MenuItem%"=="10" goto Configuration8
@@ -2024,7 +2008,7 @@ if "%MenuItem%"=="12" goto Configuration5
 
 
 :Configuration7
-set lastConfiguration=:Configuration7
+set LastConfiguration=:Configuration7
 
 
 set "TimerResolutionc="
@@ -2104,7 +2088,7 @@ if "%MenuItem%"=="3" (
     ) else (
         set "TimerResolution=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="4" (
     if "%BCDLowLatency%"=="False" (
@@ -2112,7 +2096,7 @@ if "%MenuItem%"=="4" (
     ) else (
         set "BCDLowLatency=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="5" (
     if "%DisableNetworkTrhottling%"=="False" (
@@ -2120,15 +2104,15 @@ if "%MenuItem%"=="5" (
     ) else (
         set "DisableNetworkTrhottling=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 
 
 if "%MenuItem%"=="9" (
-    if "%lasttweaks1%"=="true" (
-        goto :lasttweaks1
+    if "%LastTweaks1%"=="True" (
+        goto :LastTweaks1
     ) else (
-        goto :lasttweaks2
+        goto :LastTweaks2
     )
 ) 
 if "%MenuItem%"=="10" goto Configuration8
@@ -2137,7 +2121,7 @@ if "%MenuItem%"=="12" goto Configuration6
 
 
 :Configuration8
-set lastConfiguration=:Configuration8
+set LastConfiguration=:Configuration8
 
 
 set "DisableNaglesAlgorithmc="
@@ -2224,7 +2208,7 @@ if "%MenuItem%"=="3" (
     ) else (
         set "DisableNaglesAlgorithm=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="4" (
     if "%NIC%"=="False" (
@@ -2232,7 +2216,7 @@ if "%MenuItem%"=="4" (
     ) else (
         set "NIC=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="5" (
     if "%DNS%"=="False" (
@@ -2240,7 +2224,7 @@ if "%MenuItem%"=="5" (
     ) else (
         set "DNS=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="6" (
     if "%WindowsNetworkSettigns%"=="False" (
@@ -2248,7 +2232,7 @@ if "%MenuItem%"=="6" (
     ) else (
         set "WindowsNetworkSettigns=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="7" (
     if "%Autotunning%"=="False" (
@@ -2256,14 +2240,14 @@ if "%MenuItem%"=="7" (
     ) else (
         set "Autotunning=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 
 if "%MenuItem%"=="9" (
-    if "%lasttweaks1%"=="true" (
-        goto :lasttweaks1
+    if "%LastTweaks1%"=="True" (
+        goto :LastTweaks1
     ) else (
-        goto :lasttweaks2
+        goto :LastTweaks2
     )
 ) 
 if "%MenuItem%"=="10" goto Configuration9
@@ -2272,7 +2256,7 @@ if "%MenuItem%"=="12" goto Configuration7
 
 
 :Configuration9
-set lastConfiguration=:Configuration9
+set LastConfiguration=:Configuration9
 
 
 set "KeyboardDataSizec="
@@ -2365,7 +2349,7 @@ if "%MenuItem%"=="3" (
     ) else (
         set "KeyboardDataSize=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="4" (
     if "%AdjustKeyboardParameters%"=="False" (
@@ -2373,7 +2357,7 @@ if "%MenuItem%"=="4" (
     ) else (
         set "AdjustKeyboardParameters=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="5" (
     if "%KeyboardAccessibilitySettings%"=="False" (
@@ -2381,7 +2365,7 @@ if "%MenuItem%"=="5" (
     ) else (
         set "KeyboardAccessibilitySettings=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="6" (
     if "%MouseDataSize%"=="False" (
@@ -2389,7 +2373,7 @@ if "%MenuItem%"=="6" (
     ) else (
         set "MouseDataSize=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="7" (
     if "%DisablePointerAcceleration%"=="False" (
@@ -2397,7 +2381,7 @@ if "%MenuItem%"=="7" (
     ) else (
         set "DisablePointerAcceleration=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 
 if "%MenuItem%"=="8" (
@@ -2406,13 +2390,13 @@ if "%MenuItem%"=="8" (
     ) else (
         set "MouseAccessibilitySettings=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="9" (
-    if "%lasttweaks1%"=="true" (
-        goto :lasttweaks1
+    if "%LastTweaks1%"=="True" (
+        goto :LastTweaks1
     ) else (
-        goto :lasttweaks2
+        goto :LastTweaks2
     )
 ) 
 if "%MenuItem%"=="10" goto %Configuration10%
@@ -2421,7 +2405,7 @@ if "%MenuItem%"=="12" goto Configuration8
 
 
 :Configuration10Nvidia
-set lastConfiguration=:Configuration10Nvidia
+set LastConfiguration=:Configuration10Nvidia
 
 
 set "GameModec="
@@ -2514,7 +2498,7 @@ if "%MenuItem%"=="3" (
     ) else (
         set "GameMode=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="4" (
     if "%NvidiaTelemetry%"=="False" (
@@ -2522,7 +2506,7 @@ if "%MenuItem%"=="4" (
     ) else (
         set "NvidiaTelemetry=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="5" (
     if "%P0States%"=="False" (
@@ -2530,7 +2514,7 @@ if "%MenuItem%"=="5" (
     ) else (
         set "P0States=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="6" (
     if "%HDCP%"=="False" (
@@ -2538,7 +2522,7 @@ if "%MenuItem%"=="6" (
     ) else (
         set "HDCP=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="7" (
     if "%Preemption%"=="False" (
@@ -2546,7 +2530,7 @@ if "%MenuItem%"=="7" (
     ) else (
         set "Preemption=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 
 if "%MenuItem%"=="8" (
@@ -2555,13 +2539,13 @@ if "%MenuItem%"=="8" (
     ) else (
         set "Logging=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="9" (
-    if "%lasttweaks1%"=="true" (
-        goto :lasttweaks1
+    if "%LastTweaks1%"=="True" (
+        goto :LastTweaks1
     ) else (
-        goto :lasttweaks2
+        goto :LastTweaks2
     )
 ) 
 if "%MenuItem%"=="10" goto Configuration14
@@ -2569,7 +2553,7 @@ if "%MenuItem%"=="11" goto Configuration11
 if "%MenuItem%"=="12" goto Configuration9
 
 :Configuration11
-set lastConfiguration=:Configuration11
+set LastConfiguration=:Configuration11
 
 
 set "NvidiaProfileInspectorc="
@@ -2662,7 +2646,7 @@ if "%MenuItem%"=="3" (
     ) else (
         set "NvidiaProfileInspector=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="4" (
     if "%DisableTiledDisplay%"=="False" (
@@ -2670,7 +2654,7 @@ if "%MenuItem%"=="4" (
     ) else (
         set "DisableTiledDisplay=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="5" (
     if "%DisableTCC%"=="False" (
@@ -2678,7 +2662,7 @@ if "%MenuItem%"=="5" (
     ) else (
         set "DisableTCC=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="6" (
     if "%ForceContiguousMemoryAllocation%"=="False" (
@@ -2686,7 +2670,7 @@ if "%MenuItem%"=="6" (
     ) else (
         set "ForceContiguousMemoryAllocation=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="7" (
     if "%KBoost%"=="False" (
@@ -2694,7 +2678,7 @@ if "%MenuItem%"=="7" (
     ) else (
         set "KBoost=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 
 if "%MenuItem%"=="8" (
@@ -2703,13 +2687,13 @@ if "%MenuItem%"=="8" (
     ) else (
         set "DisableScaling=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="9" (
-    if "%lasttweaks1%"=="true" (
-        goto :lasttweaks1
+    if "%LastTweaks1%"=="True" (
+        goto :LastTweaks1
     ) else (
-        goto :lasttweaks2
+        goto :LastTweaks2
     )
 ) 
 if "%MenuItem%"=="10" goto Configuration14
@@ -2719,7 +2703,7 @@ if "%MenuItem%"=="12" goto %Configuration10%
 
 
 :Configuration12
-set lastConfiguration=:Configuration12
+set LastConfiguration=:Configuration12
 
 
 set "NoECCc="
@@ -2784,7 +2768,7 @@ if "%MenuItem%"=="3" (
     ) else (
         set "NoECC=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="4" (
     if "%UnrestrictedClockPolicy%"=="False" (
@@ -2792,13 +2776,13 @@ if "%MenuItem%"=="4" (
     ) else (
         set "UnrestrictedClockPolicy=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="9" (
-    if "%lasttweaks1%"=="true" (
-        goto :lasttweaks1
+    if "%LastTweaks1%"=="True" (
+        goto :LastTweaks1
     ) else (
-        goto :lasttweaks2
+        goto :LastTweaks2
     )
 ) 
 if "%MenuItem%"=="10" goto Configuration14
@@ -2807,7 +2791,7 @@ if "%MenuItem%"=="12" goto Configuration11
 
 
 :Configuration10AMD
-set lastConfiguration=:Configuration10AMD
+set LastConfiguration=:Configuration10AMD
 
 
 set "GameModeAMDc="
@@ -2879,7 +2863,7 @@ if "%MenuItem%"=="3" (
     ) else (
         set "GameModeAMD=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="4" (
     if "%AMDOptimizedSettings%"=="False" (
@@ -2887,7 +2871,7 @@ if "%MenuItem%"=="4" (
     ) else (
         set "AMDOptimizedSettings=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="5" (
     if "%AMDDebloat%"=="False" (
@@ -2895,14 +2879,14 @@ if "%MenuItem%"=="5" (
     ) else (
         set "AMDDebloat=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 
 if "%MenuItem%"=="9" (
-    if "%lasttweaks1%"=="true" (
-        goto :lasttweaks1
+    if "%LastTweaks1%"=="True" (
+        goto :LastTweaks1
     ) else (
-        goto :lasttweaks2
+        goto :LastTweaks2
     )
 ) 
 if "%MenuItem%"=="10" goto Configuration14
@@ -2911,7 +2895,7 @@ if "%MenuItem%"=="12" goto Configuration9
 
 
 :Configuration14
-set lastConfiguration=:Configuration14
+set LastConfiguration=:Configuration14
 
 
 set "MemoryManagmentc="
@@ -2977,7 +2961,7 @@ if "%MenuItem%"=="3" (
     ) else (
         set "MemoryManagment=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="4" (
     if "%LargePageDrivers%"=="False" (
@@ -2985,14 +2969,14 @@ if "%MenuItem%"=="4" (
     ) else (
         set "LargePageDrivers=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 
 if "%MenuItem%"=="9" (
-    if "%lasttweaks1%"=="true" (
-        goto :lasttweaks1
+    if "%LastTweaks1%"=="True" (
+        goto :LastTweaks1
     ) else (
-        goto :lasttweaks2
+        goto :LastTweaks2
     )
 ) 
 if "%MenuItem%"=="10" goto Configuration15
@@ -3001,7 +2985,7 @@ if "%MenuItem%"=="12" goto %Configuration10%
 
 
 :Configuration15
-set lastConfiguration=:Configuration15
+set LastConfiguration=:Configuration15
 
 
 set "FileSystemOptimizationc="
@@ -3073,7 +3057,7 @@ if "%MenuItem%"=="3" (
     ) else (
         set "FileSystemOptimization=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="4" (
     if "%Cleaner%"=="False" (
@@ -3081,7 +3065,7 @@ if "%MenuItem%"=="4" (
     ) else (
         set "Cleaner=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="5" (
     if "%Startupcleaner%"=="False" (
@@ -3089,14 +3073,14 @@ if "%MenuItem%"=="5" (
     ) else (
         set "Startupcleaner=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 
 if "%MenuItem%"=="9" (
-    if "%lasttweaks1%"=="true" (
-        goto :lasttweaks1
+    if "%LastTweaks1%"=="True" (
+        goto :LastTweaks1
     ) else (
-        goto :lasttweaks2
+        goto :LastTweaks2
     )
 ) 
 if "%MenuItem%"=="10" goto Configuration16
@@ -3106,7 +3090,7 @@ if "%MenuItem%"=="12" goto Configuration14
 
 
 :Configuration16
-set lastConfiguration=:Configuration16
+set LastConfiguration=:Configuration16
 
 
 set "DisableTelemetryc="
@@ -3199,7 +3183,7 @@ if "%MenuItem%"=="3" (
     ) else (
         set "DisableTelemetry=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="4" (
     if "%DisableHibernation%"=="False" (
@@ -3207,7 +3191,7 @@ if "%MenuItem%"=="4" (
     ) else (
         set "DisableHibernation=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="5" (
     if "%BootOptions%"=="False" (
@@ -3215,7 +3199,7 @@ if "%MenuItem%"=="5" (
     ) else (
         set "BootOptions=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="6" (
     if "%PasswordOnWakeUp%"=="False" (
@@ -3223,7 +3207,7 @@ if "%MenuItem%"=="6" (
     ) else (
         set "PasswordOnWakeUp=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="7" (
     if "%DisableAutomaticMaintenance%"=="False" (
@@ -3231,7 +3215,7 @@ if "%MenuItem%"=="7" (
     ) else (
         set "DisableAutomaticMaintenance=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 
 if "%MenuItem%"=="8" (
@@ -3240,13 +3224,13 @@ if "%MenuItem%"=="8" (
     ) else (
         set "DisableLocationTracking=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="9" (
-    if "%lasttweaks1%"=="true" (
-        goto :lasttweaks1
+    if "%LastTweaks1%"=="True" (
+        goto :LastTweaks1
     ) else (
-        goto :lasttweaks2
+        goto :LastTweaks2
     )
 ) 
 if "%MenuItem%"=="10" goto %Configuration23%
@@ -3254,7 +3238,7 @@ if "%MenuItem%"=="11" goto Configuration17
 if "%MenuItem%"=="12" goto Configuration15
 
 :Configuration17
-set lastConfiguration=:Configuration17
+set LastConfiguration=:Configuration17
 
 
 set "DisablePushNotificationsc="
@@ -3347,7 +3331,7 @@ if "%MenuItem%"=="3" (
     ) else (
         set "DisablePushNotifications=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="4" (
     if "%DisableDriverSearching%"=="False" (
@@ -3355,7 +3339,7 @@ if "%MenuItem%"=="4" (
     ) else (
         set "DisableDriverSearching=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="5" (
     if "%DisableWindowsNotifications%"=="False" (
@@ -3363,7 +3347,7 @@ if "%MenuItem%"=="5" (
     ) else (
         set "DisableWindowsNotifications=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="6" (
     if "%DisableTransparency%"=="False" (
@@ -3371,7 +3355,7 @@ if "%MenuItem%"=="6" (
     ) else (
         set "DisableTransparency=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="7" (
     if "%PauseMapsUpdates%"=="False" (
@@ -3379,7 +3363,7 @@ if "%MenuItem%"=="7" (
     ) else (
         set "PauseMapsUpdates=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 
 if "%MenuItem%"=="8" (
@@ -3388,13 +3372,13 @@ if "%MenuItem%"=="8" (
     ) else (
         set "DisableSettingsSync=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="9" (
-    if "%lasttweaks1%"=="true" (
-        goto :lasttweaks1
+    if "%LastTweaks1%"=="True" (
+        goto :LastTweaks1
     ) else (
-        goto :lasttweaks2
+        goto :LastTweaks2
     )
 ) 
 if "%MenuItem%"=="10" goto %Configuration23%
@@ -3402,7 +3386,7 @@ if "%MenuItem%"=="11" goto Configuration18
 if "%MenuItem%"=="12" goto Configuration16
 
 :Configuration18
-set lastConfiguration=:Configuration18
+set LastConfiguration=:Configuration18
 
 
 set "DisableAdvertisingIDc="
@@ -3495,7 +3479,7 @@ if "%MenuItem%"=="3" (
     ) else (
         set "DisableAdvertisingID=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="4" (
     if "%DisableWebInSearch%"=="False" (
@@ -3503,7 +3487,7 @@ if "%MenuItem%"=="4" (
     ) else (
         set "DisableWebInSearch=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="5" (
     if "%DisableRemoteAssistance%"=="False" (
@@ -3511,7 +3495,7 @@ if "%MenuItem%"=="5" (
     ) else (
         set "DisableRemoteAssistance=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="6" (
     if "%DisableInventoryCollector%"=="False" (
@@ -3519,7 +3503,7 @@ if "%MenuItem%"=="6" (
     ) else (
         set "DisableInventoryCollector=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="7" (
     if "%DisableWindowsErrorReporting%"=="False" (
@@ -3527,7 +3511,7 @@ if "%MenuItem%"=="7" (
     ) else (
         set "DisableWindowsErrorReporting=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 
 if "%MenuItem%"=="8" (
@@ -3536,13 +3520,13 @@ if "%MenuItem%"=="8" (
     ) else (
         set "DisableCustomerExperienceProgram=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="9" (
-    if "%lasttweaks1%"=="true" (
-        goto :lasttweaks1
+    if "%LastTweaks1%"=="True" (
+        goto :LastTweaks1
     ) else (
-        goto :lasttweaks2
+        goto :LastTweaks2
     )
 ) 
 if "%MenuItem%"=="10" goto %Configuration23%
@@ -3550,7 +3534,7 @@ if "%MenuItem%"=="11" goto Configuration19
 if "%MenuItem%"=="12" goto Configuration17
 
 :Configuration19
-set lastConfiguration=:Configuration19
+set LastConfiguration=:Configuration19
 
 
 set "DisableOneDriveSyncc="
@@ -3643,7 +3627,7 @@ if "%MenuItem%"=="3" (
     ) else (
         set "DisableOneDriveSync=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="4" (
     if "%DisableBiometrics%"=="False" (
@@ -3651,7 +3635,7 @@ if "%MenuItem%"=="4" (
     ) else (
         set "DisableBiometrics=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="5" (
     if "%DenyCapabilityForApps%"=="False" (
@@ -3659,7 +3643,7 @@ if "%MenuItem%"=="5" (
     ) else (
         set "DenyCapabilityForApps=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="6" (
     if "%DisableLocationServices%"=="False" (
@@ -3667,7 +3651,7 @@ if "%MenuItem%"=="6" (
     ) else (
         set "DisableLocationServices=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="7" (
     if "%PreventWindowsMarkingFiles%"=="False" (
@@ -3675,7 +3659,7 @@ if "%MenuItem%"=="7" (
     ) else (
         set "PreventWindowsMarkingFiles=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 
 if "%MenuItem%"=="8" (
@@ -3684,13 +3668,13 @@ if "%MenuItem%"=="8" (
     ) else (
         set "DisableLanguageBar=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="9" (
-    if "%lasttweaks1%"=="true" (
-        goto :lasttweaks1
+    if "%LastTweaks1%"=="True" (
+        goto :LastTweaks1
     ) else (
-        goto :lasttweaks2
+        goto :LastTweaks2
     )
 ) 
 if "%MenuItem%"=="10" goto %Configuration23%
@@ -3698,7 +3682,7 @@ if "%MenuItem%"=="11" goto Configuration20
 if "%MenuItem%"=="12" goto Configuration18
 
 :Configuration20
-set lastConfiguration=:Configuration20
+set LastConfiguration=:Configuration20
 
 
 set "DisableStickyKeysc="
@@ -3791,7 +3775,7 @@ if "%MenuItem%"=="3" (
     ) else (
         set "DisableStickyKeys=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="4" (
     if "%DisableProgramCompatibilityAssistant%"=="False" (
@@ -3799,7 +3783,7 @@ if "%MenuItem%"=="4" (
     ) else (
         set "DisableProgramCompatibilityAssistant=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="5" (
     if "%DisableFaultTolerantHeap%"=="False" (
@@ -3807,7 +3791,7 @@ if "%MenuItem%"=="5" (
     ) else (
         set "DisableFaultTolerantHeap=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="6" (
     if "%DisablePowerShellTelemtry%"=="False" (
@@ -3815,7 +3799,7 @@ if "%MenuItem%"=="6" (
     ) else (
         set "DisablePowerShellTelemtry=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="7" (
     if "%DisableWindowsErrorReporting%"=="False" (
@@ -3823,7 +3807,7 @@ if "%MenuItem%"=="7" (
     ) else (
         set "DisableWindowsErrorReporting=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 
 if "%MenuItem%"=="8" (
@@ -3832,13 +3816,13 @@ if "%MenuItem%"=="8" (
     ) else (
         set "DisableRemoteAssistance=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="9" (
-    if "%lasttweaks1%"=="true" (
-        goto :lasttweaks1
+    if "%LastTweaks1%"=="True" (
+        goto :LastTweaks1
     ) else (
-        goto :lasttweaks2
+        goto :LastTweaks2
     )
 ) 
 if "%MenuItem%"=="10" goto %Configuration23%
@@ -3846,7 +3830,7 @@ if "%MenuItem%"=="11" goto Configuration21
 if "%MenuItem%"=="12" goto Configuration19
 
 :Configuration21
-set lastConfiguration=:Configuration21
+set LastConfiguration=:Configuration21
 
 
 set "Remove3DObjectsFromExplorerc="
@@ -3939,7 +3923,7 @@ if "%MenuItem%"=="3" (
     ) else (
         set "Remove3DObjectsFromExplorer=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="4" (
     if "%DisableSignInAndLockLastUser%"=="False" (
@@ -3947,7 +3931,7 @@ if "%MenuItem%"=="4" (
     ) else (
         set "DisableSignInAndLockLastUser=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="5" (
     if "%DisableOnlineTips%"=="False" (
@@ -3955,7 +3939,7 @@ if "%MenuItem%"=="5" (
     ) else (
         set "DisableOnlineTips=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="6" (
     if "%DisableTypingInsights%"=="False" (
@@ -3963,7 +3947,7 @@ if "%MenuItem%"=="6" (
     ) else (
         set "DisableTypingInsights=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="7" (
     if "%DisableSuggestionsInTheSearchBox%"=="False" (
@@ -3971,7 +3955,7 @@ if "%MenuItem%"=="7" (
     ) else (
         set "DisableSuggestionsInTheSearchBox=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 
 if "%MenuItem%"=="8" (
@@ -3980,13 +3964,13 @@ if "%MenuItem%"=="8" (
     ) else (
         set "RestoreOldContextMenu=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="9" (
-    if "%lasttweaks1%"=="true" (
-        goto :lasttweaks1
+    if "%LastTweaks1%"=="True" (
+        goto :LastTweaks1
     ) else (
-        goto :lasttweaks2
+        goto :LastTweaks2
     )
 ) 
 if "%MenuItem%"=="10" goto %Configuration23%
@@ -3994,7 +3978,7 @@ if "%MenuItem%"=="11" goto Configuration22
 if "%MenuItem%"=="12" goto Configuration20
 
 :Configuration22
-set lastConfiguration=:Configuration22
+set LastConfiguration=:Configuration22
 
 
 set "RemovePinToQuickAccessc="
@@ -4087,7 +4071,7 @@ if "%MenuItem%"=="3" (
     ) else (
         set "RemovePinToQuickAccess=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="4" (
     if "%HideFoldersInQuickAccess%"=="False" (
@@ -4095,7 +4079,7 @@ if "%MenuItem%"=="4" (
     ) else (
         set "HideFoldersInQuickAccess=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="5" (
     if "%HideQuickAccessFromFileExplorer%"=="False" (
@@ -4103,7 +4087,7 @@ if "%MenuItem%"=="5" (
     ) else (
         set "HideQuickAccessFromFileExplorer=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="6" (
     if "%LaunchFileExplorerToThisPC%"=="False" (
@@ -4111,7 +4095,7 @@ if "%MenuItem%"=="6" (
     ) else (
         set "LaunchFileExplorerToThisPC=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="7" (
     if "%TurnOffDisplayOfRecentSearch%"=="False" (
@@ -4119,7 +4103,7 @@ if "%MenuItem%"=="7" (
     ) else (
         set "TurnOffDisplayOfRecentSearch=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 
 if "%MenuItem%"=="8" (
@@ -4128,13 +4112,13 @@ if "%MenuItem%"=="8" (
     ) else (
         set "ClearHistoryOfRecentlyOpenedDocumentsOnExit=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="9" (
-    if "%lasttweaks1%"=="true" (
-        goto :lasttweaks1
+    if "%LastTweaks1%"=="True" (
+        goto :LastTweaks1
     ) else (
-        goto :lasttweaks2
+        goto :LastTweaks2
     )
 ) 
 if "%MenuItem%"=="10" goto %Configuration23%
@@ -4142,7 +4126,7 @@ if "%MenuItem%"=="11" goto %Configuration23%
 if "%MenuItem%"=="12" goto Configuration21
 
 :Configuration23Intel
-set lastConfiguration=:Configuration23Intel
+set LastConfiguration=:Configuration23Intel
 
 
 set "IntelCpuVirtualizationc="
@@ -4234,7 +4218,7 @@ if "%MenuItem%"=="3" (
     ) else (
         set "IntelCpuVirtualization=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="4" (
     if "%IntelCoreIsolation%"=="False" (
@@ -4242,7 +4226,7 @@ if "%MenuItem%"=="4" (
     ) else (
         set "IntelCoreIsolation=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="5" (
     if "%IntelCStates%"=="False" (
@@ -4250,7 +4234,7 @@ if "%MenuItem%"=="5" (
     ) else (
         set "IntelCStates=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="6" (
     if "%IntelPowerThrottling%"=="False" (
@@ -4258,7 +4242,7 @@ if "%MenuItem%"=="6" (
     ) else (
         set "IntelPowerThrottling=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="7" (
     if "%AMDServices%"=="False" (
@@ -4266,7 +4250,7 @@ if "%MenuItem%"=="7" (
     ) else (
         set "AMDServices=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="" (
     if "%IntelTSX%"=="False" (
@@ -4274,13 +4258,13 @@ if "%MenuItem%"=="" (
     ) else (
         set "IntelTSX=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="9" (
-    if "%lasttweaks1%"=="true" (
-        goto :lasttweaks1
+    if "%LastTweaks1%"=="True" (
+        goto :LastTweaks1
     ) else (
-        goto :lasttweaks2
+        goto :LastTweaks2
     )
 ) 
 if "%MenuItem%"=="10" goto Configuration
@@ -4288,7 +4272,7 @@ if "%MenuItem%"=="11" goto Configuration
 if "%MenuItem%"=="12" goto Configuration22
 
 :Configuration23AMD
-set lastConfiguration=:Configuration23AMD
+set LastConfiguration=:Configuration23AMD
 
 
 set "AMDCpuVirtualizationc="
@@ -4380,7 +4364,7 @@ if "%MenuItem%"=="3" (
     ) else (
         set "AMDCpuVirtualization=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="4" (
     if "%AMDCoreIsolation%"=="False" (
@@ -4388,7 +4372,7 @@ if "%MenuItem%"=="4" (
     ) else (
         set "AMDCoreIsolation=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="5" (
     if "%AMDCStates%"=="False" (
@@ -4396,7 +4380,7 @@ if "%MenuItem%"=="5" (
     ) else (
         set "AMDCStates=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="6" (
     if "%AMDPowerThrottling%"=="False" (
@@ -4404,7 +4388,7 @@ if "%MenuItem%"=="6" (
     ) else (
         set "AMDPowerThrottling=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="7" (
     if "%IntelServices%"=="False" (
@@ -4412,7 +4396,7 @@ if "%MenuItem%"=="7" (
     ) else (
         set "IntelServices=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="8" (
     if "%AMDTSX%"=="False" (
@@ -4420,13 +4404,13 @@ if "%MenuItem%"=="8" (
     ) else (
         set "AMDTSX=False"
     )
-) && goto %lastConfiguration%
+) && goto %LastConfiguration%
 
 if "%MenuItem%"=="9" (
-    if "%lasttweaks1%"=="true" (
-        goto :lasttweaks1
+    if "%LastTweaks1%"=="True" (
+        goto :LastTweaks1
     ) else (
-        goto :lasttweaks2
+        goto :LastTweaks2
     )
 ) 
 if "%MenuItem%"=="10" goto Configuration1
@@ -4434,7 +4418,7 @@ if "%MenuItem%"=="11" goto Configuration1
 if "%MenuItem%"=="12" goto Configuration22
 
 :Credits
-set lastpage=:Credits
+set LastPage=:Credits
 cls
 echo.                                
 echo     %l%┌─────────────────────────────┐                       
@@ -4472,7 +4456,7 @@ echo.
 echo.
 choice /c:WS /n /m " "                                           
 set MenuItem=%errorlevel%
-if "%MenuItem%"=="1" goto %lastConfiguration%
+if "%MenuItem%"=="1" goto %LastConfiguration%
 if "%MenuItem%"=="2" goto Home
 
 
@@ -4498,7 +4482,7 @@ echo                                      %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^| 
 echo                                        %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%
 echo.
 
-if "%FPS%"=="false" goto skippingfps
+if "%FPS%"=="False" goto skippingfps
 echo                                            Applying FPS and Input Delay Tweaks
 if "%Visuals%" equ "True" (
 :: Configure Windows Visuals
@@ -4937,7 +4921,7 @@ echo set "ran_optimizations=%ran_optimizations%"> v.bat
 :skippingfps
 
 
-if "%Latency%"=="false" goto skippinglatency
+if "%Latency%"=="False" goto skippinglatency
 echo                                                  Applying Latency Tweaks
 :: Download Timer Resolution (Credits to Amitxv)
 if exist "%SYSTEMDRIVE%\SetTimerResolution.exe" del "%SYSTEMDRIVE%\SetTimerResolution.exe" >nul 2>&1
@@ -5049,7 +5033,7 @@ if %formatted_optimizations% LSS 10 set "formatted_optimizations= %formatted_opt
 echo set "ran_optimizations=%ran_optimizations%"> v.bat
 :skippinglatency
 
-if "%Network%"=="false" goto skippingnetwork
+if "%Network%"=="False" goto skippingnetwork
 echo                                                  Applying Network Tweaks
 if "%DisableNaglesAlgorithm%" equ "True" (
 :: Disable Nagle's Algorithm
@@ -5231,7 +5215,7 @@ echo set "ran_optimizations=%ran_optimizations%"> v.bat
 :skippingnetwork
 
 
-if "%KBM%"=="false" goto skippingkbm
+if "%KBM%"=="False" goto skippingkbm
 echo                                                     Applying KBM Tweaks
 
 if "%KeyboardDataSize%" equ "True" (
@@ -5290,7 +5274,7 @@ echo set "ran_optimizations=%ran_optimizations%"> v.bat
 
 
 :skippingkbm
-if "%Task%"=="false" goto skippingtask
+if "%Task%"=="False" goto skippingtask
 echo                                               Applying Task Scheduler Tweaks
 :: Disable Not Used Scheduler Tasks
 schtasks /Change /TN "Microsoft\Windows\AppID\SmartScreenSpecific" /Disable >nul 2>&1
@@ -5343,7 +5327,7 @@ echo set "ran_optimizations=%ran_optimizations%"> v.bat
 
 
 
-if "%GPU%"=="false" goto skippinggpu
+if "%GPU%"=="False" goto skippinggpu
 
 If %gpuBrand%==Nvidia (
     goto nvidia
@@ -5532,11 +5516,11 @@ reg add "HKCU\Software\AMD\CN" /v "WizardProfile" /t REG_SZ /d "PROFILE_CUSTOM" 
 reg add "HKCU\Software\AMD\CN" /v "UserTypeWizardShown" /t REG_DWORD /d "1" /f > nul 2>&1
 reg add "HKCU\Software\AMD\CN" /v "LastPage" /t REG_SZ /d "settings/graphics/0/" /f > nul 2>&1
 reg add "HKCU\Software\AMD\CN" /v "AutoUpdate" /t REG_DWORD /d "0" /f > nul 2>&1
-reg add "HKCU\Software\AMD\CN" /v "RSXBrowserUnavailable" /t REG_SZ /d "true" /f > nul 2>&1
-reg add "HKCU\Software\AMD\CN" /v "SYSTEMTray" /t REG_SZ /d "false" /f > nul 2>&1
-reg add "HKCU\Software\AMD\CN" /v "AllowWebContent" /t REG_SZ /d "false" /f > nul 2>&1
-reg add "HKCU\Software\AMD\CN" /v "CN_Hide_Toast_Notification" /t REG_SZ /d "true" /f > nul 2>&1
-reg add "HKCU\Software\AMD\CN" /v "AnimationEffect" /t REG_SZ /d "false" /f > nul 2>&1
+reg add "HKCU\Software\AMD\CN" /v "RSXBrowserUnavailable" /t REG_SZ /d "True" /f > nul 2>&1
+reg add "HKCU\Software\AMD\CN" /v "SYSTEMTray" /t REG_SZ /d "False" /f > nul 2>&1
+reg add "HKCU\Software\AMD\CN" /v "AllowWebContent" /t REG_SZ /d "False" /f > nul 2>&1
+reg add "HKCU\Software\AMD\CN" /v "CN_Hide_Toast_Notification" /t REG_SZ /d "True" /f > nul 2>&1
+reg add "HKCU\Software\AMD\CN" /v "AnimationEffect" /t REG_SZ /d "False" /f > nul 2>&1
 reg add "HKCU\Software\AMD\CN\OverlayNotification" /v "AlreadyNotified" /t REG_DWORD /d "1" /f > nul 2>&1
 reg add "HKCU\Software\AMD\CN\VirtualSuperResolution" /v "AlreadyNotified" /t REG_DWORD /d "1" /f > nul 2>&1
 reg add "HKCU\Software\AMD\DVR" /v "PerformanceMonitorOpacityWA" /t REG_DWORD /d "0" /f > nul 2>&1
@@ -5552,7 +5536,7 @@ reg add "HKCU\Software\AMD\DVR" /v "PrevInGameReplayEnabled" /t REG_DWORD /d "0"
 reg add "HKCU\Software\AMD\DVR" /v "PrevInstantGifEnabled" /t REG_DWORD /d "0" /f > nul 2>&1
 reg add "HKCU\Software\AMD\DVR" /v "DvrDesktops" /t REG_SZ /d "\\.\DISPLAY19" /f > nul 2>&1
 reg add "HKCU\Software\AMD\DVR" /v "RemoteServerStatus" /t REG_DWORD /d "0" /f > nul 2>&1
-reg add "HKCU\Software\AMD\DVR" /v "ShowRSOverlay" /t REG_SZ /d "false" /f > nul 2>&1
+reg add "HKCU\Software\AMD\DVR" /v "ShowRSOverlay" /t REG_SZ /d "False" /f > nul 2>&1
 reg add "HKCU\Software\AMD\SCENE\0" /v "CameraSize" /t REG_DWORD /d "3" /f > nul 2>&1
 reg add "HKCU\Software\AMD\SCENE\0" /v "CameraEnabled" /t REG_DWORD /d "1" /f > nul 2>&1
 reg add "HKCU\Software\AMD\SCENE\0" /v "CameraOpacity" /t REG_DWORD /d "100" /f > nul 2>&1
@@ -5793,7 +5777,7 @@ goto skippinggpu
 
 
 
-if "%RAM%"=="false" goto skippingram
+if "%RAM%"=="False" goto skippingram
 echo                                                     Applying RAM Tweaks
 
 if "%MemoryManagment%" equ "True" (
@@ -5844,7 +5828,7 @@ echo set "ran_optimizations=%ran_optimizations%"> v.bat
 
 :skippingram
 
-if "%DISK%"=="false" goto skippingdisk
+if "%DISK%"=="False" goto skippingdisk
 echo                                                     Applying DISK Tweaks
 
 if "%FileSystemOptimization%" equ "True" (
@@ -5923,7 +5907,7 @@ echo set "ran_optimizations=%ran_optimizations%"> v.bat
 
 
 
-if "%Windows%"=="false" goto skippingwindows
+if "%Windows%"=="False" goto skippingwindows
 echo                                                   Applying Windows Tweaks
 
 if "%DisablePushNotifications%" equ "True" (
@@ -6093,13 +6077,13 @@ If "%BootOptions%" equ "True" (
     bcdedit /set quietboot yes > NUL 2>&1
 
     :: Disable Boot Logo
-    bcdedit /set {globalsettings} custom:16000067 true > NUL 2>&13
+    bcdedit /set {globalsettings} custom:16000067 True > NUL 2>&13
 
     :: Disable Spinning Animation
-    bcdedit /set {globalsettings} custom:16000069 true > NUL 2>&1
+    bcdedit /set {globalsettings} custom:16000069 True > NUL 2>&1
 
     :: Disable Boot Message
-    bcdedit /set {globalsettings} custom:16000068 true > NUL 2>&1
+    bcdedit /set {globalsettings} custom:16000068 True > NUL 2>&1
 
     :: Disable Automatic Repair
     bcdedit /set {current} recoveryenabled no > NUL 2>&1
@@ -6254,7 +6238,7 @@ echo set "ran_optimizations=%ran_optimizations%"> v.bat
 :skippingwindows
 
 
-if "%CPU%"=="false" goto skippingcpu
+if "%CPU%"=="False" goto skippingcpu
 if %cpuBrand%==Intel (
     goto intel
 ) else (
@@ -6371,7 +6355,7 @@ goto skippingcpu
 
 :skippingcpu
 
-if "%HighQuality%"=="false" goto skippinghighquality
+if "%HighQuality%"=="False" goto skippinghighquality
 echo                                           Applying High Quality Recording Settings
 if not exist "%appdata%\obs-studio" echo                                                   Please Reinstall OBS
 taskkill /f /im obs64.exe >nul 2>&1
@@ -6381,13 +6365,13 @@ if %gpuBrand% == Nvidia (
 	(for %%i in (
 		"[AdvOut]"
 		"RecEncoder=jim_nvenc"
-		"RecRB=true"
+		"RecRB=True"
 		"TrackIndex=1"
 		"RecType=Standard"
 		"RecFormat=mp4"
 		"RecTracks=1"
 		"FLVTrack=1"
-		"FFOutputToFile=true"
+		"FFOutputToFile=True"
 		"FFFormat="
 		"FFFormatMimeType="
 		"FFVEncoderId=0"
@@ -6416,7 +6400,7 @@ if %gpuBrand% == Nvidia (
 		"RecType=Standard"
 		"Mode=Advanced"
 	) do echo.%%~i)>"%TEMP%\Basic.ini"
-	echo.{"bf":2,"cqp":17,"keyint_sec":0,"lookahead":"false","multipass":"disabled","preset2":"p1","profile":"baseline","rate_control":"CQP"} >"%TEMP%\RecordEncoder.json"
+	echo.{"bf":2,"cqp":17,"keyint_sec":0,"lookahead":"False","multipass":"disabled","preset2":"p1","profile":"baseline","rate_control":"CQP"} >"%TEMP%\RecordEncoder.json"
     move /Y "%TEMP%\basic.ini" "%APPDATA%\obs-studio\basic\profiles\Untitled\" >nul 2>&1
     move /Y "%TEMP%\RecordEncoder.json" "%APPDATA%\obs-studio\basic\profiles\Untitled\" >nul 2>&1
     set "file=C:\Vitality\Info\obs"
@@ -6435,13 +6419,13 @@ if %gpuBrand% == AMD (
 	(for %%i in (
 		"[AdvOut]"
 		"RecEncoder=h264_texture_amf"
-		"RecRB=true"
+		"RecRB=True"
 		"TrackIndex=1"
 		"RecType=Standard"
 		"RecFormat=mp4"
 		"RecTracks=1"
 		"FLVTrack=1"
-		"FFOutputToFile=true"
+		"FFOutputToFile=True"
 		"FFFormat="
 		"FFFormatMimeType="
 		"FFVEncoderId=0"
@@ -6489,13 +6473,13 @@ if %gpuBrand% == NaN (
 	(for %%i in (
 		"[AdvOut]"
 		"RecEncoder=obs_x264"
-		"RecRB=true"
+		"RecRB=True"
 		"TrackIndex=1"
 		"RecType=Standard"
 		"RecFormat=mp4"
 		"RecTracks=1"
 		"FLVTrack=1"
-		"FFOutputToFile=true"
+		"FFOutputToFile=True"
 		"FFFormat="
 		"FFFormatMimeType="
 		"FFVEncoderId=0"
@@ -6541,7 +6525,7 @@ if %gpuBrand% == NaN (
 
 :skippinghighquality
 
-if "%MediumQuality%"=="false" goto skippingmediumquality
+if "%MediumQuality%"=="False" goto skippingmediumquality
 echo                                          Applying Medium Quality Recording Settings
 if not exist "%appdata%\obs-studio" echo                                                        Reinstall OBS
 taskkill /f /im obs64.exe >nul 2>&1
@@ -6551,13 +6535,13 @@ if %gpuBrand% == Nvidia (
 	(for %%i in (
 		"[AdvOut]"
 		"RecEncoder=jim_nvenc"
-		"RecRB=true"
+		"RecRB=True"
 		"TrackIndex=1"
 		"RecType=Standard"
 		"RecFormat=mp4"
 		"RecTracks=1"
 		"FLVTrack=1"
-		"FFOutputToFile=true"
+		"FFOutputToFile=True"
 		"FFFormat="
 		"FFFormatMimeType="
 		"FFVEncoderId=0"
@@ -6586,7 +6570,7 @@ if %gpuBrand% == Nvidia (
 		"RecType=Standard"
 		"Mode=Advanced"
 	) do echo.%%~i)>"%TEMP%\Basic.ini"
-	echo.{"bf":0,"cqp":18,"keyint_sec":0,"lookahead":"false","multipass":"disabled","preset2":"p1","profile":"baseline","psycho_aq":"false","rate_control":"CQP"} >"%TEMP%\RecordEncoder.json"
+	echo.{"bf":0,"cqp":18,"keyint_sec":0,"lookahead":"False","multipass":"disabled","preset2":"p1","profile":"baseline","psycho_aq":"False","rate_control":"CQP"} >"%TEMP%\RecordEncoder.json"
     move /Y "%TEMP%\basic.ini" "%APPDATA%\obs-studio\basic\profiles\Untitled\" >nul 2>&1
     move /Y "%TEMP%\RecordEncoder.json" "%APPDATA%\obs-studio\basic\profiles\Untitled\" >nul 2>&1
     set "file=C:\Vitality\Info\obs"
@@ -6605,13 +6589,13 @@ if %gpuBrand% == AMD (
 	(for %%i in (
 		"[AdvOut]"
 		"RecEncoder=h264_texture_amf"
-		"RecRB=true"
+		"RecRB=True"
 		"TrackIndex=1"
 		"RecType=Standard"
 		"RecFormat=mp4"
 		"RecTracks=1"
 		"FLVTrack=1"
-		"FFOutputToFile=true"
+		"FFOutputToFile=True"
 		"FFFormat="
 		"FFFormatMimeType="
 		"FFVEncoderId=0"
@@ -6659,13 +6643,13 @@ if %gpuBrand% == NaN(
 	(for %%i in (
 		"[AdvOut]"
 		"RecEncoder=obs_x264"
-		"RecRB=true"
+		"RecRB=True"
 		"TrackIndex=1"
 		"RecType=Standard"
 		"RecFormat=mp4"
 		"RecTracks=1"
 		"FLVTrack=1"
-		"FFOutputToFile=true"
+		"FFOutputToFile=True"
 		"FFFormat="
 		"FFFormatMimeType="
 		"FFVEncoderId=0"
@@ -6723,7 +6707,7 @@ if %gpuBrand% == NaN(
 
 
 
-if "%LowQuality%"=="false" goto skippinglowquality
+if "%LowQuality%"=="False" goto skippinglowquality
 echo                                           Applying Low Quality Recording Settings
 if not exist "%appdata%\obs-studio" echo                                                        Reinstall OBS
 taskkill /f /im obs64.exe >nul 2>&1
@@ -6733,13 +6717,13 @@ if %gpuBrand% == Nvidia (
 	(for %%i in (
 		"[AdvOut]"
 		"RecEncoder=jim_nvenc"
-		"RecRB=true"
+		"RecRB=True"
 		"TrackIndex=1"
 		"RecType=Standard"
 		"RecFormat=mp4"
 		"RecTracks=1"
 		"FLVTrack=1"
-		"FFOutputToFile=true"
+		"FFOutputToFile=True"
 		"FFFormat="
 		"FFFormatMimeType="
 		"FFVEncoderId=0"
@@ -6768,7 +6752,7 @@ if %gpuBrand% == Nvidia (
 		"RecType=Standard"
 		"Mode=Advanced"
 	) do echo.%%~i)>"%TEMP%\Basic.ini"
-	echo.{"bf":0,"cqp":19,"keyint_sec":0,"lookahead":"false","multipass":"disabled","preset2":"p1","profile":"baseline","psycho_aq":"false","rate_control":"CQP"} >"%TEMP%\RecordEncoder.json"
+	echo.{"bf":0,"cqp":19,"keyint_sec":0,"lookahead":"False","multipass":"disabled","preset2":"p1","profile":"baseline","psycho_aq":"False","rate_control":"CQP"} >"%TEMP%\RecordEncoder.json"
     move /Y "%TEMP%\basic.ini" "%APPDATA%\obs-studio\basic\profiles\Untitled\" >nul 2>&1
     move /Y "%TEMP%\RecordEncoder.json" "%APPDATA%\obs-studio\basic\profiles\Untitled\" >nul 2>&1
     set "file=C:\Vitality\Info\obs"
@@ -6787,13 +6771,13 @@ if %gpuBrand% == AMD (
 	(for %%i in (
 		"[AdvOut]"
 		"RecEncoder=h264_texture_amf"
-		"RecRB=true"
+		"RecRB=True"
 		"TrackIndex=1"
 		"RecType=Standard"
 		"RecFormat=mp4"
 		"RecTracks=1"
 		"FLVTrack=1"
-		"FFOutputToFile=true"
+		"FFOutputToFile=True"
 		"FFFormat="
 		"FFFormatMimeType="
 		"FFVEncoderId=0"
@@ -6841,13 +6825,13 @@ if %gpuBrand% == NaN (
 	(for %%i in (
 		"[AdvOut]"
 		"RecEncoder=obs_x264"
-		"RecRB=true"
+		"RecRB=True"
 		"TrackIndex=1"
 		"RecType=Standard"
 		"RecFormat=mp4"
 		"RecTracks=1"
 		"FLVTrack=1"
-		"FFOutputToFile=true"
+		"FFOutputToFile=True"
 		"FFFormat="
 		"FFFormatMimeType="
 		"FFVEncoderId=0"
@@ -6914,7 +6898,7 @@ if %gpuBrand% == NaN (
 
 
 
-if "%PrivacyCleanup%"=="false" goto skippingprivacypleanup
+if "%PrivacyCleanup%"=="False" goto skippingprivacypleanup
 echo                                                   Applying Privacy Cleanup
 
 :: Remove adware, spyware, PUPs
@@ -7131,7 +7115,7 @@ echo set "ran_optimizations=%ran_optimizations%"> v.bat
 :skippingprivacypleanup
 
 
-if "%DataCol%"=="false" goto skippingdatacol
+if "%DataCol%"=="False" goto skippingdatacol
 echo                                                   Applying Data Collection
 :: Disable CEIP (Customer Experience Improvement Program)
 reg add "HKLM\SOFTWARE\Policies\Microsoft\SQMClient\Windows" /v "CEIPEnable" /t REG_DWORD /d "0" /f >nul 2>&1
@@ -7443,10 +7427,10 @@ reg add "HKLM\SOFTWARE\Policies\Microsoft\Biometrics" /v "Enabled" /t REG_DWORD 
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Biometrics\Credential Provider" /v "Enabled" /t "REG_DWORD" /d "0" /f >nul 2>&1
 
 :: Disable Windows Biometric Service
-PowerShell -ExecutionPolicy Unrestricted -Command "$serviceName = 'WbioSrvc'; Write-Host "^""Disabling service: `"^""$serviceName`"^""."^""; <# -- 1. Skip if service does not exist #>; $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue; if(!$service) {; Write-Host "^""Service `"^""$serviceName`"^"" could not be not found, no need to disable it."^""; Exit 0; }; <# -- 2. Stop if running #>; if ($service.Status -eq [System.ServiceProcess.ServiceControllerStatus]::Running) {; Write-Host "^""`"^""$serviceName`"^"" is running, stopping it."^""; try {; Stop-Service -Name "^""$serviceName"^"" -Force -ErrorAction Stop; Write-Host "^""Stopped `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Warning "^""Could not stop `"^""$serviceName`"^"", it will be stopped after reboot: $_"^""; }; } else {; Write-Host "^""`"^""$serviceName`"^"" is not running, no need to stop."^""; }; <# -- 3. Skip if already disabled #>; $startupType = $service.StartType <# Does not work before .NET 4.6.1 #>; if(!$startupType) {; $startupType = (Get-WmiObject -Query "^""Select StartMode From Win32_Service Where Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; if(!$startupType) {; $startupType = (Get-WmiObject -Class Win32_Service -Property StartMode -Filter "^""Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; }; }; if($startupType -eq 'Disabled') {; Write-Host "^""$serviceName is already disabled, no further action is needed"^""; }; <# -- 4. Disable service #>; try {; Set-Service -Name "^""$serviceName"^"" -StartupType Disabled -Confirm:$false -ErrorAction Stop; Write-Host "^""Disabled `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Error "^""Could not disable `"^""$serviceName`"^"": $_"^""; }" >nul 2>&1
+PowerShell -ExecutionPolicy Unrestricted -Command "$serviceName = 'WbioSrvc'; Write-Host "^""Disabling service: `"^""$serviceName`"^""."^""; <# -- 1. Skip if service does not exist #>; $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue; if(!$service) {; Write-Host "^""Service `"^""$serviceName`"^"" could not be not found, no need to disable it."^""; Exit 0; }; <# -- 2. Stop if running #>; if ($service.Status -eq [System.ServiceProcess.ServiceControllerStatus]::Running) {; Write-Host "^""`"^""$serviceName`"^"" is running, stopping it."^""; try {; Stop-Service -Name "^""$serviceName"^"" -Force -ErrorAction Stop; Write-Host "^""Stopped `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Warning "^""Could not stop `"^""$serviceName`"^"", it will be stopped after reboot: $_"^""; }; } else {; Write-Host "^""`"^""$serviceName`"^"" is not running, no need to stop."^""; }; <# -- 3. Skip if already disabled #>; $startupType = $service.StartType <# Does not work before .NET 4.6.1 #>; if(!$startupType) {; $startupType = (Get-WmiObject -Query "^""Select StartMode From Win32_Service Where Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; if(!$startupType) {; $startupType = (Get-WmiObject -Class Win32_Service -Property StartMode -Filter "^""Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; }; }; if($startupType -eq 'Disabled') {; Write-Host "^""$serviceName is already disabled, no further action is needed"^""; }; <# -- 4. Disable service #>; try {; Set-Service -Name "^""$serviceName"^"" -StartupType Disabled -Confirm:$False -ErrorAction Stop; Write-Host "^""Disabled `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Error "^""Could not disable `"^""$serviceName`"^"": $_"^""; }" >nul 2>&1
 
 :: Disable Windows Insider Service
-PowerShell -ExecutionPolicy Unrestricted -Command "$serviceName = 'wisvc'; Write-Host "^""Disabling service: `"^""$serviceName`"^""."^""; <# -- 1. Skip if service does not exist #>; $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue; if(!$service) {; Write-Host "^""Service `"^""$serviceName`"^"" could not be not found, no need to disable it."^""; Exit 0; }; <# -- 2. Stop if running #>; if ($service.Status -eq [System.ServiceProcess.ServiceControllerStatus]::Running) {; Write-Host "^""`"^""$serviceName`"^"" is running, stopping it."^""; try {; Stop-Service -Name "^""$serviceName"^"" -Force -ErrorAction Stop; Write-Host "^""Stopped `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Warning "^""Could not stop `"^""$serviceName`"^"", it will be stopped after reboot: $_"^""; }; } else {; Write-Host "^""`"^""$serviceName`"^"" is not running, no need to stop."^""; }; <# -- 3. Skip if already disabled #>; $startupType = $service.StartType <# Does not work before .NET 4.6.1 #>; if(!$startupType) {; $startupType = (Get-WmiObject -Query "^""Select StartMode From Win32_Service Where Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; if(!$startupType) {; $startupType = (Get-WmiObject -Class Win32_Service -Property StartMode -Filter "^""Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; }; }; if($startupType -eq 'Disabled') {; Write-Host "^""$serviceName is already disabled, no further action is needed"^""; }; <# -- 4. Disable service #>; try {; Set-Service -Name "^""$serviceName"^"" -StartupType Disabled -Confirm:$false -ErrorAction Stop; Write-Host "^""Disabled `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Error "^""Could not disable `"^""$serviceName`"^"": $_"^""; }" >nul 2>&1
+PowerShell -ExecutionPolicy Unrestricted -Command "$serviceName = 'wisvc'; Write-Host "^""Disabling service: `"^""$serviceName`"^""."^""; <# -- 1. Skip if service does not exist #>; $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue; if(!$service) {; Write-Host "^""Service `"^""$serviceName`"^"" could not be not found, no need to disable it."^""; Exit 0; }; <# -- 2. Stop if running #>; if ($service.Status -eq [System.ServiceProcess.ServiceControllerStatus]::Running) {; Write-Host "^""`"^""$serviceName`"^"" is running, stopping it."^""; try {; Stop-Service -Name "^""$serviceName"^"" -Force -ErrorAction Stop; Write-Host "^""Stopped `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Warning "^""Could not stop `"^""$serviceName`"^"", it will be stopped after reboot: $_"^""; }; } else {; Write-Host "^""`"^""$serviceName`"^"" is not running, no need to stop."^""; }; <# -- 3. Skip if already disabled #>; $startupType = $service.StartType <# Does not work before .NET 4.6.1 #>; if(!$startupType) {; $startupType = (Get-WmiObject -Query "^""Select StartMode From Win32_Service Where Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; if(!$startupType) {; $startupType = (Get-WmiObject -Class Win32_Service -Property StartMode -Filter "^""Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; }; }; if($startupType -eq 'Disabled') {; Write-Host "^""$serviceName is already disabled, no further action is needed"^""; }; <# -- 4. Disable service #>; try {; Set-Service -Name "^""$serviceName"^"" -StartupType Disabled -Confirm:$False -ErrorAction Stop; Write-Host "^""Disabled `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Error "^""Could not disable `"^""$serviceName`"^"": $_"^""; }" >nul 2>&1
 
 :: Disable Windows Insider Preview Builds Experimentation
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\PreviewBuilds" /v "EnableExperimentation" /t REG_DWORD /d 0 /f >nul 2>&1
@@ -7563,7 +7547,7 @@ echo set "ran_optimizations=%ran_optimizations%"> v.bat
 
 
 
-if "%SecurityImp%"=="false" goto skippingsecurityimp
+if "%SecurityImp%"=="False" goto skippingsecurityimp
 echo                                                 Applying Security Improvements
 :: Disable SMBv1 Protoco
 dism /online /Disable-Feature /FeatureName:"SMB1Protocol" /NoRestart >nul 2>&1
@@ -7728,7 +7712,7 @@ echo set "ran_optimizations=%ran_optimizations%"> v.bat
 
 :skippingsecurityimp
 
-if "%ConfigurePro%"=="false" goto skippingconfigurepro
+if "%ConfigurePro%"=="False" goto skippingconfigurepro
 echo                                                Applying Programs Configuration
 
 :: Disable Visual Studio Telemetry
@@ -7740,7 +7724,7 @@ reg add "HKLM\SOFTWARE\Policies\Microsoft\VisualStudio\Feedback" /v "DisableEmai
 reg add "HKLM\SOFTWARE\Policies\Microsoft\VisualStudio\Feedback" /v "DisableScreenshotCapture" /t REG_DWORD /d 1 /f >nul 2>&1
 
 :: Disable NVIDIA Telemetry
-PowerShell -ExecutionPolicy Unrestricted -Command "$serviceName = 'VSStandardCollectorService150'; Write-Host "^""Disabling service: `"^""$serviceName`"^""."^""; <# -- 1. Skip if service does not exist #>; $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue; if(!$service) {; Write-Host "^""Service `"^""$serviceName`"^"" could not be not found, no need to disable it."^""; Exit 0; }; <# -- 2. Stop if running #>; if ($service.Status -eq [System.ServiceProcess.ServiceControllerStatus]::Running) {; Write-Host "^""`"^""$serviceName`"^"" is running, stopping it."^""; try {; Stop-Service -Name "^""$serviceName"^"" -Force -ErrorAction Stop; Write-Host "^""Stopped `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Warning "^""Could not stop `"^""$serviceName`"^"", it will be stopped after reboot: $_"^""; }; } else {; Write-Host "^""`"^""$serviceName`"^"" is not running, no need to stop."^""; }; <# -- 3. Skip if already disabled #>; $startupType = $service.StartType <# Does not work before .NET 4.6.1 #>; if(!$startupType) {; $startupType = (Get-WmiObject -Query "^""Select StartMode From Win32_Service Where Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; if(!$startupType) {; $startupType = (Get-WmiObject -Class Win32_Service -Property StartMode -Filter "^""Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; }; }; if($startupType -eq 'Disabled') {; Write-Host "^""$serviceName is already disabled, no further action is needed"^""; }; <# -- 4. Disable service #>; try {; Set-Service -Name "^""$serviceName"^"" -StartupType Disabled -Confirm:$false -ErrorAction Stop; Write-Host "^""Disabled `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Error "^""Could not disable `"^""$serviceName`"^"": $_"^""; }" >nul 2>&1
+PowerShell -ExecutionPolicy Unrestricted -Command "$serviceName = 'VSStandardCollectorService150'; Write-Host "^""Disabling service: `"^""$serviceName`"^""."^""; <# -- 1. Skip if service does not exist #>; $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue; if(!$service) {; Write-Host "^""Service `"^""$serviceName`"^"" could not be not found, no need to disable it."^""; Exit 0; }; <# -- 2. Stop if running #>; if ($service.Status -eq [System.ServiceProcess.ServiceControllerStatus]::Running) {; Write-Host "^""`"^""$serviceName`"^"" is running, stopping it."^""; try {; Stop-Service -Name "^""$serviceName"^"" -Force -ErrorAction Stop; Write-Host "^""Stopped `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Warning "^""Could not stop `"^""$serviceName`"^"", it will be stopped after reboot: $_"^""; }; } else {; Write-Host "^""`"^""$serviceName`"^"" is not running, no need to stop."^""; }; <# -- 3. Skip if already disabled #>; $startupType = $service.StartType <# Does not work before .NET 4.6.1 #>; if(!$startupType) {; $startupType = (Get-WmiObject -Query "^""Select StartMode From Win32_Service Where Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; if(!$startupType) {; $startupType = (Get-WmiObject -Class Win32_Service -Property StartMode -Filter "^""Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; }; }; if($startupType -eq 'Disabled') {; Write-Host "^""$serviceName is already disabled, no further action is needed"^""; }; <# -- 4. Disable service #>; try {; Set-Service -Name "^""$serviceName"^"" -StartupType Disabled -Confirm:$False -ErrorAction Stop; Write-Host "^""Disabled `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Error "^""Could not disable `"^""$serviceName`"^"": $_"^""; }" >nul 2>&1
 if %PROCESSOR_ARCHITECTURE%==x86 ( 
     reg add "HKLM\SOFTWARE\Microsoft\VSCommon\14.0\SQM" /v "OptIn" /t REG_DWORD /d 0 /f >nul 2>&1
     reg add "HKLM\SOFTWARE\Microsoft\VSCommon\15.0\SQM" /v "OptIn" /t REG_DWORD /d 0 /f >nul 2>&1
@@ -7765,7 +7749,7 @@ reg add "HKLM\SOFTWARE\NVIDIA Corporation\Global\FTS" /v "EnableRID44231" /t REG
 reg add "HKLM\SOFTWARE\NVIDIA Corporation\Global\FTS" /v "EnableRID64640" /t REG_DWORD /d 0 /f  >nul 2>&1
 reg add "HKLM\SOFTWARE\NVIDIA Corporation\Global\FTS" /v "EnableRID66610" /t REG_DWORD /d 0 /f  >nul 2>&1
 reg add "HKLM\SYSTEM\CurrentControlSet\Services\nvlddmkm\Global\Startup" /v "SendTelemetryData" /t REG_DWORD /d 0 /f >nul 2>&1
-PowerShell -ExecutionPolicy Unrestricted -Command "$serviceName = 'NvTelemetryContainer'; Write-Host "^""Disabling service: `"^""$serviceName`"^""."^""; <# -- 1. Skip if service does not exist #>; $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue; if(!$service) {; Write-Host "^""Service `"^""$serviceName`"^"" could not be not found, no need to disable it."^""; Exit 0; }; <# -- 2. Stop if running #>; if ($service.Status -eq [System.ServiceProcess.ServiceControllerStatus]::Running) {; Write-Host "^""`"^""$serviceName`"^"" is running, stopping it."^""; try {; Stop-Service -Name "^""$serviceName"^"" -Force -ErrorAction Stop; Write-Host "^""Stopped `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Warning "^""Could not stop `"^""$serviceName`"^"", it will be stopped after reboot: $_"^""; }; } else {; Write-Host "^""`"^""$serviceName`"^"" is not running, no need to stop."^""; }; <# -- 3. Skip if already disabled #>; $startupType = $service.StartType <# Does not work before .NET 4.6.1 #>; if(!$startupType) {; $startupType = (Get-WmiObject -Query "^""Select StartMode From Win32_Service Where Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; if(!$startupType) {; $startupType = (Get-WmiObject -Class Win32_Service -Property StartMode -Filter "^""Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; }; }; if($startupType -eq 'Disabled') {; Write-Host "^""$serviceName is already disabled, no further action is needed"^""; }; <# -- 4. Disable service #>; try {; Set-Service -Name "^""$serviceName"^"" -StartupType Disabled -Confirm:$false -ErrorAction Stop; Write-Host "^""Disabled `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Error "^""Could not disable `"^""$serviceName`"^"": $_"^""; }" >nul 2>&1
+PowerShell -ExecutionPolicy Unrestricted -Command "$serviceName = 'NvTelemetryContainer'; Write-Host "^""Disabling service: `"^""$serviceName`"^""."^""; <# -- 1. Skip if service does not exist #>; $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue; if(!$service) {; Write-Host "^""Service `"^""$serviceName`"^"" could not be not found, no need to disable it."^""; Exit 0; }; <# -- 2. Stop if running #>; if ($service.Status -eq [System.ServiceProcess.ServiceControllerStatus]::Running) {; Write-Host "^""`"^""$serviceName`"^"" is running, stopping it."^""; try {; Stop-Service -Name "^""$serviceName"^"" -Force -ErrorAction Stop; Write-Host "^""Stopped `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Warning "^""Could not stop `"^""$serviceName`"^"", it will be stopped after reboot: $_"^""; }; } else {; Write-Host "^""`"^""$serviceName`"^"" is not running, no need to stop."^""; }; <# -- 3. Skip if already disabled #>; $startupType = $service.StartType <# Does not work before .NET 4.6.1 #>; if(!$startupType) {; $startupType = (Get-WmiObject -Query "^""Select StartMode From Win32_Service Where Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; if(!$startupType) {; $startupType = (Get-WmiObject -Class Win32_Service -Property StartMode -Filter "^""Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; }; }; if($startupType -eq 'Disabled') {; Write-Host "^""$serviceName is already disabled, no further action is needed"^""; }; <# -- 4. Disable service #>; try {; Set-Service -Name "^""$serviceName"^"" -StartupType Disabled -Confirm:$False -ErrorAction Stop; Write-Host "^""Disabled `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Error "^""Could not disable `"^""$serviceName`"^"": $_"^""; }" >nul 2>&1
 schtasks /change /TN NvTmMon_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8} /DISABLE >nul 2>&1
 schtasks /change /TN NvTmRep_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8} /DISABLE >nul 2>&1
 schtasks /change /TN NvTmRepOnLogon_{B2FE1952-0186-46C3-BAEC-A80AA35AC5B8} /DISABLE >nul 2>&1
@@ -7845,30 +7829,30 @@ reg add "HKCU\Software\Policies\Microsoft\WindowsMediaPlayer" /v "PreventRadioPr
 reg add "HKLM\SOFTWARE\Policies\Microsoft\WMDRM" /v "DisableOnline" /t REG_DWORD /d 1 /f >nul 2>&1
 
 :: Disable Windows Media Player Network Sharing Service.
-PowerShell -ExecutionPolicy Unrestricted -Command "$serviceName = 'WMPNetworkSvc'; Write-Host "^""Disabling service: `"^""$serviceName`"^""."^""; <# -- 1. Skip if service does not exist #>; $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue; if(!$service) {; Write-Host "^""Service `"^""$serviceName`"^"" could not be not found, no need to disable it."^""; Exit 0; }; <# -- 2. Stop if running #>; if ($service.Status -eq [System.ServiceProcess.ServiceControllerStatus]::Running) {; Write-Host "^""`"^""$serviceName`"^"" is running, stopping it."^""; try {; Stop-Service -Name "^""$serviceName"^"" -Force -ErrorAction Stop; Write-Host "^""Stopped `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Warning "^""Could not stop `"^""$serviceName`"^"", it will be stopped after reboot: $_"^""; }; } else {; Write-Host "^""`"^""$serviceName`"^"" is not running, no need to stop."^""; }; <# -- 3. Skip if already disabled #>; $startupType = $service.StartType <# Does not work before .NET 4.6.1 #>; if(!$startupType) {; $startupType = (Get-WmiObject -Query "^""Select StartMode From Win32_Service Where Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; if(!$startupType) {; $startupType = (Get-WmiObject -Class Win32_Service -Property StartMode -Filter "^""Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; }; }; if($startupType -eq 'Disabled') {; Write-Host "^""$serviceName is already disabled, no further action is needed"^""; }; <# -- 4. Disable service #>; try {; Set-Service -Name "^""$serviceName"^"" -StartupType Disabled -Confirm:$false -ErrorAction Stop; Write-Host "^""Disabled `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Error "^""Could not disable `"^""$serviceName`"^"": $_"^""; }" >nul 2>&1
+PowerShell -ExecutionPolicy Unrestricted -Command "$serviceName = 'WMPNetworkSvc'; Write-Host "^""Disabling service: `"^""$serviceName`"^""."^""; <# -- 1. Skip if service does not exist #>; $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue; if(!$service) {; Write-Host "^""Service `"^""$serviceName`"^"" could not be not found, no need to disable it."^""; Exit 0; }; <# -- 2. Stop if running #>; if ($service.Status -eq [System.ServiceProcess.ServiceControllerStatus]::Running) {; Write-Host "^""`"^""$serviceName`"^"" is running, stopping it."^""; try {; Stop-Service -Name "^""$serviceName"^"" -Force -ErrorAction Stop; Write-Host "^""Stopped `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Warning "^""Could not stop `"^""$serviceName`"^"", it will be stopped after reboot: $_"^""; }; } else {; Write-Host "^""`"^""$serviceName`"^"" is not running, no need to stop."^""; }; <# -- 3. Skip if already disabled #>; $startupType = $service.StartType <# Does not work before .NET 4.6.1 #>; if(!$startupType) {; $startupType = (Get-WmiObject -Query "^""Select StartMode From Win32_Service Where Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; if(!$startupType) {; $startupType = (Get-WmiObject -Class Win32_Service -Property StartMode -Filter "^""Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; }; }; if($startupType -eq 'Disabled') {; Write-Host "^""$serviceName is already disabled, no further action is needed"^""; }; <# -- 4. Disable service #>; try {; Set-Service -Name "^""$serviceName"^"" -StartupType Disabled -Confirm:$False -ErrorAction Stop; Write-Host "^""Disabled `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Error "^""Could not disable `"^""$serviceName`"^"": $_"^""; }" >nul 2>&1
 
 :: Disable scheduled tasks related to Google Update.
 schtasks /change /disable /tn "GoogleUpdateTaskMachineCore" >nul 2>&1
 schtasks /change /disable /tn "GoogleUpdateTaskMachineUA" >nul 2>&1
 
 :: Disable Google Update services using PowerShell
-PowerShell -ExecutionPolicy Unrestricted -Command "$serviceName = 'gupdate'; Write-Host "^""Disabling service: `"^""$serviceName`"^""."^""; <# -- 1. Skip if service does not exist #>; $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue; if(!$service) {; Write-Host "^""Service `"^""$serviceName`"^"" could not be not found, no need to disable it."^""; Exit 0; }; <# -- 2. Stop if running #>; if ($service.Status -eq [System.ServiceProcess.ServiceControllerStatus]::Running) {; Write-Host "^""`"^""$serviceName`"^"" is running, stopping it."^""; try {; Stop-Service -Name "^""$serviceName"^"" -Force -ErrorAction Stop; Write-Host "^""Stopped `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Warning "^""Could not stop `"^""$serviceName`"^"", it will be stopped after reboot: $_"^""; }; } else {; Write-Host "^""`"^""$serviceName`"^"" is not running, no need to stop."^""; }; <# -- 3. Skip if already disabled #>; $startupType = $service.StartType <# Does not work before .NET 4.6.1 #>; if(!$startupType) {; $startupType = (Get-WmiObject -Query "^""Select StartMode From Win32_Service Where Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; if(!$startupType) {; $startupType = (Get-WmiObject -Class Win32_Service -Property StartMode -Filter "^""Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; }; }; if($startupType -eq 'Disabled') {; Write-Host "^""$serviceName is already disabled, no further action is needed"^""; }; <# -- 4. Disable service #>; try {; Set-Service -Name "^""$serviceName"^"" -StartupType Disabled -Confirm:$false -ErrorAction Stop; Write-Host "^""Disabled `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Error "^""Could not disable `"^""$serviceName`"^"": $_"^""; }" >nul 2>&1
-PowerShell -ExecutionPolicy Unrestricted -Command "$serviceName = 'gupdatem'; Write-Host "^""Disabling service: `"^""$serviceName`"^""."^""; <# -- 1. Skip if service does not exist #>; $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue; if(!$service) {; Write-Host "^""Service `"^""$serviceName`"^"" could not be not found, no need to disable it."^""; Exit 0; }; <# -- 2. Stop if running #>; if ($service.Status -eq [System.ServiceProcess.ServiceControllerStatus]::Running) {; Write-Host "^""`"^""$serviceName`"^"" is running, stopping it."^""; try {; Stop-Service -Name "^""$serviceName"^"" -Force -ErrorAction Stop; Write-Host "^""Stopped `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Warning "^""Could not stop `"^""$serviceName`"^"", it will be stopped after reboot: $_"^""; }; } else {; Write-Host "^""`"^""$serviceName`"^"" is not running, no need to stop."^""; }; <# -- 3. Skip if already disabled #>; $startupType = $service.StartType <# Does not work before .NET 4.6.1 #>; if(!$startupType) {; $startupType = (Get-WmiObject -Query "^""Select StartMode From Win32_Service Where Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; if(!$startupType) {; $startupType = (Get-WmiObject -Class Win32_Service -Property StartMode -Filter "^""Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; }; }; if($startupType -eq 'Disabled') {; Write-Host "^""$serviceName is already disabled, no further action is needed"^""; }; <# -- 4. Disable service #>; try {; Set-Service -Name "^""$serviceName"^"" -StartupType Disabled -Confirm:$false -ErrorAction Stop; Write-Host "^""Disabled `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Error "^""Could not disable `"^""$serviceName`"^"": $_"^""; }" >nul 2>&1
+PowerShell -ExecutionPolicy Unrestricted -Command "$serviceName = 'gupdate'; Write-Host "^""Disabling service: `"^""$serviceName`"^""."^""; <# -- 1. Skip if service does not exist #>; $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue; if(!$service) {; Write-Host "^""Service `"^""$serviceName`"^"" could not be not found, no need to disable it."^""; Exit 0; }; <# -- 2. Stop if running #>; if ($service.Status -eq [System.ServiceProcess.ServiceControllerStatus]::Running) {; Write-Host "^""`"^""$serviceName`"^"" is running, stopping it."^""; try {; Stop-Service -Name "^""$serviceName"^"" -Force -ErrorAction Stop; Write-Host "^""Stopped `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Warning "^""Could not stop `"^""$serviceName`"^"", it will be stopped after reboot: $_"^""; }; } else {; Write-Host "^""`"^""$serviceName`"^"" is not running, no need to stop."^""; }; <# -- 3. Skip if already disabled #>; $startupType = $service.StartType <# Does not work before .NET 4.6.1 #>; if(!$startupType) {; $startupType = (Get-WmiObject -Query "^""Select StartMode From Win32_Service Where Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; if(!$startupType) {; $startupType = (Get-WmiObject -Class Win32_Service -Property StartMode -Filter "^""Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; }; }; if($startupType -eq 'Disabled') {; Write-Host "^""$serviceName is already disabled, no further action is needed"^""; }; <# -- 4. Disable service #>; try {; Set-Service -Name "^""$serviceName"^"" -StartupType Disabled -Confirm:$False -ErrorAction Stop; Write-Host "^""Disabled `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Error "^""Could not disable `"^""$serviceName`"^"": $_"^""; }" >nul 2>&1
+PowerShell -ExecutionPolicy Unrestricted -Command "$serviceName = 'gupdatem'; Write-Host "^""Disabling service: `"^""$serviceName`"^""."^""; <# -- 1. Skip if service does not exist #>; $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue; if(!$service) {; Write-Host "^""Service `"^""$serviceName`"^"" could not be not found, no need to disable it."^""; Exit 0; }; <# -- 2. Stop if running #>; if ($service.Status -eq [System.ServiceProcess.ServiceControllerStatus]::Running) {; Write-Host "^""`"^""$serviceName`"^"" is running, stopping it."^""; try {; Stop-Service -Name "^""$serviceName"^"" -Force -ErrorAction Stop; Write-Host "^""Stopped `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Warning "^""Could not stop `"^""$serviceName`"^"", it will be stopped after reboot: $_"^""; }; } else {; Write-Host "^""`"^""$serviceName`"^"" is not running, no need to stop."^""; }; <# -- 3. Skip if already disabled #>; $startupType = $service.StartType <# Does not work before .NET 4.6.1 #>; if(!$startupType) {; $startupType = (Get-WmiObject -Query "^""Select StartMode From Win32_Service Where Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; if(!$startupType) {; $startupType = (Get-WmiObject -Class Win32_Service -Property StartMode -Filter "^""Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; }; }; if($startupType -eq 'Disabled') {; Write-Host "^""$serviceName is already disabled, no further action is needed"^""; }; <# -- 4. Disable service #>; try {; Set-Service -Name "^""$serviceName"^"" -StartupType Disabled -Confirm:$False -ErrorAction Stop; Write-Host "^""Disabled `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Error "^""Could not disable `"^""$serviceName`"^"": $_"^""; }" >nul 2>&1
 
 :: Disable Adobe-related services using PowerShell.
-PowerShell -ExecutionPolicy Unrestricted -Command "$serviceName = 'AdobeARMservice'; Write-Host "^""Disabling service: `"^""$serviceName`"^""."^""; <# -- 1. Skip if service does not exist #>; $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue; if(!$service) {; Write-Host "^""Service `"^""$serviceName`"^"" could not be not found, no need to disable it."^""; Exit 0; }; <# -- 2. Stop if running #>; if ($service.Status -eq [System.ServiceProcess.ServiceControllerStatus]::Running) {; Write-Host "^""`"^""$serviceName`"^"" is running, stopping it."^""; try {; Stop-Service -Name "^""$serviceName"^"" -Force -ErrorAction Stop; Write-Host "^""Stopped `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Warning "^""Could not stop `"^""$serviceName`"^"", it will be stopped after reboot: $_"^""; }; } else {; Write-Host "^""`"^""$serviceName`"^"" is not running, no need to stop."^""; }; <# -- 3. Skip if already disabled #>; $startupType = $service.StartType <# Does not work before .NET 4.6.1 #>; if(!$startupType) {; $startupType = (Get-WmiObject -Query "^""Select StartMode From Win32_Service Where Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; if(!$startupType) {; $startupType = (Get-WmiObject -Class Win32_Service -Property StartMode -Filter "^""Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; }; }; if($startupType -eq 'Disabled') {; Write-Host "^""$serviceName is already disabled, no further action is needed"^""; }; <# -- 4. Disable service #>; try {; Set-Service -Name "^""$serviceName"^"" -StartupType Disabled -Confirm:$false -ErrorAction Stop; Write-Host "^""Disabled `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Error "^""Could not disable `"^""$serviceName`"^"": $_"^""; }" >nul 2>&1
-PowerShell -ExecutionPolicy Unrestricted -Command "$serviceName = 'adobeupdateservice'; Write-Host "^""Disabling service: `"^""$serviceName`"^""."^""; <# -- 1. Skip if service does not exist #>; $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue; if(!$service) {; Write-Host "^""Service `"^""$serviceName`"^"" could not be not found, no need to disable it."^""; Exit 0; }; <# -- 2. Stop if running #>; if ($service.Status -eq [System.ServiceProcess.ServiceControllerStatus]::Running) {; Write-Host "^""`"^""$serviceName`"^"" is running, stopping it."^""; try {; Stop-Service -Name "^""$serviceName"^"" -Force -ErrorAction Stop; Write-Host "^""Stopped `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Warning "^""Could not stop `"^""$serviceName`"^"", it will be stopped after reboot: $_"^""; }; } else {; Write-Host "^""`"^""$serviceName`"^"" is not running, no need to stop."^""; }; <# -- 3. Skip if already disabled #>; $startupType = $service.StartType <# Does not work before .NET 4.6.1 #>; if(!$startupType) {; $startupType = (Get-WmiObject -Query "^""Select StartMode From Win32_Service Where Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; if(!$startupType) {; $startupType = (Get-WmiObject -Class Win32_Service -Property StartMode -Filter "^""Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; }; }; if($startupType -eq 'Disabled') {; Write-Host "^""$serviceName is already disabled, no further action is needed"^""; }; <# -- 4. Disable service #>; try {; Set-Service -Name "^""$serviceName"^"" -StartupType Disabled -Confirm:$false -ErrorAction Stop; Write-Host "^""Disabled `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Error "^""Could not disable `"^""$serviceName`"^"": $_"^""; }" >nul 2>&1
-PowerShell -ExecutionPolicy Unrestricted -Command "$serviceName = 'adobeflashplayerupdatesvc'; Write-Host "^""Disabling service: `"^""$serviceName`"^""."^""; <# -- 1. Skip if service does not exist #>; $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue; if(!$service) {; Write-Host "^""Service `"^""$serviceName`"^"" could not be not found, no need to disable it."^""; Exit 0; }; <# -- 2. Stop if running #>; if ($service.Status -eq [System.ServiceProcess.ServiceControllerStatus]::Running) {; Write-Host "^""`"^""$serviceName`"^"" is running, stopping it."^""; try {; Stop-Service -Name "^""$serviceName"^"" -Force -ErrorAction Stop; Write-Host "^""Stopped `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Warning "^""Could not stop `"^""$serviceName`"^"", it will be stopped after reboot: $_"^""; }; } else {; Write-Host "^""`"^""$serviceName`"^"" is not running, no need to stop."^""; }; <# -- 3. Skip if already disabled #>; $startupType = $service.StartType <# Does not work before .NET 4.6.1 #>; if(!$startupType) {; $startupType = (Get-WmiObject -Query "^""Select StartMode From Win32_Service Where Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; if(!$startupType) {; $startupType = (Get-WmiObject -Class Win32_Service -Property StartMode -Filter "^""Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; }; }; if($startupType -eq 'Disabled') {; Write-Host "^""$serviceName is already disabled, no further action is needed"^""; }; <# -- 4. Disable service #>; try {; Set-Service -Name "^""$serviceName"^"" -StartupType Disabled -Confirm:$false -ErrorAction Stop; Write-Host "^""Disabled `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Error "^""Could not disable `"^""$serviceName`"^"": $_"^""; }" >nul 2>&1
+PowerShell -ExecutionPolicy Unrestricted -Command "$serviceName = 'AdobeARMservice'; Write-Host "^""Disabling service: `"^""$serviceName`"^""."^""; <# -- 1. Skip if service does not exist #>; $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue; if(!$service) {; Write-Host "^""Service `"^""$serviceName`"^"" could not be not found, no need to disable it."^""; Exit 0; }; <# -- 2. Stop if running #>; if ($service.Status -eq [System.ServiceProcess.ServiceControllerStatus]::Running) {; Write-Host "^""`"^""$serviceName`"^"" is running, stopping it."^""; try {; Stop-Service -Name "^""$serviceName"^"" -Force -ErrorAction Stop; Write-Host "^""Stopped `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Warning "^""Could not stop `"^""$serviceName`"^"", it will be stopped after reboot: $_"^""; }; } else {; Write-Host "^""`"^""$serviceName`"^"" is not running, no need to stop."^""; }; <# -- 3. Skip if already disabled #>; $startupType = $service.StartType <# Does not work before .NET 4.6.1 #>; if(!$startupType) {; $startupType = (Get-WmiObject -Query "^""Select StartMode From Win32_Service Where Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; if(!$startupType) {; $startupType = (Get-WmiObject -Class Win32_Service -Property StartMode -Filter "^""Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; }; }; if($startupType -eq 'Disabled') {; Write-Host "^""$serviceName is already disabled, no further action is needed"^""; }; <# -- 4. Disable service #>; try {; Set-Service -Name "^""$serviceName"^"" -StartupType Disabled -Confirm:$False -ErrorAction Stop; Write-Host "^""Disabled `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Error "^""Could not disable `"^""$serviceName`"^"": $_"^""; }" >nul 2>&1
+PowerShell -ExecutionPolicy Unrestricted -Command "$serviceName = 'adobeupdateservice'; Write-Host "^""Disabling service: `"^""$serviceName`"^""."^""; <# -- 1. Skip if service does not exist #>; $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue; if(!$service) {; Write-Host "^""Service `"^""$serviceName`"^"" could not be not found, no need to disable it."^""; Exit 0; }; <# -- 2. Stop if running #>; if ($service.Status -eq [System.ServiceProcess.ServiceControllerStatus]::Running) {; Write-Host "^""`"^""$serviceName`"^"" is running, stopping it."^""; try {; Stop-Service -Name "^""$serviceName"^"" -Force -ErrorAction Stop; Write-Host "^""Stopped `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Warning "^""Could not stop `"^""$serviceName`"^"", it will be stopped after reboot: $_"^""; }; } else {; Write-Host "^""`"^""$serviceName`"^"" is not running, no need to stop."^""; }; <# -- 3. Skip if already disabled #>; $startupType = $service.StartType <# Does not work before .NET 4.6.1 #>; if(!$startupType) {; $startupType = (Get-WmiObject -Query "^""Select StartMode From Win32_Service Where Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; if(!$startupType) {; $startupType = (Get-WmiObject -Class Win32_Service -Property StartMode -Filter "^""Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; }; }; if($startupType -eq 'Disabled') {; Write-Host "^""$serviceName is already disabled, no further action is needed"^""; }; <# -- 4. Disable service #>; try {; Set-Service -Name "^""$serviceName"^"" -StartupType Disabled -Confirm:$False -ErrorAction Stop; Write-Host "^""Disabled `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Error "^""Could not disable `"^""$serviceName`"^"": $_"^""; }" >nul 2>&1
+PowerShell -ExecutionPolicy Unrestricted -Command "$serviceName = 'adobeflashplayerupdatesvc'; Write-Host "^""Disabling service: `"^""$serviceName`"^""."^""; <# -- 1. Skip if service does not exist #>; $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue; if(!$service) {; Write-Host "^""Service `"^""$serviceName`"^"" could not be not found, no need to disable it."^""; Exit 0; }; <# -- 2. Stop if running #>; if ($service.Status -eq [System.ServiceProcess.ServiceControllerStatus]::Running) {; Write-Host "^""`"^""$serviceName`"^"" is running, stopping it."^""; try {; Stop-Service -Name "^""$serviceName"^"" -Force -ErrorAction Stop; Write-Host "^""Stopped `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Warning "^""Could not stop `"^""$serviceName`"^"", it will be stopped after reboot: $_"^""; }; } else {; Write-Host "^""`"^""$serviceName`"^"" is not running, no need to stop."^""; }; <# -- 3. Skip if already disabled #>; $startupType = $service.StartType <# Does not work before .NET 4.6.1 #>; if(!$startupType) {; $startupType = (Get-WmiObject -Query "^""Select StartMode From Win32_Service Where Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; if(!$startupType) {; $startupType = (Get-WmiObject -Class Win32_Service -Property StartMode -Filter "^""Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; }; }; if($startupType -eq 'Disabled') {; Write-Host "^""$serviceName is already disabled, no further action is needed"^""; }; <# -- 4. Disable service #>; try {; Set-Service -Name "^""$serviceName"^"" -StartupType Disabled -Confirm:$False -ErrorAction Stop; Write-Host "^""Disabled `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Error "^""Could not disable `"^""$serviceName`"^"": $_"^""; }" >nul 2>&1
 
 :: Disable scheduled tasks related to Adobe updates.
 schtasks /change /tn "Adobe Acrobat Update Task" /disable >nul 2>&1
 schtasks /change /tn "Adobe Flash Player Updater" /disable >nul 2>&1
 
 :: Disable Razer Game Scanner Service.
-PowerShell -ExecutionPolicy Unrestricted -Command "$serviceName = 'Razer Game Scanner Service'; Write-Host "^""Disabling service: `"^""$serviceName`"^""."^""; <# -- 1. Skip if service does not exist #>; $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue; if(!$service) {; Write-Host "^""Service `"^""$serviceName`"^"" could not be not found, no need to disable it."^""; Exit 0; }; <# -- 2. Stop if running #>; if ($service.Status -eq [System.ServiceProcess.ServiceControllerStatus]::Running) {; Write-Host "^""`"^""$serviceName`"^"" is running, stopping it."^""; try {; Stop-Service -Name "^""$serviceName"^"" -Force -ErrorAction Stop; Write-Host "^""Stopped `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Warning "^""Could not stop `"^""$serviceName`"^"", it will be stopped after reboot: $_"^""; }; } else {; Write-Host "^""`"^""$serviceName`"^"" is not running, no need to stop."^""; }; <# -- 3. Skip if already disabled #>; $startupType = $service.StartType <# Does not work before .NET 4.6.1 #>; if(!$startupType) {; $startupType = (Get-WmiObject -Query "^""Select StartMode From Win32_Service Where Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; if(!$startupType) {; $startupType = (Get-WmiObject -Class Win32_Service -Property StartMode -Filter "^""Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; }; }; if($startupType -eq 'Disabled') {; Write-Host "^""$serviceName is already disabled, no further action is needed"^""; }; <# -- 4. Disable service #>; try {; Set-Service -Name "^""$serviceName"^"" -StartupType Disabled -Confirm:$false -ErrorAction Stop; Write-Host "^""Disabled `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Error "^""Could not disable `"^""$serviceName`"^"": $_"^""; }" >nul 2>&1
+PowerShell -ExecutionPolicy Unrestricted -Command "$serviceName = 'Razer Game Scanner Service'; Write-Host "^""Disabling service: `"^""$serviceName`"^""."^""; <# -- 1. Skip if service does not exist #>; $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue; if(!$service) {; Write-Host "^""Service `"^""$serviceName`"^"" could not be not found, no need to disable it."^""; Exit 0; }; <# -- 2. Stop if running #>; if ($service.Status -eq [System.ServiceProcess.ServiceControllerStatus]::Running) {; Write-Host "^""`"^""$serviceName`"^"" is running, stopping it."^""; try {; Stop-Service -Name "^""$serviceName"^"" -Force -ErrorAction Stop; Write-Host "^""Stopped `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Warning "^""Could not stop `"^""$serviceName`"^"", it will be stopped after reboot: $_"^""; }; } else {; Write-Host "^""`"^""$serviceName`"^"" is not running, no need to stop."^""; }; <# -- 3. Skip if already disabled #>; $startupType = $service.StartType <# Does not work before .NET 4.6.1 #>; if(!$startupType) {; $startupType = (Get-WmiObject -Query "^""Select StartMode From Win32_Service Where Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; if(!$startupType) {; $startupType = (Get-WmiObject -Class Win32_Service -Property StartMode -Filter "^""Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; }; }; if($startupType -eq 'Disabled') {; Write-Host "^""$serviceName is already disabled, no further action is needed"^""; }; <# -- 4. Disable service #>; try {; Set-Service -Name "^""$serviceName"^"" -StartupType Disabled -Confirm:$False -ErrorAction Stop; Write-Host "^""Disabled `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Error "^""Could not disable `"^""$serviceName`"^"": $_"^""; }" >nul 2>&1
 
 :: Disable Logitech registry service.
-PowerShell -ExecutionPolicy Unrestricted -Command "$serviceName = 'LogiRegistryService'; Write-Host "^""Disabling service: `"^""$serviceName`"^""."^""; <# -- 1. Skip if service does not exist #>; $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue; if(!$service) {; Write-Host "^""Service `"^""$serviceName`"^"" could not be not found, no need to disable it."^""; Exit 0; }; <# -- 2. Stop if running #>; if ($service.Status -eq [System.ServiceProcess.ServiceControllerStatus]::Running) {; Write-Host "^""`"^""$serviceName`"^"" is running, stopping it."^""; try {; Stop-Service -Name "^""$serviceName"^"" -Force -ErrorAction Stop; Write-Host "^""Stopped `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Warning "^""Could not stop `"^""$serviceName`"^"", it will be stopped after reboot: $_"^""; }; } else {; Write-Host "^""`"^""$serviceName`"^"" is not running, no need to stop."^""; }; <# -- 3. Skip if already disabled #>; $startupType = $service.StartType <# Does not work before .NET 4.6.1 #>; if(!$startupType) {; $startupType = (Get-WmiObject -Query "^""Select StartMode From Win32_Service Where Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; if(!$startupType) {; $startupType = (Get-WmiObject -Class Win32_Service -Property StartMode -Filter "^""Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; }; }; if($startupType -eq 'Disabled') {; Write-Host "^""$serviceName is already disabled, no further action is needed"^""; }; <# -- 4. Disable service #>; try {; Set-Service -Name "^""$serviceName"^"" -StartupType Disabled -Confirm:$false -ErrorAction Stop; Write-Host "^""Disabled `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Error "^""Could not disable `"^""$serviceName`"^"": $_"^""; }" >nul 2>&1
+PowerShell -ExecutionPolicy Unrestricted -Command "$serviceName = 'LogiRegistryService'; Write-Host "^""Disabling service: `"^""$serviceName`"^""."^""; <# -- 1. Skip if service does not exist #>; $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue; if(!$service) {; Write-Host "^""Service `"^""$serviceName`"^"" could not be not found, no need to disable it."^""; Exit 0; }; <# -- 2. Stop if running #>; if ($service.Status -eq [System.ServiceProcess.ServiceControllerStatus]::Running) {; Write-Host "^""`"^""$serviceName`"^"" is running, stopping it."^""; try {; Stop-Service -Name "^""$serviceName"^"" -Force -ErrorAction Stop; Write-Host "^""Stopped `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Warning "^""Could not stop `"^""$serviceName`"^"", it will be stopped after reboot: $_"^""; }; } else {; Write-Host "^""`"^""$serviceName`"^"" is not running, no need to stop."^""; }; <# -- 3. Skip if already disabled #>; $startupType = $service.StartType <# Does not work before .NET 4.6.1 #>; if(!$startupType) {; $startupType = (Get-WmiObject -Query "^""Select StartMode From Win32_Service Where Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; if(!$startupType) {; $startupType = (Get-WmiObject -Class Win32_Service -Property StartMode -Filter "^""Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; }; }; if($startupType -eq 'Disabled') {; Write-Host "^""$serviceName is already disabled, no further action is needed"^""; }; <# -- 4. Disable service #>; try {; Set-Service -Name "^""$serviceName"^"" -StartupType Disabled -Confirm:$False -ErrorAction Stop; Write-Host "^""Disabled `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Error "^""Could not disable `"^""$serviceName`"^"": $_"^""; }" >nul 2>&1
 
 :: Disable Dropbox update tasks.
 schtasks /Change /DISABLE /TN "DropboxUpdateTaskMachineCore" >nul 2>&1
@@ -7899,7 +7883,7 @@ echo set "ran_optimizations=%ran_optimizations%"> v.bat
 
 :skippingconfigurepro
 
-if "%PrivacyOverSec%"=="false" goto skippingprivacyoversec
+if "%PrivacyOverSec%"=="False" goto skippingprivacyoversec
 echo                                                Applying Privacy Over Security
 :: Disable Windows Firewall
 PowerShell -ExecutionPolicy Unrestricted -Command "if(!(Get-Command 'netsh' -ErrorAction Ignore)) {; throw '"^""netsh"^"" does not exist, is system installed correctly?'; }; $message=netsh advfirewall set allprofiles state off 2>&1; if($?) {; Write-Host "^""Successfully disabled firewall."^""; } else {; if($message -like '*Firewall service*') {; Write-Warning 'Cannot use CLI because MpsSvc or MpsDrv is not running. Try to enable them (revert) -> reboot -> re-run this?'; } else {; throw "^""Cannot disable: $message"^""; }; }" >nul 2>&1
@@ -8090,7 +8074,7 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\AppHost" /v "EnableWebCo
 reg add "HKCU\Software\Microsoft\Windows\CurrentVersion\AppHost" /v "EnableWebContentEvaluation" /t REG_DWORD /d "0" /f >nul 2>&1
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" /v "NoAutoUpdate" /t "REG_DWORD" /d "0" /f >nul 2>&1
 reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU" /v "AUOptions" /t "REG_DWORD" /d "0" /f >nul 2>&1
-PowerShell -ExecutionPolicy Unrestricted -Command "$serviceName = 'UsoSvc'; Write-Host "^""Disabling service: `"^""$serviceName`"^""."^""; <# -- 1. Skip if service does not exist #>; $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue; if(!$service) {; Write-Host "^""Service `"^""$serviceName`"^"" could not be not found, no need to disable it."^""; Exit 0; }; <# -- 2. Stop if running #>; if ($service.Status -eq [System.ServiceProcess.ServiceControllerStatus]::Running) {; Write-Host "^""`"^""$serviceName`"^"" is running, stopping it."^""; try {; Stop-Service -Name "^""$serviceName"^"" -Force -ErrorAction Stop; Write-Host "^""Stopped `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Warning "^""Could not stop `"^""$serviceName`"^"", it will be stopped after reboot: $_"^""; }; } else {; Write-Host "^""`"^""$serviceName`"^"" is not running, no need to stop."^""; }; <# -- 3. Skip if already disabled #>; $startupType = $service.StartType <# Does not work before .NET 4.6.1 #>; if(!$startupType) {; $startupType = (Get-WmiObject -Query "^""Select StartMode From Win32_Service Where Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; if(!$startupType) {; $startupType = (Get-WmiObject -Class Win32_Service -Property StartMode -Filter "^""Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; }; }; if($startupType -eq 'Disabled') {; Write-Host "^""$serviceName is already disabled, no further action is needed"^""; }; <# -- 4. Disable service #>; try {; Set-Service -Name "^""$serviceName"^"" -StartupType Disabled -Confirm:$false -ErrorAction Stop; Write-Host "^""Disabled `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Error "^""Could not disable `"^""$serviceName`"^"": $_"^""; }" >nul 2>&1
+PowerShell -ExecutionPolicy Unrestricted -Command "$serviceName = 'UsoSvc'; Write-Host "^""Disabling service: `"^""$serviceName`"^""."^""; <# -- 1. Skip if service does not exist #>; $service = Get-Service -Name $serviceName -ErrorAction SilentlyContinue; if(!$service) {; Write-Host "^""Service `"^""$serviceName`"^"" could not be not found, no need to disable it."^""; Exit 0; }; <# -- 2. Stop if running #>; if ($service.Status -eq [System.ServiceProcess.ServiceControllerStatus]::Running) {; Write-Host "^""`"^""$serviceName`"^"" is running, stopping it."^""; try {; Stop-Service -Name "^""$serviceName"^"" -Force -ErrorAction Stop; Write-Host "^""Stopped `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Warning "^""Could not stop `"^""$serviceName`"^"", it will be stopped after reboot: $_"^""; }; } else {; Write-Host "^""`"^""$serviceName`"^"" is not running, no need to stop."^""; }; <# -- 3. Skip if already disabled #>; $startupType = $service.StartType <# Does not work before .NET 4.6.1 #>; if(!$startupType) {; $startupType = (Get-WmiObject -Query "^""Select StartMode From Win32_Service Where Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; if(!$startupType) {; $startupType = (Get-WmiObject -Class Win32_Service -Property StartMode -Filter "^""Name='$serviceName'"^"" -ErrorAction Ignore).StartMode; }; }; if($startupType -eq 'Disabled') {; Write-Host "^""$serviceName is already disabled, no further action is needed"^""; }; <# -- 4. Disable service #>; try {; Set-Service -Name "^""$serviceName"^"" -StartupType Disabled -Confirm:$False -ErrorAction Stop; Write-Host "^""Disabled `"^""$serviceName`"^"" successfully."^""; } catch {; Write-Error "^""Could not disable `"^""$serviceName`"^"": $_"^""; }" >nul 2>&1
 set "file=C:\Vitality\Info\privacyoversec"
 if not exist "%file%" (
     echo Vitality > "%file%"
@@ -8103,7 +8087,7 @@ echo set "ran_optimizations=%ran_optimizations%"> v.bat
 :skippingprivacyoversec
 
 
-if "%UIForPrivacy%"=="false" goto skippinguiforprivacy
+if "%UIForPrivacy%"=="False" goto skippinguiforprivacy
 echo                                            Applying UI For Privacy
 
 :: Disable Online Tips
@@ -8160,7 +8144,7 @@ if %formatted_optimizations% LSS 10 set "formatted_optimizations= %formatted_opt
 echo set "ran_optimizations=%ran_optimizations%"> v.bat
 :skippinguiforprivacy
 
-if "%Minecraft%"=="false" (
+if "%Minecraft%"=="False" (
 echo                                       Applying Minecraft 1.8.9 Settings
 if exist "%appdata%\.minecraft\optionsof.txt-old" del "%appdata%\.minecraft\optionsof.txt-old"
 if exist "%appdata%\.minecraft\optionsof.txt" (
@@ -8169,9 +8153,9 @@ if exist "%appdata%\.minecraft\optionsof.txt" (
 echo ofFogType:3                 > "%appdata%\.minecraft\optionsof.txt"
 echo ofFogStart:0.8              >> "%appdata%\.minecraft\optionsof.txt"
 echo ofMipmapType:0              >> "%appdata%\.minecraft\optionsof.txt"
-echo ofOcclusionFancy:false      >> "%appdata%\.minecraft\optionsof.txt"
-echo ofSmoothFps:false           >> "%appdata%\.minecraft\optionsof.txt"
-echo ofSmoothWorld:true          >> "%appdata%\.minecraft\optionsof.txt"
+echo ofOcclusionFancy:False      >> "%appdata%\.minecraft\optionsof.txt"
+echo ofSmoothFps:False           >> "%appdata%\.minecraft\optionsof.txt"
+echo ofSmoothWorld:True          >> "%appdata%\.minecraft\optionsof.txt"
 echo ofAoLevel:1.0               >> "%appdata%\.minecraft\optionsof.txt"
 echo ofClouds:3                  >> "%appdata%\.minecraft\optionsof.txt"
 echo ofCloudsHeight:0.0          >> "%appdata%\.minecraft\optionsof.txt"
@@ -8180,72 +8164,72 @@ echo ofDroppedItems:1            >> "%appdata%\.minecraft\optionsof.txt"
 echo ofRain:0                    >> "%appdata%\.minecraft\optionsof.txt"
 echo ofAnimatedWater:0           >> "%appdata%\.minecraft\optionsof.txt"
 echo ofAnimatedLava:0            >> "%appdata%\.minecraft\optionsof.txt"
-echo ofAnimatedFire:true         >> "%appdata%\.minecraft\optionsof.txt"
-echo ofAnimatedPortal:true       >> "%appdata%\.minecraft\optionsof.txt"
-echo ofAnimatedRedstone:true     >> "%appdata%\.minecraft\optionsof.txt"
-echo ofAnimatedExplosion:true    >> "%appdata%\.minecraft\optionsof.txt"
-echo ofAnimatedFlame:true        >> "%appdata%\.minecraft\optionsof.txt"
-echo ofAnimatedSmoke:true        >> "%appdata%\.minecraft\optionsof.txt"
-echo ofVoidParticles:true        >> "%appdata%\.minecraft\optionsof.txt"
-echo ofWaterParticles:true       >> "%appdata%\.minecraft\optionsof.txt"
-echo ofPortalParticles:true      >> "%appdata%\.minecraft\optionsof.txt"
-echo ofPotionParticles:true      >> "%appdata%\.minecraft\optionsof.txt"
-echo ofFireworkParticles:true    >> "%appdata%\.minecraft\optionsof.txt"
-echo ofDrippingWaterLava:true    >> "%appdata%\.minecraft\optionsof.txt"
-echo ofAnimatedTerrain:true      >> "%appdata%\.minecraft\optionsof.txt"
-echo ofAnimatedTextures:true     >> "%appdata%\.minecraft\optionsof.txt"
-echo ofRainSplash:true           >> "%appdata%\.minecraft\optionsof.txt"
-echo ofLagometer:false           >> "%appdata%\.minecraft\optionsof.txt"
-echo ofShowFps:false             >> "%appdata%\.minecraft\optionsof.txt"
+echo ofAnimatedFire:True         >> "%appdata%\.minecraft\optionsof.txt"
+echo ofAnimatedPortal:True       >> "%appdata%\.minecraft\optionsof.txt"
+echo ofAnimatedRedstone:True     >> "%appdata%\.minecraft\optionsof.txt"
+echo ofAnimatedExplosion:True    >> "%appdata%\.minecraft\optionsof.txt"
+echo ofAnimatedFlame:True        >> "%appdata%\.minecraft\optionsof.txt"
+echo ofAnimatedSmoke:True        >> "%appdata%\.minecraft\optionsof.txt"
+echo ofVoidParticles:True        >> "%appdata%\.minecraft\optionsof.txt"
+echo ofWaterParticles:True       >> "%appdata%\.minecraft\optionsof.txt"
+echo ofPortalParticles:True      >> "%appdata%\.minecraft\optionsof.txt"
+echo ofPotionParticles:True      >> "%appdata%\.minecraft\optionsof.txt"
+echo ofFireworkParticles:True    >> "%appdata%\.minecraft\optionsof.txt"
+echo ofDrippingWaterLava:True    >> "%appdata%\.minecraft\optionsof.txt"
+echo ofAnimatedTerrain:True      >> "%appdata%\.minecraft\optionsof.txt"
+echo ofAnimatedTextures:True     >> "%appdata%\.minecraft\optionsof.txt"
+echo ofRainSplash:True           >> "%appdata%\.minecraft\optionsof.txt"
+echo ofLagometer:False           >> "%appdata%\.minecraft\optionsof.txt"
+echo ofShowFps:False             >> "%appdata%\.minecraft\optionsof.txt"
 echo ofAutoSaveTicks:4000        >> "%appdata%\.minecraft\optionsof.txt"
 echo ofBetterGrass:3             >> "%appdata%\.minecraft\optionsof.txt"
 echo ofConnectedTextures:2       >> "%appdata%\.minecraft\optionsof.txt"
-echo ofWeather:true              >> "%appdata%\.minecraft\optionsof.txt"
-echo ofSky:false                 >> "%appdata%\.minecraft\optionsof.txt"
-echo ofStars:false               >> "%appdata%\.minecraft\optionsof.txt"
-echo ofSunMoon:false             >> "%appdata%\.minecraft\optionsof.txt"
+echo ofWeather:True              >> "%appdata%\.minecraft\optionsof.txt"
+echo ofSky:False                 >> "%appdata%\.minecraft\optionsof.txt"
+echo ofStars:False               >> "%appdata%\.minecraft\optionsof.txt"
+echo ofSunMoon:False             >> "%appdata%\.minecraft\optionsof.txt"
 echo ofVignette:1                >> "%appdata%\.minecraft\optionsof.txt"
 echo ofChunkUpdates:1            >> "%appdata%\.minecraft\optionsof.txt"
-echo ofChunkUpdatesDynamic:false >> "%appdata%\.minecraft\optionsof.txt"
+echo ofChunkUpdatesDynamic:False >> "%appdata%\.minecraft\optionsof.txt"
 echo ofTime:0                    >> "%appdata%\.minecraft\optionsof.txt"
-echo ofClearWater:false          >> "%appdata%\.minecraft\optionsof.txt"
+echo ofClearWater:False          >> "%appdata%\.minecraft\optionsof.txt"
 echo ofAaLevel:0                 >> "%appdata%\.minecraft\optionsof.txt"
 echo ofAfLevel:1                 >> "%appdata%\.minecraft\optionsof.txt"
-echo ofProfiler:false            >> "%appdata%\.minecraft\optionsof.txt"
-echo ofBetterSnow:false          >> "%appdata%\.minecraft\optionsof.txt"
-echo ofSwampColors:true          >> "%appdata%\.minecraft\optionsof.txt"
-echo ofRandomEntities:true       >> "%appdata%\.minecraft\optionsof.txt"
-echo ofSmoothBiomes:true         >> "%appdata%\.minecraft\optionsof.txt"
-echo ofCustomFonts:true          >> "%appdata%\.minecraft\optionsof.txt"
-echo ofCustomColors:true         >> "%appdata%\.minecraft\optionsof.txt"
-echo ofCustomItems:true          >> "%appdata%\.minecraft\optionsof.txt"
-echo ofCustomSky:true            >> "%appdata%\.minecraft\optionsof.txt"
-echo ofShowCapes:true            >> "%appdata%\.minecraft\optionsof.txt"
-echo ofNaturalTextures:false     >> "%appdata%\.minecraft\optionsof.txt"
-echo ofEmissiveTextures:true     >> "%appdata%\.minecraft\optionsof.txt"
-echo ofLazyChunkLoading:true     >> "%appdata%\.minecraft\optionsof.txt"
-echo ofRenderRegions:false       >> "%appdata%\.minecraft\optionsof.txt"
-echo ofSmartAnimations:false     >> "%appdata%\.minecraft\optionsof.txt"
-echo ofDynamicFov:true           >> "%appdata%\.minecraft\optionsof.txt"
-echo ofAlternateBlocks:true      >> "%appdata%\.minecraft\optionsof.txt"
+echo ofProfiler:False            >> "%appdata%\.minecraft\optionsof.txt"
+echo ofBetterSnow:False          >> "%appdata%\.minecraft\optionsof.txt"
+echo ofSwampColors:True          >> "%appdata%\.minecraft\optionsof.txt"
+echo ofRandomEntities:True       >> "%appdata%\.minecraft\optionsof.txt"
+echo ofSmoothBiomes:True         >> "%appdata%\.minecraft\optionsof.txt"
+echo ofCustomFonts:True          >> "%appdata%\.minecraft\optionsof.txt"
+echo ofCustomColors:True         >> "%appdata%\.minecraft\optionsof.txt"
+echo ofCustomItems:True          >> "%appdata%\.minecraft\optionsof.txt"
+echo ofCustomSky:True            >> "%appdata%\.minecraft\optionsof.txt"
+echo ofShowCapes:True            >> "%appdata%\.minecraft\optionsof.txt"
+echo ofNaturalTextures:False     >> "%appdata%\.minecraft\optionsof.txt"
+echo ofEmissiveTextures:True     >> "%appdata%\.minecraft\optionsof.txt"
+echo ofLazyChunkLoading:True     >> "%appdata%\.minecraft\optionsof.txt"
+echo ofRenderRegions:False       >> "%appdata%\.minecraft\optionsof.txt"
+echo ofSmartAnimations:False     >> "%appdata%\.minecraft\optionsof.txt"
+echo ofDynamicFov:True           >> "%appdata%\.minecraft\optionsof.txt"
+echo ofAlternateBlocks:True      >> "%appdata%\.minecraft\optionsof.txt"
 echo ofDynamicLights:3           >> "%appdata%\.minecraft\optionsof.txt"
 echo ofScreenshotSize:1          >> "%appdata%\.minecraft\optionsof.txt"
-echo ofCustomEntityModels:true   >> "%appdata%\.minecraft\optionsof.txt"
-echo ofCustomGuis:true           >> "%appdata%\.minecraft\optionsof.txt"
-echo ofShowGlErrors:true         >> "%appdata%\.minecraft\optionsof.txt"
+echo ofCustomEntityModels:True   >> "%appdata%\.minecraft\optionsof.txt"
+echo ofCustomGuis:True           >> "%appdata%\.minecraft\optionsof.txt"
+echo ofShowGlErrors:True         >> "%appdata%\.minecraft\optionsof.txt"
 echo ofFullscreenMode:Default    >> "%appdata%\.minecraft\optionsof.txt"
-echo ofFastMath:false            >> "%appdata%\.minecraft\optionsof.txt"
-echo ofFastRender:false          >> "%appdata%\.minecraft\optionsof.txt"
+echo ofFastMath:False            >> "%appdata%\.minecraft\optionsof.txt"
+echo ofFastRender:False          >> "%appdata%\.minecraft\optionsof.txt"
 echo ofTranslucentBlocks:1       >> "%appdata%\.minecraft\optionsof.txt"
 echo key_of.key.zoom:46          >> "%appdata%\.minecraft\optionsof.txt"
 )
 
-if "%Valorant%"=="false" (
+if "%Valorant%"=="False" (
 echo                                          Applying Valorant Tweaks
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\VALORANT-Win64-Shipping.exe\PerfOptions" /v "CpuPriorityClass" /t REG_DWORD /d "3" /f
 )
 
-if "%Fortnite%"=="false" (
+if "%Fortnite%"=="False" (
 echo                                          Applying Fortnite Tweaks
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\FortniteClient-Win64-Shipping.exe\PerfOptions" /v "CpuPriorityClass" /t REG_DWORD /d "3" /f
 )
@@ -8276,7 +8260,7 @@ set "batch_file=%~f0"
 goto :Restart
 
 
-goto %lastpage%
+goto %LastPage%
 
 
 :Restart
@@ -8305,7 +8289,7 @@ echo                                       %r% _      _  _____   __    _     _  
 echo                                      %r% \ \  / ^| ^|  ^| ^|   / /\  ^| ^|   ^| ^|  ^| ^|  \ \_/%l%
 echo                                        %r%\_\/  ^|_^|  ^|_^|  /_/--\ ^|_^|__ ^|_^|  ^|_^|   ^|_^|%l%
 echo.
-if "%FPS%"=="false" goto skippingfps
+if "%FPS%"=="False" goto skippingfps
 echo                                            Reverting FPS and Input Delay Tweaks
 if "%Visuals%" equ "True" (
 :: Revert Windows Visuals
@@ -8559,7 +8543,7 @@ echo set "ran_optimizations=%ran_optimizations%"> v.bat
 :skippingfps
 
 
-if "%Latency%"=="false" goto skippinglatency
+if "%Latency%"=="False" goto skippinglatency
 echo                                                  Reverting Latency Tweaks
 :: Remove Downloaded Stuff
 del "%SYSTEMDRIVE%\SetTimerResolution.exe" >nul 2>&1
@@ -8576,7 +8560,7 @@ reg delete "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Managem
 
 :: Revert BCD Settings
 bcdedit /set disabledynamictick no > nul 2>&1
-bcdedit /set useplatformclock true > nul 2>&1
+bcdedit /set useplatformclock True > nul 2>&1
 bcdedit /deletevalue useplatformtick > nul 2>&1
 
 if "%DisableIDLE%" equ "True" (
@@ -8622,7 +8606,7 @@ if %formatted_optimizations% LSS 10 set "formatted_optimizations= %formatted_opt
 echo set "ran_optimizations=%ran_optimizations%"> v.bat
 :skippinglatency
 
-if "%Network%"=="false" goto skippingnetwork
+if "%Network%"=="False" goto skippingnetwork
 echo                                                  Reverting Network Tweaks
 if "%DisableNaglesAlgorithm%" equ "True" (
 :: Revert Nagle's Algorithm
@@ -8717,7 +8701,7 @@ echo set "ran_optimizations=%ran_optimizations%"> v.bat
 :skippingnetwork
 
 
-if "%KBM%"=="false" goto skippingkbm
+if "%KBM%"=="False" goto skippingkbm
 echo                                                     Reverting KBM Tweaks
 
 if "%KeyboardDataSize%" equ "True" (
@@ -8769,7 +8753,7 @@ echo set "ran_optimizations=%ran_optimizations%"> v.bat
 
 
 :skippingkbm
-if "%Task%"=="false" goto skippingtask
+if "%Task%"=="False" goto skippingtask
 echo                                               Reverting Task Scheduler Tweaks
 :: Revert most Scheduler Tasks
 schtasks /Change /TN "Microsoft\Windows\AppID\SmartScreenSpecific" /Enable >nul 2>&1
@@ -8812,7 +8796,7 @@ echo set "ran_optimizations=%ran_optimizations%"> v.bat
 
 
 
-if "%GPU%"=="false" goto skippinggpu
+if "%GPU%"=="False" goto skippinggpu
 
 If %gpuBrand%==Nvidia (
     goto nvidia
@@ -8985,7 +8969,7 @@ goto skippinggpu
 
 
 
-if "%RAM%"=="false" goto skippingram
+if "%RAM%"=="False" goto skippingram
 echo                                                     Reverting RAM Tweaks
 
 if "%MemoryManagment%" equ "True" (
@@ -9034,7 +9018,7 @@ echo set "ran_optimizations=%ran_optimizations%"> v.bat
 
 :skippingram
 
-if "%DISK%"=="false" goto skippingdisk
+if "%DISK%"=="False" goto skippingdisk
 echo                                                     Reverting DISK Tweaks
 
 if "%FileSystemOptimization%" equ "True" (
@@ -9073,7 +9057,7 @@ echo set "ran_optimizations=%ran_optimizations%"> v.bat
 
 
 
-if "%Windows%"=="false" goto skippingwindows
+if "%Windows%"=="False" goto skippingwindows
 echo                                                   Reverting Windows Tweaks
 
 if "%DisablePushNotifications%" equ "True" (
@@ -9358,7 +9342,7 @@ echo set "ran_optimizations=%ran_optimizations%"> v.bat
 :skippingwindows
 
 
-if "%CPU%"=="false" goto skippingcpu
+if "%CPU%"=="False" goto skippingcpu
 if %cpuBrand%==Intel (
     goto intel
 ) else (
@@ -9488,7 +9472,7 @@ set "batch_file=%~f0"
 goto :Restart
 
 
-goto %lastpage%
+goto %LastPage%
 
 
 :Restart
