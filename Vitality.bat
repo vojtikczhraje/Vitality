@@ -4867,17 +4867,8 @@ If "%PowerPlan%" equ "True" (
     :: Interrupt Steering
     echo %PROCESSOR_IDENTIFIER% | find /I "Intel" >nul && powercfg -setacvalueindex scheme_current SUB_INTSTEER MODE 6 >nul 2>&1
 
-    :: Enable Hardware P-States
-    reg add "HKLM\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\4d2b0152-7d5c-498b-88e2-34345392a2c5" /v "ValueMax" /t REG_DWORD /d "20000" /f >nul 2>&1
-
     :: Dont restrict core boost
     powercfg -setacvalueindex scheme_current sub_processor PERFEPP 0 >nul 2>&1
-
-
-    :: Enable Turbo Boost
-    powercfg -setacvalueindex scheme_current sub_processor PERFBOOSTMODE 1 >nul 2>&1
-    powercfg -setacvalueindex scheme_current sub_processor PERFBOOSTPOL 100 >nul 2>&1
-
 
     :: Disable Sleep States
     powercfg -setacvalueindex scheme_current SUB_SLEEP AWAYMODE 0 >nul 2>&1
