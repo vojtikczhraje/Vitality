@@ -623,12 +623,12 @@ echo     ^│                             ^│             Unlock Peak GPU Perfo
 echo     ^│           Credits           ^│  
 echo     ^│                             ^│          
 echo     ^│                             ^│
-echo     └─────────────────────────────┘         %l%┌───────────────┐   %l%┌───────────────┐   %l%┌───────────────┐
-echo                                             %l%│   %e%Apply [%r%X%e%]%l%   │   %l%│   %e%Revert [%r%R%e%]%l%  │   %l%│ %e%Configure [%r%C%e%]%l% │
-echo                                             └───────────────┘   └───────────────┘   └───────────────┘
-choice /c:WS012345DAXCR /n /m " "                                           
+echo     └─────────────────────────────┘ %l%┌───────────────┐  %l%┌───────────────┐  %l%┌───────────────┐  %l%┌───────────────┐
+echo                                     %l%│   %e%Apply [%r%X%e%]%l%   │  %l%│  %e%Revert [%r%R%e%]%l%   │  %l%│ %e%Configure [%r%C%e%]%l% │  %l%│  %e%Export [%r%E%e%]%l%   │
+echo                                     └───────────────┘  └───────────────┘  └───────────────┘  └───────────────┘
+choice /c:WS012345DAXCRE /n /m " "                                           
 set MenuItem=%errorlevel%
-if "%MenuItem%"=="1" goto Home
+if "%MenuItem%"=="1" goto Homes
 if "%MenuItem%"=="2" goto IngameSettings
 if "%MenuItem%"=="3" (
     if "%FPS%"=="False" (
@@ -684,6 +684,7 @@ if "%MenuItem%"=="10" goto Tweaks2
 if "%MenuItem%"=="11" goto TweaksProceed
 if "%MenuItem%"=="12" goto %LastConfiguration%
 if "%MenuItem%"=="13" goto Revert
+if "%MenuItem%"=="14" goto Export
 
 
 
@@ -769,10 +770,10 @@ echo     ^│                             ^│
 echo     ^│           Credits           ^│           
 echo     ^│                             ^│             
 echo     ^│                             ^│
-echo     └─────────────────────────────┘         %l%┌───────────────┐   %l%┌───────────────┐   %l%┌───────────────┐
-echo                                             %l%│   %e%Apply [%r%X%e%]%l%   │   %l%│   %e%Revert [%r%R%e%]%l%  │   %l%│ %e%Configure [%r%C%e%]%l% │
-echo                                             └───────────────┘   └───────────────┘   └───────────────┘
-choice /c:WS6789ADXCR /n /m " "                                           
+echo     └─────────────────────────────┘ %l%┌───────────────┐  %l%┌───────────────┐  %l%┌───────────────┐  %l%┌───────────────┐
+echo                                     %l%│   %e%Apply [%r%X%e%]%l%   │  %l%│  %e%Revert [%r%R%e%]%l%   │  %l%│ %e%Configure [%r%C%e%]%l% │  %l%│  %e%Export [%r%E%e%]%l%   │
+echo                                     └───────────────┘  └───────────────┘  └───────────────┘  └───────────────┘
+choice /c:WS6789ADXCRE /n /m " "                                           
 set MenuItem=%errorlevel%
 if "%MenuItem%"=="1" goto Home
 if "%MenuItem%"=="2" goto IngameSettings
@@ -813,13 +814,12 @@ if "%MenuItem%"=="8" goto Tweaks
 if "%MenuItem%"=="9" goto TweaksProceed
 if "%MenuItem%"=="10" goto %LastConfiguration%
 if "%MenuItem%"=="11" goto Revert
+if "%MenuItem%"=="12" goto Export
 
 
 
 
 :IngameSettings
-
-
 
 set LastPage=:IngameSettings
 cls
@@ -4460,6 +4460,190 @@ if "%MenuItem%"=="1" goto %LastConfiguration%
 if "%MenuItem%"=="2" goto Home
 
 
+:Export
+if exist "C:\Vitality\config.ini" (
+    if exist "C:\Vitality\old_config.ini" del /f "C:\Vitality\old_config.ini" 
+    ren "C:\Vitality\config.ini" "old_config.ini"
+)
+
+
+echo # Tweaks Page 1  >> C:\Vitality\config.ini
+echo FPS=%FPS%  >> C:\Vitality\config.ini
+echo Latency=%Latency%  >> C:\Vitality\config.ini
+echo GPU=%GPU%  >> C:\Vitality\config.ini
+echo Task=%Task%  >> C:\Vitality\config.ini
+echo KBM=%KBM%  >> C:\Vitality\config.ini
+echo CPU=%CPU%  >> C:\Vitality\config.ini
+echo Network=%Network%  >> C:\Vitality\config.ini
+
+echo # Tweaks Page 2  >> C:\Vitality\config.ini
+echo RAM=%RAM% >> C:\Vitality\config.ini
+echo DISK=%DISK% >> C:\Vitality\config.ini
+echo Windows=%Windows% >> C:\Vitality\config.ini
+
+echo # Recording Settings >> C:\Vitality\config.ini
+echo HighQuality=%HighQuality% >> C:\Vitality\config.ini
+echo MediumQuality=%MediumQuality% >> C:\Vitality\config.ini
+echo LowQuality=%LowQuality% >> C:\Vitality\config.ini
+
+echo # Game Settings >> C:\Vitality\config.ini
+echo Minecraft=%Minecraft% >> C:\Vitality\config.ini
+echo Valorant=%Valorant% >> C:\Vitality\config.ini
+echo Fortnite=%Fortnite% >> C:\Vitality\config.ini
+
+echo # Privacy >> C:\Vitality\config.ini
+echo PrivacyCleanup=%PrivacyCleanup% >> C:\Vitality\config.ini
+echo DataCol=%DataCol% >> C:\Vitality\config.ini
+echo SecurityImp=%SecurityImp% >> C:\Vitality\config.ini
+echo ConfigurePro=%ConfigurePro% >> C:\Vitality\config.ini
+echo PrivacyOverSec=%PrivacyOverSec% >> C:\Vitality\config.ini
+echo UIForPrivacy=%UIForPrivacy% >> C:\Vitality\config.ini
+ 
+echo # FPS ^& Input  >> C:\Vitality\config.ini
+echo Visuals=%Visuals% >> C:\Vitality\config.ini
+echo WindowsUpdates=%WindowsUpdates% >> C:\Vitality\config.ini
+echo WindowsDefender=%WindowsDefender% >> C:\Vitality\config.ini
+echo ProcessMitigations=%ProcessMitigations% >> C:\Vitality\config.ini
+echo DebloatWindows=%DebloatWindows% >> C:\Vitality\config.ini
+echo FSE=%FSE% >> C:\Vitality\config.ini
+echo PowerPlan=%PowerPlan% >> C:\Vitality\config.ini
+echo WindowsServices=%WindowsServices% >> C:\Vitality\config.ini
+echo Win32PrioritySeparation=%Win32PrioritySeparation% >> C:\Vitality\config.ini
+echo DisableSearchIndexing=%DisableSearchIndexing% >> C:\Vitality\config.ini
+echo DisableFastStartup=%DisableFastStartup% >> C:\Vitality\config.ini
+echo ReserveCPUResources=%ReserveCPUResources% >> C:\Vitality\config.ini
+echo DisableBackgroundApps=%DisableBackgroundApps% >> C:\Vitality\config.ini
+echo Winlogon=%Winlogon% >> C:\Vitality\config.ini
+echo IntelMicroCode=%IntelMicroCode% >> C:\Vitality\config.ini
+echo AMDMicroCode=%AMDMicroCode% >> C:\Vitality\config.ini
+echo EnableGPUSheduling=%EnableGPUSheduling% >> C:\Vitality\config.ini
+echo DisableSettingsSynchronization=%DisableSettingsSynchronization% >> C:\Vitality\config.ini
+echo DisableRemoteAssistance=%DisableRemoteAssistance% >> C:\Vitality\config.ini
+echo DisableGamebarpresencewriter=%DisableGamebarpresencewriter% >> C:\Vitality\config.ini
+echo DisableSystemEnergySaving=%DisableSystemEnergySaving%  >> C:\Vitality\config.ini
+echo SVCSplitThreshold=%SVCSplitThreshold% >> C:\Vitality\config.ini
+echo DisableUSBPowerSavings=%DisableUSBPowerSavings%  >> C:\Vitality\config.ini
+echo EnableMSIMode=%EnableMSIMode% >> C:\Vitality\config.ini
+echo DevicePriorityUndefined=%DevicePriorityUndefined% >> C:\Vitality\config.ini
+
+echo # Latency >> C:\Vitality\config.ini
+echo SpectreMeltdown=%SpectreMeltdown% >> C:\Vitality\config.ini
+echo DisableIDLE=%DisableIDLE%  >> C:\Vitality\config.ini
+echo MMCSS=%MMCSS% >> C:\Vitality\config.ini
+echo CSRSS=%CSRSS% >> C:\Vitality\config.ini
+echo LowProcessPriority=%LowProcessPriority% >> C:\Vitality\config.ini
+echo LowAudioLatency=%LowAudioLatency% >> C:\Vitality\config.ini
+echo TimerResolution=%TimerResolution% >> C:\Vitality\config.ini
+echo BCDLowLatency=%BCDLowLatency% >> C:\Vitality\config.ini
+echo DisableNetworkThrottling=%DisableNetworkThrottling% >> C:\Vitality\config.ini
+echo LatencyTolerance=%LatencyTolerance% >> C:\Vitality\config.ini
+
+echo # Network >> C:\Vitality\config.ini
+echo DisableNaglesAlgorithm=%DisableNaglesAlgorithm% >> C:\Vitality\config.ini
+echo NIC=%NIC% >> C:\Vitality\config.ini
+echo DNS=%DNS% >> C:\Vitality\config.ini
+echo WindowsNetworkSettings=%WindowsNetworkSettings% >> C:\Vitality\config.ini
+echo Autotuning=%Autotuning% >> C:\Vitality\config.ini
+
+echo # Keyboard and Mouse >> C:\Vitality\config.ini
+echo KeyboardDataSize=%KeyboardDataSize% >> C:\Vitality\config.ini
+echo AdjustKeyboardParameters=%AdjustKeyboardParameters% >> C:\Vitality\config.ini
+echo KeyboardAccessibilitySettings=%KeyboardAccessibilitySettings% >> C:\Vitality\config.ini
+echo MouseDataSize=%MouseDataSize% >> C:\Vitality\config.ini
+echo DisablePointerAcceleration=%DisablePointerAcceleration% >> C:\Vitality\config.ini
+echo MouseAccessibilitySettings=%MouseAccessibilitySettings% >> C:\Vitality\config.ini
+
+echo # Nvidia (not applied if you are on AMD) >> C:\Vitality\config.ini
+echo GameMode=%GameMode% >> C:\Vitality\config.ini
+echo NvidiaTelemetry=%NvidiaTelemetry% >> C:\Vitality\config.ini
+echo P0States=%P0States%  >> C:\Vitality\config.ini
+echo HDCP=%HDCP% >> C:\Vitality\config.ini
+echo Preemption=%Preemption% >> C:\Vitality\config.ini
+echo Logging=%Logging% >> C:\Vitality\config.ini
+echo NvidiaProfileInspector=%NvidiaProfileInspector% >> C:\Vitality\config.ini
+echo DisableTiledDisplay=%DisableTiledDisplay% >> C:\Vitality\config.ini
+echo DisableTCC=%DisableTCC% >> C:\Vitality\config.ini
+echo ForceContiguousMemoryAllocation=%ForceContiguousMemoryAllocation% >> C:\Vitality\config.ini
+echo KBoost=%KBoost% >> C:\Vitality\config.ini
+echo DisableScaling=%DisableScaling% >> C:\Vitality\config.ini
+echo NoECC=%NoECC% >> C:\Vitality\config.ini
+echo UnrestrictedClockPolicy=%UnrestrictedClockPolicy% >> C:\Vitality\config.ini
+
+echo # AMD (not applied if you are on Nvidia) >> C:\Vitality\config.ini
+echo GameModeAMD=%GameModeAMD% >> C:\Vitality\config.ini
+echo AMDOptimizedSettings=%AMDOptimizedSettings% >> C:\Vitality\config.ini
+echo AMDDebloat=%AMDDebloat% >> C:\Vitality\config.ini
+
+echo # RAM >> C:\Vitality\config.ini
+echo MemoryManagement=%MemoryManagement% >> C:\Vitality\config.ini
+echo LargePageDrivers=%LargePageDrivers% >> C:\Vitality\config.ini
+
+echo # Disk >> C:\Vitality\config.ini
+echo FileSystemOptimization=%FileSystemOptimization% >> C:\Vitality\config.ini
+echo Cleaner=%Cleaner% >> C:\Vitality\config.ini
+echo Startupcleaner=%Startupcleaner% >> C:\Vitality\config.ini
+
+echo # Windows >> C:\Vitality\config.ini
+echo DisableTelemetry=%DisableTelemetry% >> C:\Vitality\config.ini
+echo DisableHibernation=%DisableHibernation% >> C:\Vitality\config.ini
+echo BootOptions=%BootOptions% >> C:\Vitality\config.ini
+echo PasswordOnWakeUp=%PasswordOnWakeUp% >> C:\Vitality\config.ini
+echo DisableAutomaticMaintenance=%DisableAutomaticMaintenance% >> C:\Vitality\config.ini
+echo DisableLocationTracking=%DisableLocationTracking% >> C:\Vitality\config.ini
+echo DisablePushNotifications=%DisablePushNotifications% >> C:\Vitality\config.ini
+echo DisableDriverSearching=%DisableDriverSearching% >> C:\Vitality\config.ini
+echo DisableWindowsNotifications=%DisableWindowsNotifications% >> C:\Vitality\config.ini
+echo DisableTransparency=%DisableTransparency% >> C:\Vitality\config.ini
+echo PauseMapsUpdates=%PauseMapsUpdates% >> C:\Vitality\config.ini
+echo DisableSettingsSync=%DisableSettingsSync% >> C:\Vitality\config.ini
+echo DisableAdvertisingID=%DisableAdvertisingID% >> C:\Vitality\config.ini
+echo DisableWebInSearch=%DisableWebInSearch% >> C:\Vitality\config.ini
+echo DisableRemoteAssistance=%DisableRemoteAssistance% >> C:\Vitality\config.ini
+echo DisableInventoryCollector=%DisableInventoryCollector% >> C:\Vitality\config.ini
+echo DisableWindowsErrorReporting=%DisableWindowsErrorReporting% >> C:\Vitality\config.ini
+echo DisableCustomerExperienceProgram=%DisableCustomerExperienceProgram% >> C:\Vitality\config.ini
+echo DisableOneDriveSync=%DisableOneDriveSync% >> C:\Vitality\config.ini
+echo DisableBiometrics=%DisableBiometrics% >> C:\Vitality\config.ini
+echo DenyCapabilityForApps=%DenyCapabilityForApps% >> C:\Vitality\config.ini
+echo DisableLocationServices=%DisableLocationServices% >> C:\Vitality\config.ini
+echo PreventWindowsMarkingFiles=%PreventWindowsMarkingFiles% >> C:\Vitality\config.ini
+echo DisableLanguageBar=%DisableLanguageBar% >> C:\Vitality\config.ini
+echo DisableStickyKeys=%DisableStickyKeys% >> C:\Vitality\config.ini
+echo DisableProgramCompatibilityAssistant=%DisableProgramCompatibilityAssistant% >> C:\Vitality\config.ini
+echo DisableFaultTolerantHeap=%DisableFaultTolerantHeap% >> C:\Vitality\config.ini
+echo DisablePowerShellTelemetry=%DisablePowerShellTelemetry% >> C:\Vitality\config.ini
+echo DisableWindowsErrorReporting=%DisableWindowsErrorReporting% >> C:\Vitality\config.ini
+echo Remove3DObjectsFromExplorer=%Remove3DObjectsFromExplorer% >> C:\Vitality\config.ini
+echo DisableSignInAndLockLastUser=%DisableSignInAndLockLastUser% >> C:\Vitality\config.ini
+echo DisableOnlineTips=%DisableOnlineTips% >> C:\Vitality\config.ini
+echo DisableTypingInsights=%DisableTypingInsights% >> C:\Vitality\config.ini
+echo DisableSuggestionsInTheSearchBox=%DisableSuggestionsInTheSearchBox% >> C:\Vitality\config.ini
+echo RestoreOldContextMenu=%RestoreOldContextMenu% >> C:\Vitality\config.ini
+echo RemovePinToQuickAccess=%RemovePinToQuickAccess% >> C:\Vitality\config.ini
+echo HideFoldersInQuickAccess=%HideFoldersInQuickAccess% >> C:\Vitality\config.ini
+echo HideQuickAccessFromFileExplorer=%HideQuickAccessFromFileExplorer% >> C:\Vitality\config.ini
+echo LaunchFileExplorerToThisPC=%LaunchFileExplorerToThisPC% >> C:\Vitality\config.ini
+echo TurnOffDisplayOfRecentSearch=%TurnOffDisplayOfRecentSearch% >> C:\Vitality\config.ini
+echo ClearHistoryOfRecentlyOpenedDocumentsOnExit=%ClearHistoryOfRecentlyOpenedDocumentsOnExit% >> C:\Vitality\config.ini
+
+echo # Intel (not applied if you are on AMD) >> C:\Vitality\config.ini
+echo IntelCpuVirtualization=%IntelCpuVirtualization%  >> C:\Vitality\config.ini
+echo IntelCoreIsolation=%IntelCoreIsolation% >> C:\Vitality\config.ini
+echo IntelCStates=%IntelCStates%  >> C:\Vitality\config.ini
+echo IntelPowerThrottling=%IntelPowerThrottling% >> C:\Vitality\config.ini
+echo AMDServices=%AMDServices% >> C:\Vitality\config.ini
+echo IntelTSX=%IntelTSX% >> C:\Vitality\config.ini
+
+echo # AMD (not applied if you are on Intel) >> C:\Vitality\config.ini
+echo AMDCpuVirtualization=%AMDCpuVirtualization%  >> C:\Vitality\config.ini
+echo AMDCoreIsolation=%AMDCoreIsolation% >> C:\Vitality\config.ini
+echo AMDCStates=%AMDCStates% >> C:\Vitality\config.ini
+echo AMDPowerThrottling=%AMDPowerThrottling% >> C:\Vitality\config.ini
+echo IntelServices=%IntelServices% >> C:\Vitality\config.ini
+echo AMDTSX=%AMDTSX% >> C:\Vitality\config.ini
+
+
+goto %LastPage%
 
 :TweaksProceed
 cls
