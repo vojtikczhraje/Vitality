@@ -82,16 +82,17 @@ exit
 if %SystemType%==Desktop set "SystemType=Desktop            " 
 if %SystemType%==Laptop set "SystemType=Laptop             "
 
+:: Create registry paths
+:: Define the registry path
+set "reg_path=HKCU\Software\Vitality"
+
+:: Ensure the registry key exists
+call :ensureRegKeyExists
 
 :: Create Required Directories 
 :: Check and Create Main Directory
 if not exist "C:\Vitality\" (
     mkdir "C:\Vitality"
-)
-
-:: Check and Create Info Directory
-if not exist "C:\Vitality\Info\" (
-    mkdir "C:\Vitality\Info"
 )
 
 :: Check and Create Backup Directory
@@ -116,19 +117,18 @@ if %formatted_optimizations% LSS 10 set "formatted_optimizations= %formatted_opt
 for /f %%A in ('"prompt $H &echo on &for %%B in (1) do ::"') do set BS=%%A
 
 :: Welcome Message
-if exist "C:\Vitality\Info\Launch-Welcome" (
-    set "Launch-Welcome=Welcome back %r%%username%%e%, have a good time using Vitality."
+call :getRegValue Launch-Welcome welcomeMessage
+if defined welcomeMessage (
+    set "Launch-Welcome=Welcome back %username%, have a good time using Vitality."
 ) else (
-    set "Launch-Welcome=Welcome to Vitality %r%%username%%e%. Optimize your PC to %r%MAX%l%"
-    echo Vitality > "C:\Vitality\Info\Launch-Welcome"
+    set "Launch-Welcome=Welcome to Vitality %username%. Optimize your PC to MAX"
 )
 
 for /F "tokens=* skip=1" %%n in ('WMIC path Win32_VideoController get Name ^| findstr "."') do set GPU_NAME=%%n >nul
 :: Tweaks Part
 echo %GPU_NAME% | find "NVIDIA" && set "gpuBrand=Nvidia" && set "Configuration10=:Configuration10Nvidia" >nul 2>&1
 echo %GPU_NAME% | find "AMD" && set "gpuBrand=AMD" && set "Configuration10=:Configuration10AMD" >nul 2>&1
-if not defined GPU_NAME set "gpuBrand=NaN" && set "Configuration10=:Configuration10NaN" 
-
+if not defined GPU_NAME set "gpuBrand=NaN" && set "Configuration10=:Configuration10NaN"
 
 for /F "skip=1 delims=" %%A in ('wmic cpu get name') do (
     set "cpuName=%%A"
@@ -172,18 +172,23 @@ echo.
 cd "C:\Vitality\Backup"
 
 :: Create registry backup
-if not exist "%SYSTEMDRIVE%\Vitality\Backup\regbackup.reg" Regedit /e "%SYSTEMDRIVE%\Vitality\Backup\regbackup.reg" >nul 2>&1
+call :getRegValue Registry-Backup RegBackup
+
+if not defined RegBackup (
+    Regedit /e "%SYSTEMDRIVE%\Vitality\Backup\regbackup.reg"
+)
 
 :: Create restore point
-if not exist "C:\Vitality\Backup\RestorePoint.bat" (
+call :getRegValue Restore-Point RestorePoint
+
+if not defined RestorePoint (
     echo @echo off > "%SYSTEMDRIVE%\Vitality\Backup\RestorePoint.bat"
-    echo reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore" /v "SystemRestorePointCreationFrequency" /t REG_DWORD /d 0 /f >> "C:\Vitality\Backup\RestorePoint.bat"
-    echo powershell -ExecutionPolicy Unrestricted -NoProfile Enable-ComputerRestore -Drive 'C:\', 'D:\', 'E:\', 'F:\', 'G:\' >> "C:\Vitality\Backup\RestorePoint.bat"
-    echo powershell -ExecutionPolicy Unrestricted -NoProfile Checkpoint-Computer -Description 'Vitality' >> "C:\Vitality\Backup\RestorePoint.bat"
+    echo reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore" /v "SystemRestorePointCreationFrequency" /t REG_DWORD /d 0 /f >> "%SYSTEMDRIVE%\Vitality\Backup\RestorePoint.bat"
+    echo powershell -ExecutionPolicy Unrestricted -NoProfile -Command "Enable-ComputerRestore -Drive 'C:\', 'D:\', 'E:\', 'F:\', 'G:\'" >> "%SYSTEMDRIVE%\Vitality\Backup\RestorePoint.bat"
+    echo powershell -ExecutionPolicy Unrestricted -NoProfile -Command "Checkpoint-Computer -Description 'Vitality'" >> "%SYSTEMDRIVE%\Vitality\Backup\RestorePoint.bat"
     echo exit >> "%SYSTEMDRIVE%\Vitality\Backup\RestorePoint.bat"
     start /min "" "%SYSTEMDRIVE%\Vitality\Backup\RestorePoint.bat"
 )
-
 
 Ping www.google.com -n 1 -w 1000 >nul
 if %errorlevel% neq 0 (
@@ -236,8 +241,6 @@ if "%OSInfo%"=="OS Name:                   Microsoft Windows 10 Enterprise" set 
 if "%OSInfo%"=="OS Name:                   Microsoft Windows 11 Home" set "OSVersion=Windows 11      "
 if "%OSInfo%"=="OS Name:                   Microsoft Windows 11 Pro" set "OSVersion=Windows 11      "
 if "%OSInfo%"=="OS Name:                   Microsoft Windows 11 Enterprise LTSC" set "OSVersion=Windows 11      "
-
-OS Name:                   Microsoft Windows 10 IoT Enterprise LTSC
 
 :: Tweaks Page 1 / FPS, Latency, GPU, Task Scheduler, Keboard and Mouse, CPU, Network
 set "FPS=False"
@@ -471,7 +474,7 @@ set "AMDTSX=True"
 
 :: Check if config.ini exists, overide default settings
 if exist C:\Vitality\config.ini (
-    for /f "tokens=1,2 delims==" %%a in (C:\Vitality\config.ini) do (
+    for /f "tokens=1,2 delims==" %%a in (%SYSTEMDRIVE%\Vitality\config.ini) do (
         set "%%a=%%b"
     )
 ) else (
@@ -628,7 +631,7 @@ echo                                     %l%│   %e%Apply [%r%X%e%]%l%   │  %
 echo                                     └───────────────┘  └───────────────┘  └───────────────┘  └───────────────┘
 choice /c:WS012345DAXCRE /n /m " "                                           
 set MenuItem=%errorlevel%
-if "%MenuItem%"=="1" goto Homes
+if "%MenuItem%"=="1" goto Home
 if "%MenuItem%"=="2" goto IngameSettings
 if "%MenuItem%"=="3" (
     if "%FPS%"=="False" (
@@ -9653,3 +9656,23 @@ goto %LastPage%
 :Restart
 start "" "%batch_file%"
 exit
+
+
+:: Function to ensure the registry key exists
+:ensureRegKeyExists
+reg query "%reg_path%" >nul 2>&1 || reg add "%reg_path%" /f >nul 2>&1
+goto :eof
+
+:: Function to set a registry value (name, value)
+:setRegValue
+reg add "%reg_path%" /v %1 /t REG_SZ /d "%2" /f >nul 2>&1
+goto :eof
+
+:: Function to get a registry value (name, variable to set)
+:getRegValue
+set "%2="
+for /f "tokens=2*" %%a in ('reg query "%reg_path%" /v %1 2^>nul') do (
+    if "%%a"=="REG_SZ" set "%2=%%b"
+    if "%%a"=="REG_DWORD" set "%2=%%b"
+)
+goto :eof
