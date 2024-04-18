@@ -126,9 +126,9 @@ if defined welcomeMessage (
 
 for /F "tokens=* skip=1" %%n in ('WMIC path Win32_VideoController get Name ^| findstr "."') do set GPU_NAME=%%n >nul
 :: Tweaks Part
-echo %GPU_NAME% | find "NVIDIA" && set "gpuBrand=Nvidia" && set "Configuration10=:Configuration10Nvidia" >nul 2>&1
-echo %GPU_NAME% | find "AMD" && set "gpuBrand=AMD" && set "Configuration10=:Configuration10AMD" >nul 2>&1
-if not defined GPU_NAME set "gpuBrand=NaN" && set "Configuration10=:Configuration10NaN"
+echo %GPU_NAME% | find "NVIDIA" && set gpuBrand=Nvidia && set "Configuration10=:Configuration10Nvidia" >nul 2>&1
+echo %GPU_NAME% | find "AMD" && set gpuBrand=AMD && set "Configuration10=:Configuration10AMD" >nul 2>&1
+if not defined GPU_NAME set gpuBrand=NaN && set "Configuration10=:Configuration10NaN"
 
 for /F "skip=1 delims=" %%A in ('wmic cpu get name') do (
     set "cpuName=%%A"
@@ -138,10 +138,10 @@ for /F "skip=1 delims=" %%A in ('wmic cpu get name') do (
 :check_brand
 echo %cpuName% | find "Intel" >nul 2>&1
 if "%errorlevel%"==0 (
-    set "cpuBrand=Intel"
+    set cpuBrand=Intel
     set "Configuration23=:Configuration23Intel"
 ) else (
-    set "cpuBrand=AMD"
+    set cpuBrand=AMD
     set "Configuration23=:Configuration23AMD"
 )
 
@@ -477,8 +477,6 @@ if exist C:\Vitality\config.ini (
     for /f "tokens=1,2 delims==" %%a in (%SYSTEMDRIVE%\Vitality\config.ini) do (
         set "%%a=%%b"
     )
-) else (
-    echo the file doesnt exist
 )
 
 :Home
@@ -9625,6 +9623,8 @@ reg add "HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\kernel" /v "Enabl
 )
 
 :End
+
+pause 
 cls
 echo.
 echo.
