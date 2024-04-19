@@ -6,9 +6,6 @@ mode 120, 36
 chcp 65001 >nul
 TITLE Vitality
 
-REM Version
-set "Version=0.1.1"
-
 REM Set Colors
 set l=[38;5;240m
 set r=[38;5;216m
@@ -214,13 +211,16 @@ echo !SystemType! > "%temp%\SystemType.txt"
 echo.
 )
 
-If exist "%SYSTEMDRIVE%\Vitality\Backup\regbackup.reg" (
-    set "MStatus=Enabled       "
-) else set set "MStatus=Disabled      "
+if exist "%SYSTEMDRIVE%\Vitality\Backup\regbackup.reg" (
+    if exist "%SYSTEMDRIVE%\Vitality\Backup\RestorePoint.bat" (
+        set "MStatus=Enabled       "
+    ) else (
+        set "MStatus=Disabled      "
+    )
+) else (
+    set "MStatus=Disabled      "
+)
 
-If exist "%SYSTEMDRIVE%\Vitality\Backup\RestorePoint.bat" (
-    set "MStatus=Enabled       "
-) else set set "MStatus=Disabled      "
 
 set "LastConfiguration=:Configuration1"
 
@@ -5673,7 +5673,7 @@ if not exist "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector" md "%SYST
 curl -g -L -# -o "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector\nvidiaProfileInspector.zip" "https://github.com/Orbmu2k/nvidiaProfileInspector/releases/latest/download/nvidiaProfileInspector.zip"  >nul 2>&1
 powershell -NoProfile Expand-Archive '%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector\nvidiaProfileInspector.zip' -DestinationPath '%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector' >nul 2>&1
 del /F /Q "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector\nvidiaProfileInspector.zip"  >nul 2>&1
-curl -g -L -# -o "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector\Vitality.nip" "https://cdn.discordapp.com/attachments/1140029335944835152/1155469748755247135/Vitality.nip"  >nul 2>&1
+Powershell.exe -Command "Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/vojtikczhraje/Vitality/main/assets/Config.nip' -OutFile '%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector\Vitality.nip'" >nul 2>&1
 cd "%SYSTEMDRIVE%\Vitality\Resources\nvidiaProfileInspector\"  >nul 2>&1
 nvidiaProfileInspector.exe "Vitality.nip" >nul 2>&1
 )
