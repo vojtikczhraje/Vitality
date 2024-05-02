@@ -132,10 +132,10 @@ echo %GPU_NAME% | find "NVIDIA" && set gpu1=Nvidia >nul 2>&1
 echo %GPU_NAME% | find "AMD" && set gpu1=AMD >nul 2>&1
 if not defined GPU_NAME set gpu1=NaN
 
-REM Configuration Part / For some reason i can't use: if "%gpu1%"=="%Nvidia/AMD%" set Configuration10=Configuration10AMD/Nvidia
+REM Configuration Part
+set Configuration10=:Configuration14
 echo %GPU_NAME% | find "AMD" && set Configuration10=:Configuration10AMD
 echo %GPU_NAME% | find "NVIDIA" && set Configuration10=:Configuration10Nvidia
-if not defined GPU_NAME set Configuration10=:Configuration10NaN
 
 
 for /F "skip=1 delims=" %%A in ('wmic cpu get name') do (
@@ -2999,7 +2999,14 @@ if "%MenuItem%"=="9" (
 ) 
 if "%MenuItem%"=="10" goto Configuration15
 if "%MenuItem%"=="11" goto Configuration15
-if "%MenuItem%"=="12" goto %Configuration10%
+if "%MenuItem%"=="12" (
+    if "%Configuration10%"==":Configuration14" (
+        goto Configuration9
+    ) else (
+        goto %Configuration10%
+    )
+)
+
 
 
 :Configuration15
