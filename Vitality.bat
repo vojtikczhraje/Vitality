@@ -4292,8 +4292,8 @@ if "%MenuItem%"=="9" (
         goto :LastTweaks2
     )
 ) 
-if "%MenuItem%"=="10" goto Configuration
-if "%MenuItem%"=="11" goto Configuration
+if "%MenuItem%"=="10" goto Configuration1
+if "%MenuItem%"=="11" goto Configuration1
 if "%MenuItem%"=="12" goto Configuration22
 
 :Configuration23AMD
