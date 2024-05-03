@@ -128,14 +128,14 @@ if exist C:\Vitality\Info\welcome1 (
 
 for /F "tokens=* skip=1" %%n in ('WMIC path Win32_VideoController get Name ^| findstr "."') do set GPU_NAME=%%n >nul
 REM Tweaks Part
+set gpu1=NaN
 echo %GPU_NAME% | find "NVIDIA" && set gpu1=Nvidia >nul 2>&1
 echo %GPU_NAME% | find "AMD" && set gpu1=AMD >nul 2>&1
-if not defined GPU_NAME set gpu1=NaN
 
 REM Configuration Part
 set Configuration10=:Configuration14
-echo %GPU_NAME% | find "AMD" && set Configuration10=:Configuration10AMD
-echo %GPU_NAME% | find "NVIDIA" && set Configuration10=:Configuration10Nvidia
+echo %GPU_NAME% | find "AMD" && set Configuration10=:Configuration10AMD >nul 2>&1
+echo %GPU_NAME% | find "NVIDIA" && set Configuration10=:Configuration10Nvidia >nul 2>&1
 
 
 for /F "skip=1 delims=" %%A in ('wmic cpu get name') do (
@@ -5541,6 +5541,7 @@ If %gpu1%==AMD (
 
 :nullgpu
 echo                                            Your GPU is not supported by Vitality.
+pause >nul
 goto skippinggpu
 
 :nvidia
