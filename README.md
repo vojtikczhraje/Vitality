@@ -36,13 +36,13 @@ $url = "https://raw.githubusercontent.com/vojtikczhraje/Vitality/main/Vitality.b
 
 
 ## ❓ About
-- Vitality is being developed by vojtikczhraje and Pigeon 
+- Vitality is being developed by [vojtikczhraje](https://discordapp.com/users/1056305220914786406) and designed by [Pigeonlonion](https://discordapp.com/users/1091070103933681685)
 
 
 - Made with Batch, Powershell
 
 
-- [Discord](https://discord.gg/uEHp2Uejk3)
+- If you need any help feel free to join our [Discord](https://discord.gg/uEHp2Uejk3)
 
 
 ---
