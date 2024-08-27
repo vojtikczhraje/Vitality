@@ -1,5 +1,7 @@
 ![Header image](https://github.com/vojtikczhraje/Vitality/blob/main/img/Vitality-Github.png)
 
+> [!IMPORTANT]  
+> The Discord server is currently closed for an indefinite period. This program will no longer receive updates, and significant updates are unlikely in the future. I'm currently recoding it as an Electron application.
 
 ## 🚀 Vitality
 Vitality is a free and open source batch optimizer designed to improve performance, decrease latency, enhance game settings, and optimize recording settings.
